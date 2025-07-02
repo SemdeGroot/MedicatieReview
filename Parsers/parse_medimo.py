@@ -175,5 +175,53 @@ def main():
             print(f"    → Groep: {fk_groep} ({fk_naam})")
             print(f"    → Gebruik: {gm['gebruik']} | Opmerking: {gm['opmerking']}")
 
+def run_parser():
+    """
+    Draait het volledige parse proces en retourneert een lijst van patiënt dicts + afdelingsnaam + db_spkodes.
+    """
+    dir_path = "G-Standaard"
+    bst020_path = os.path.join(dir_path, "BST020T")
+    bst004_path = os.path.join(dir_path, "BST004T")
+    bst052_path = os.path.join(dir_path, "BST052T")
+    bst070_path = os.path.join(dir_path, "BST070T")
+    bst711_path = os.path.join(dir_path, "BST711T")
+    medimo_path = "Data/medimo_input.txt"
+
+    bst020_cols = [("NMNR", 5, 12), ("NMNAAM", 85, 135)]
+    bst004_cols = [("HPKODE", 13, 21), ("ATNMNR", 21, 28)]
+    bst052_cols = [("PRKODE", 5, 13), ("PRNMNR", 13, 20), ("GPKODE", 20, 28)]
+    bst070_cols = [("HPKODE", 5, 13), ("GPKODE", 29, 37)]
+    bst711_cols = [
+        ("GPKODE", 5, 13), ("GSKODE", 13, 21),
+        ("GPNMNR", 33, 40), ("GPSTNR", 40, 47),
+        ("SPKODE", 104, 112)
+    ]
+
+    bst020 = load_fixed_width_file(bst020_path, bst020_cols)
+    bst004 = load_fixed_width_file(bst004_path, bst004_cols)
+    bst052 = load_fixed_width_file(bst052_path, bst052_cols)
+    bst070 = load_fixed_width_file(bst070_path, bst070_cols)
+    bst711 = load_fixed_width_file(bst711_path, bst711_cols)
+    db_spkodes = get_spkodes_in_db()
+
+    with open(medimo_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # Afdelingsnaam extraheren
+    afdeling_match = re.search(r"Een overzicht van alle actieve medicatie in afdeling (.+?)\.", content)
+    afdeling = afdeling_match.group(1).strip() if afdeling_match else "Onbekend"
+
+    patiënten = extract_patient_blocks(medimo_path)
+    resultaat = []
+
+    for patiënt in patiënten:
+        gm_list = parse_medimo_block(patiënt)
+        for gm in gm_list:
+            nmnr, hpkode, spkode = match_to_spkode(gm["clean"], bst020, bst052, bst004, bst070, bst711, db_spkodes)
+            gm["SPKode"] = spkode
+        resultaat.append({"patiënt": patiënt.split("\n")[0].strip(), "geneesmiddelen": gm_list})
+
+    return resultaat, db_spkodes, afdeling
+
 if __name__ == "__main__":
     main()

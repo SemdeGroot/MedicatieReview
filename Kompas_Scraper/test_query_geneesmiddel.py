@@ -1,6 +1,6 @@
 import sqlite3
 
-geneesmiddel = "paracetamol"
+geneesmiddel = "risperidon"
 # geneesmiddel = "ezetimib/atorvastatine"  # voorbeeld met verborgen spatie verwijderd
 
 # Open database

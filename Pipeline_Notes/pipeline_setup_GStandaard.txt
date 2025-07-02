@@ -1,0 +1,37 @@
+## Interacties (G-Standaard)
+
+input: list van medicijnnaam: 
+
+e.g.:   - METOPROLOLTARTRAAT SANDOZ TABLET 50MG
+        - IBUPROFEN TABLET 600MG 
+
+BST020T: Naamnummers van producten verkrijgen
+
+BST004T: NMNRs koppelen aan HPKs
+
+BST070T: HPKs koppelen aan PRKs
+
+BST671T: Dubbelmedicatie opvragen codes voor 
+            PRK(a) = PRK(b) -> DMCODE
+
+BST672T: DMCODE -> TXKODE
+
+BST922T: TXKODE -> Tekst
+
+output: Interacties van een list van geneesmiddelen
+        En welke geneesmiddelen het om gaat.
+
+## Bijwerkingen (FK) scraping
+
+input: medicijnnaam: METOPROLOLTARTRAAT SANDOZ TABLET 50MG
+
+## MFB
+
+input: medicijnnamen, lab, leeftijd
+
+HPK 
+
+PRK 
+
+GPK
+

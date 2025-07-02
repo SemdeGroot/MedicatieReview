@@ -1,0 +1,185 @@
+{
+  "metadata": {
+    "description": "Mapping van geneesmiddelen uit Medimo zonder GPK-match naar correcte GPK-namen uit de G-Standaard",
+    "left_key": "fk_geneesmiddel",
+    "right_value": "gpk_naam"
+  },
+  "mappings": [
+    {
+      "fk_geneesmiddel": "perindopril/amlodipine/indapamide",
+      "gpk_naam": "PERINDOPRIL/INDAPAMIDE/AMLODIPINE"
+    },
+    {
+      "fk_geneesmiddel": "paracetamol/propyfenazon/coffeine",
+      "gpk_naam": "PROPYFENAZON/PARACETAMOL/COFFEINE"
+    },
+    {
+      "fk_geneesmiddel": "paracetamol/tramadol",
+      "gpk_naam": "TRAMADOL/PARACETAMOL"
+    },
+    {
+      "fk_geneesmiddel": "aluin/salicylzuur",
+      "gpk_naam": "ALUMINIUMKALIUMSULFAAT/SALICYLZUUR"
+    },
+    {
+      "fk_geneesmiddel": "allergeenextract boompollen",
+      "gpk_naam": "BOOMPOLLENALLERGEEN"
+    },
+    {
+      "fk_geneesmiddel": "allergeenextract graspollen",
+      "gpk_naam": "GRASPOLLENALLERGEEN"
+    },
+    {
+      "fk_geneesmiddel": "allergeenextract huisstofmijt",
+      "gpk_naam": "HUISSTOFMIJTENALLERGEEN"
+    },
+    {
+      "fk_geneesmiddel": "allergeenextract insectengif",
+      "gpk_naam": "BIJENGIF"
+    },
+    {
+      "fk_geneesmiddel": "allergeenextract kattenepitheel",
+      "gpk_naam": "DIERALLERGEEN"
+    },
+    {
+      "fk_geneesmiddel": "distikstofoxide/zuurstof",
+      "gpk_naam": "DISTIKSTOFOXIDE"
+    },
+    {
+      "fk_geneesmiddel": "chloorhexidine/lidocaine",
+      "gpk_naam": "LIDOCAINE/CHLOORHEXIDINE"
+    },
+    {
+      "fk_geneesmiddel": "alginezuur/natriumwaterstofcarbonaat/calciumcarbonaat",
+      "gpk_naam": "ALGINEZUUR/NATRIUMWATETSTOFCARBONAAT/CALCIUMCARBON"
+    },
+    {
+      "fk_geneesmiddel": "calciumcarbonaat/magnesiumcarbonaat",
+      "gpk_naam": "CALCIUMCARBONAAT/MAGNESIUMSUBCARBONAAT"
+    },
+    {
+      "fk_geneesmiddel": "calciumcarbonaat/magnesiumcarbonaat/dimeticon",
+      "gpk_naam": "CALCIUMCARBONAAT/MAGNESIUMSUBCARBONAAT/DIMETICON"
+    },
+    {
+      "fk_geneesmiddel": "estetrol/drospirenon",
+      "gpk_naam": "DROSPIRENON/ ESTETROL"
+    },
+    {
+      "fk_geneesmiddel": "geactiveerde kool",
+      "gpk_naam": "KOOL GEACTIVEERD"
+    },
+    {
+      "fk_geneesmiddel": "chloorcyclizine/cinnarizine",
+      "gpk_naam": "CINNARIZINE/CHLOORCYCLIZINE"
+    },
+    {
+      "fk_geneesmiddel": "amfotericine B in liposomen",
+      "gpk_naam": ""
+    },
+    {
+      "fk_geneesmiddel": "amfotericine B lipidencomplex",
+      "gpk_naam": ""
+    },
+    {
+      "fk_geneesmiddel": "lisocabtagen maraleucel",
+      "gpk_naam": ""
+    },
+    {
+      "fk_geneesmiddel": "darunavir/cobicistat/emtricitabine/tenofoviralafenamide",
+      "gpk_naam": ""
+    },
+    {
+      "fk_geneesmiddel": "doravirine/lamivudine/tenofovirdisoproxil",
+      "gpk_naam": ""
+    },
+    {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    },
+        {
+      "fk_geneesmiddel": "",
+      "gpk_naam": ""
+    }
+  ]
+}

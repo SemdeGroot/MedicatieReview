@@ -1,0 +1,26 @@
+{
+  "version": "ACB-scorelijst op basis van ePHOR, zie folder",
+  "last_modified": "2025-06-19",
+  "scores": {
+    "1": [
+      "alimemazine", "alprazolam", "atenolol", "beclometason (inhalatie)", "beclometason (nasaal)", "beclometason (rectaal)", "formoterol/beclometason", "beclometason/mesalazine", "beclometason/formoterol/gylcopyrronium",
+      "bupropion", "captopril", "chloortalidon", "cimetidine",
+      "codeïne", "colchicine", "diazepam", "digoxine",
+      "dipyridamol", "disopyramide", "fentanyl (bij doorbraakpijn)", "fentanyl (parenteraal)","fentanyl (transdermaal)", "fluvoxamine", "furosemide",
+      "haloperidol", "hydrocortisone (systemisch)", "isosorbidedinitraat (bij cardiovasculaire aandoening)", "isosorbidemononitraat", "loperamide",
+      "metoprolol", "morfine", "morfine (retard)", "nifedipine", "prednison", "prednisolon (systemisch)", "kinidine",
+      "theofylline", "timolol", "trazodon"
+    ],
+    "2": [
+      "amantadine", "carbamazepine",
+      "oxcarbazepine", "pethidine", "pimozide"
+    ],
+    "3": [
+      "amitriptyline", "atropine (systemisch)",
+      "chloorpromazine", "clemastine", "clomipramine", "clozapine", "darifenacine",
+      "flavoxaat", "hydroxyzine", "imipramine", "nortriptyline",
+      "oxybutynine", "paroxetine", "promethazine", "scopolamine",
+      "tolterodine", "trihexyfenidyl"
+    ]
+  }
+}

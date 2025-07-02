@@ -18,10 +18,10 @@ headers = {
 # ===============================
 def clean_name(name):
     name = unicodedata.normalize('NFKD', name).encode('ASCII', 'ignore').decode('ASCII')
-    name = re.sub(r"\(.*?\)", "", name)           # Haakjes verwijderen
-    name = name.replace("\u200b", "")             # Verborgen spaties verwijderen
+    name = re.sub(r"\(.*?\)", "", name)
+    name = name.replace("\u200b", "")
     name = name.strip()
-    return name
+    return name.lower()
 
 # ===============================
 # BST020T inlezen en naam → NMNR dictionary maken
@@ -37,23 +37,43 @@ def load_bst020t(filepath):
     return nmnaam_to_nmnr
 
 # ===============================
-# BST711T inlezen en NMNR → SPKode dictionary maken
+# BST711T inlezen en NMNR → (SPKode, ATC-code) dictionary maken
 # ===============================
 def load_bst711t(filepath):
-    nmnr_to_spkode = {}
+    nmnr_to_spk_atc = {}
     with open(filepath, encoding="utf-8") as f:
         for line in f:
-            nmnr = line[40:47].strip()  # GPNMNR veld
-            spkode = line[104:112].strip()  # SPKode veld (let op correcte slicing)
-            if nmnr and spkode:
-                nmnr_to_spkode[nmnr] = spkode
-    return nmnr_to_spkode
+            nmnr = line[40:47].strip()
+            spkode = line[104:112].strip()
+            atc_code = line[118:126].strip()
+            if nmnr:
+                nmnr_to_spk_atc[nmnr] = (spkode, atc_code)
+    return nmnr_to_spk_atc
+
+# ===============================
+# BST801T inlezen en ATC_groep → Nederlandse omschrijving dictionary maken
+# ===============================
+def load_bst801t(filepath):
+    atc3_to_omschrijving = {}
+    with open(filepath, encoding="utf-8") as f:
+        for line in f:
+            atc_code = line[5:13]
+            atc_groep = atc_code[:3].strip()
+            rest = atc_code[3:].strip()
+            omschrijving = line[13:93].strip()
+            
+            # We nemen alleen ATC-groep op als de eerste 3 tekens gevuld zijn
+            # én de rest van het veld leeg is
+            if atc_groep and not rest and omschrijving:
+                atc3_to_omschrijving[atc_groep] = omschrijving
+    return atc3_to_omschrijving
 
 # ===============================
 # Load BST data
 # ===============================
 nmnaam_to_nmnr = load_bst020t(BST_PATH + "BST020T")
-nmnr_to_spkode = load_bst711t(BST_PATH + "BST711T")
+nmnr_to_spk_atc = load_bst711t(BST_PATH + "BST711T")
+atc3_to_omschrijving = load_bst801t(BST_PATH + "BST801T")
 
 # ===============================
 # Haal groep-links op uit het Kompas
@@ -74,7 +94,10 @@ c.execute("""
     CREATE TABLE geneesmiddelen (
         groep TEXT,
         geneesmiddel TEXT,
-        SPKode TEXT
+        SPKode TEXT,
+        ATCcode TEXT,
+        ATC_groep TEXT,
+        ATC_omschrijving TEXT
     )
 """)
 conn.commit()
@@ -95,17 +118,22 @@ for groepslug in groepen:
     for link in geneesmiddelen_links:
         raw_name = link.text.strip()
         geneesmiddel = clean_name(raw_name)
-        lookup_key = geneesmiddel.lower()
 
-        nmnr = nmnaam_to_nmnr.get(lookup_key)
-        spk = nmnr_to_spkode.get(nmnr) if nmnr else None
+        nmnr = nmnaam_to_nmnr.get(geneesmiddel)
+        spk, atc, atc_groep, atc_omschrijving = (None, None, None, None)
+        
+        if nmnr and nmnr in nmnr_to_spk_atc:
+            spk, atc = nmnr_to_spk_atc[nmnr]
+            if atc and len(atc) >= 3:
+                atc_groep = atc[:3]
+                atc_omschrijving = atc3_to_omschrijving.get(atc_groep)
 
         status = "✅" if spk else "❌"
         print(f"  {status} {geneesmiddel}")
 
         c.execute(
-            "INSERT INTO geneesmiddelen (groep, geneesmiddel, SPKode) VALUES (?, ?, ?)",
-            (groepsnaam, geneesmiddel, spk)
+            "INSERT INTO geneesmiddelen (groep, geneesmiddel, SPKode, ATCcode, ATC_groep, ATC_omschrijving) VALUES (?, ?, ?, ?, ?, ?)",
+            (groepsnaam, geneesmiddel, spk, atc, atc_groep, atc_omschrijving)
         )
     conn.commit()
     time.sleep(random.uniform(0.5, 1.5))

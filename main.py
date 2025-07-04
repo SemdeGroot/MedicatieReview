@@ -119,7 +119,7 @@ def genereer_word_document(patiënten_data, afdeling):
             table = doc.add_table(rows=1, cols=4)
             table.style = 'Table Grid'
             hdr_cells = table.rows[0].cells
-            headers = ["Geneesmiddel", "Geneesmiddelgroep", "Gebruik", "Opmerking arts"]
+            headers = ["Geneesmiddel", "Geneesmiddelgroep", "Gebruik", "Opmerking"]
             for i, text in enumerate(headers):
                 run = hdr_cells[i].paragraphs[0].add_run(text)
                 run.bold = True

@@ -1,1 +1,14 @@
+# Virtuele omgevingen
 venv/
+.venv/
+
+# Pycache bestanden
+__pycache__/
+*.py[cod]
+
+# Tijdelijke bestanden van Word en Excel (geopende bestanden)
+~$*.docx
+~$*.xlsx
+
+# VSCode instellingen
+.vscode/

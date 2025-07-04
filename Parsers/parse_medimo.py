@@ -123,13 +123,32 @@ def get_spkodes_in_db(db_path="geneesmiddelen.db"):
     conn.close()
     return set(result)
 
-def match_to_fk_database(spkode, db_path="geneesmiddelen.db"):
+def match_to_fk_database(spkode, db_path="geneesmiddelen.db", atc_db_path="ATC_groepen.db"):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute("SELECT geneesmiddel, groep FROM geneesmiddelen WHERE SPKode = ?", (spkode,))
+    c.execute("SELECT geneesmiddel, groep, ATC_groep FROM geneesmiddelen WHERE SPKode = ?", (spkode,))
     result = c.fetchone()
     conn.close()
-    return result if result else (None, None)
+
+    if not result:
+        return None, None, None, None, None  # geneesmiddel, groep, ATC_groep, ATC_omschrijving, Jansen_omschrijving
+
+    geneesmiddel, groep, atc_groep = result
+
+    if not atc_groep:
+        return geneesmiddel, groep, None, None, None
+
+    atc_conn = sqlite3.connect(atc_db_path)
+    atc_c = atc_conn.cursor()
+    atc_c.execute("SELECT ATC_groep, ATC_omschrijving, Jansen_omschrijving FROM ATC_groepen WHERE ATC_groep = ?", (atc_groep,))
+    atc_result = atc_c.fetchone()
+    atc_conn.close()
+
+    if not atc_result:
+        return geneesmiddel, groep, atc_groep, None, None
+
+    atc_groep, atc_omschrijving, jansen_omschrijving = atc_result
+    return geneesmiddel, groep, atc_groep, atc_omschrijving, jansen_omschrijving
 
 def main():
     dir_path = "G-Standaard"
@@ -167,13 +186,19 @@ def main():
         gm_list = parse_medimo_block(patiënt)
         for gm in gm_list:
             nmnr, hpkode, spkode = match_to_spkode(gm["clean"], bst020, bst052, bst004, bst070, bst711, db_spkodes)
-            fk_naam, fk_groep = (match_to_fk_database(spkode) if spkode else (None, None))
+            fk_naam, fk_groep, atc_groep, atc_omschrijving, jansen_omschrijving = (
+                match_to_fk_database(spkode) if spkode else (None, None, None, None, None)
+            )
+            
             status = "✅" if fk_groep else "❌"
 
             print(f"  {status} {gm['clean']}")
             print(f"    → NMNR: {nmnr}, HPKODE: {hpkode}, SPKode: {spkode}")
-            print(f"    → Groep: {fk_groep} ({fk_naam})")
-            print(f"    → Gebruik: {gm['gebruik']} | Opmerking: {gm['opmerking']}")
+            print(f"    → FK Groep: {fk_groep} ({fk_naam})")
+            print(f"    → ATC Groep: {atc_groep}")
+            print(f"    → ATC Omschrijving: {atc_omschrijving}")
+            print(f"    → Jansen Omschrijving: {jansen_omschrijving}")
+            print(f"    → Gebruik: {gm['gebruik']} | Opmerking: {gm['opmerking']}\n")
 
 def run_parser():
     """

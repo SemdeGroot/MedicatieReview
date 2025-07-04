@@ -67,10 +67,18 @@ def check_stopp_criteria(medicatielijst, leeftijd, db_path='geneesmiddelen.db', 
                     matched_middelen.update(middelen_in_groep)
 
         if matched_middelen:
+            # Controle op combinatie
+            if len(matched_middelen) > 1 and (combi_x or combi_y or combi_z):
+                triggering_text = f"Combinatie: {' + '.join(sorted(matched_middelen))}"
+            else:
+                triggering_text = ", ".join(sorted(matched_middelen))
+
             triggered_criteria.append({
                 "id": criterion["id"],
+                "category": criterion["category"],
                 "description": criterion["description"],
-                "triggering_medicines": sorted(matched_middelen)
+                "argument": criterion["argument"],
+                "triggering_medicines": triggering_text
             })
 
     return triggered_criteria

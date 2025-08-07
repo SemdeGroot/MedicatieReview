@@ -59,20 +59,22 @@ def parse_medimo_block(block):
 
 def lichte_fuzzy_match(gm_clean, bst020):
     gm_norm = clean_name(gm_clean).lower()
-    gm_tokens = set(gm_norm.split())
-    beste_match = None
-    meeste_overlap = 0
+
+    # Stap 1: Exacte match op de volledige naam
     for row in bst020:
         naam = clean_name(row["NMNAAM"]).lower()
-        naam_tokens = set(naam.split())
-        gemeenschappelijk = len(gm_tokens & naam_tokens)
-        min_aantal = min(len(gm_tokens), len(naam_tokens))
-        overlap_ratio = gemeenschappelijk / min_aantal if min_aantal > 0 else 0
-        if overlap_ratio > 0.6 or gm_norm in naam or naam in gm_norm:
-            if gemeenschappelijk > meeste_overlap:
-                beste_match = row
-                meeste_overlap = gemeenschappelijk
-    return beste_match["NMNR"] if beste_match else None
+        if gm_norm == naam:
+            return row["NMNR"]
+
+    # Stap 2: Probeer met eerste woord
+    eerste_woord = gm_norm.split()[0]
+    for row in bst020:
+        naam = clean_name(row["NMNAAM"]).lower()
+        if naam == eerste_woord:
+            return row["NMNR"]
+
+    return None  # Geen match gevonden
+
 
 def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711, db_spkodes):
     nmnr = lichte_fuzzy_match(gm_clean, bst020)
@@ -83,7 +85,7 @@ def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711, db_spkodes
 
     # 1. Direct via BST711T
     for row in bst711:
-        if row["GPNMNR"] == nmnr or row["GPSTNR"] == nmnr:
+        if row["GPSTNR"] == nmnr or row["GPNMNR"] == nmnr:
             mogelijke_spkodes.append((None, row["SPKODE"]))
 
     # 2. Via PRKODE → GPKODE → SPKODE

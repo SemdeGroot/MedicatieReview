@@ -123,83 +123,83 @@
     },
         {
       "fk_geneesmiddel": "adamts13",
-      "gpk_naam": ""
+      "gpk_naam": "ADAMTS13, RECOMBINANT"
     },
         {
       "fk_geneesmiddel": "podofylline",
-      "gpk_naam": ""
+      "gpk_naam": "PODOFYLLUM"
     },
         {
       "fk_geneesmiddel": "sinecatechins",
-      "gpk_naam": ""
+      "gpk_naam": "VEREGEN"
     },
         {
       "fk_geneesmiddel": "doxorubicine in gepegyleerde liposomen",
-      "gpk_naam": ""
+      "gpk_naam": "DOXORUBICINE"
     },
         {
       "fk_geneesmiddel": "zolpidem",
-      "gpk_naam": ""
+      "gpk_naam": "ZOLPIDEM TARTRAAT"
     },
         {
       "fk_geneesmiddel": "plasma vers bevroren",
-      "gpk_naam": ""
+      "gpk_naam": "PLASMA VERSBEVROREN"
     },
         {
       "fk_geneesmiddel": "eptacog alfa, geactiveerd",
-      "gpk_naam": ""
+      "gpk_naam": "EPTACOG ALFA GEACTIVEERD"
     },
         {
       "fk_geneesmiddel": "factor viii/von willebrand-factor",
-      "gpk_naam": ""
+      "gpk_naam": "VON WILLEBRANDFACTOR/FACTOR VIII"
     },
         {
       "fk_geneesmiddel": "von willebrand-factor",
-      "gpk_naam": ""
+      "gpk_naam": "VON WILLEBRANDFACTOR"
     },
         {
       "fk_geneesmiddel": "brimonidine/timolol",
-      "gpk_naam": ""
+      "gpk_naam": "TIMOLOL/BRIMONIDINE"
     },
         {
       "fk_geneesmiddel": "imipenem/cilastatine/relebactam",
-      "gpk_naam": ""
+      "gpk_naam": "IMIPENEM/CILASTATINR/RELEBACTAM"
     },
         {
       "fk_geneesmiddel": "ceftarolinefosamil",
-      "gpk_naam": ""
+      "gpk_naam": "CEFTAROLINE"
     },
         {
       "fk_geneesmiddel": "neostigmine/glycopyrronium",
-      "gpk_naam": ""
+      "gpk_naam": "GLYCOPYRRONIUM/NEOSTIGMINE"
     },
         {
       "fk_geneesmiddel": "miconazol/hydrocortison",
-      "gpk_naam": ""
+      "gpk_naam": "HYDROCORTISON/MICONAZOL"
     },
         {
       "fk_geneesmiddel": "triamcinolon/salicylzuur",
-      "gpk_naam": ""
+      "gpk_naam": "TRIAMCINOLONACETONIDE/SALICYLZUUR"
     },
     {
       "fk_geneesmiddel": "triamcinolon/ureum",
-      "gpk_naam": ""
+      "gpk_naam": "TRIAMCINOLONACETONIDE/UREUM"
     },
         {
       "fk_geneesmiddel": "betamethason in propyleenglycol",
-      "gpk_naam": ""
+      "gpk_naam": "BETAMETHASON"
     },
         {
       "fk_geneesmiddel": "hydrocortisonbutyraat",
-      "gpk_naam": ""
+      "gpk_naam": "HYDROCORTISON"
     },
         {
       "fk_geneesmiddel": "fluticasonfuroaat",
-      "gpk_naam": ""
+      "gpk_naam": "FLUTICASON"
     },
         {
       "fk_geneesmiddel": "fluticasonpropionaat",
-      "gpk_naam": ""
+      "gpk_naam": "FLUTICASON"
     },
         {
       "fk_geneesmiddel": "fludrocortison/neomycine/polymyxine b/lidocaine",

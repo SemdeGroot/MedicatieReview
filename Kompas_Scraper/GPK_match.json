@@ -203,91 +203,91 @@
     },
         {
       "fk_geneesmiddel": "fludrocortison/neomycine/polymyxine b/lidocaine",
-      "gpk_naam": ""
+      "gpk_naam": "PANOTILE"
     },
         {
       "fk_geneesmiddel": "hydrocortison/azijnzuur",
-      "gpk_naam": ""
+      "gpk_naam": "AZIJNZUUR/HYDROCORTISON"
     },
         {
       "fk_geneesmiddel": "hydrocortison/colistine/bacitracine",
-      "gpk_naam": ""
+      "gpk_naam": "BACITRACINE/COLISTINE/HYDROCORTISON"
     },
         {
       "fk_geneesmiddel": "triamcinolon/azijnzuur",
-      "gpk_naam": ""
+      "gpk_naam": "AZIJNZUUR/TRIAMCINOLONACETONIDE"
     },
         {
       "fk_geneesmiddel": "formoterol/beclometason",
-      "gpk_naam": ""
+      "gpk_naam": "BECLOMETASON/FORMOTEROL"
     },
         {
       "fk_geneesmiddel": "formoterol/budesonide",
-      "gpk_naam": ""
+      "gpk_naam": "BUDESONIDE/FORMOTEROL"
     },
         {
       "fk_geneesmiddel": "formoterol/fluticason",
-      "gpk_naam": ""
+      "gpk_naam": "FLUTICASON/FORMOTEROL"
     },
         {
       "fk_geneesmiddel": "vilanterol/fluticasonfuroaat",
-      "gpk_naam": ""
+      "gpk_naam": "FLUTICASON/VILANTEROL"
     },
         {
       "fk_geneesmiddel": "biergist/haaienlevertraan",
-      "gpk_naam": ""
+      "gpk_naam": "LEVERTRAAN/BIERGIST"
     },
         {
       "fk_geneesmiddel": "bismutsubnitraat/lidocaine/zinkoxide",
-      "gpk_naam": ""
+      "gpk_naam": "LIDOCAINE/ZINKOXIDE/BISMUTSUBNITRAAT"
     },
         {
       "fk_geneesmiddel": "mucopolysaccharidepolysulfaat/salicylzuur",
-      "gpk_naam": ""
+      "gpk_naam": "MOBILAT"
     },
         {
       "fk_geneesmiddel": "cetrimide/chloorhexidine",
-      "gpk_naam": ""
+      "gpk_naam": "CHLOORHEXIDINE/CETRIMIDE"
     },
         {
       "fk_geneesmiddel": "chloorhexidine/isopropylalcohol",
-      "gpk_naam": ""
+      "gpk_naam": "CHLOORHEXIDINE/ISOPROPANOL"
     },
         {
       "fk_geneesmiddel": "mecetronium",
-      "gpk_naam": ""
+      "gpk_naam": "STERILLIUM"
     },
         {
       "fk_geneesmiddel": "rheum/salicylzuur",
-      "gpk_naam": ""
+      "gpk_naam": "SALICYLZUUR/RHEUM"
     },
         {
       "fk_geneesmiddel": "methoxypolyethyleenglycol-epoetine beta",
-      "gpk_naam": ""
+      "gpk_naam": "METHOXYPEG-EPO BETA"
     },
         {
       "fk_geneesmiddel": "fentolamine/papaverine",
-      "gpk_naam": ""
+      "gpk_naam": "PAPAVERINE/FENTOLAMINE"
     },
         {
       "fk_geneesmiddel": "aminofluoriden",
-      "gpk_naam": ""
+      "gpk_naam": "ELMEX"
     },
         {
       "fk_geneesmiddel": "natriumfosfaat",
-      "gpk_naam": ""
+      "gpk_naam": "NATRIUMFOSFATEN"
     },
         {
       "fk_geneesmiddel": "calciumacetaat/magnesiumcarbonaat",
-      "gpk_naam": ""
+      "gpk_naam": "CALCIUMACETAAT/MAGNESIUMSUBCARBONAAT"
     },
         {
       "fk_geneesmiddel": "ijzeroxidehydroxidesaccharosezetmeelcomplex",
-      "gpk_naam": ""
+      "gpk_naam": "FERRIOXIDESACCHARAAT"
     },
     {
       "fk_geneesmiddel": "choriongonadotropine alfa",
-      "gpk_naam": ""
+      "gpk_naam": "CHORIONGONADOTROFINE"
     },
         {
       "fk_geneesmiddel": "follitropine alfa",

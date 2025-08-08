@@ -283,7 +283,7 @@
     },
         {
       "fk_geneesmiddel": "ijzeroxidehydroxidesaccharosezetmeelcomplex",
-      "gpk_naam": "FERRIOXIDESACCHARAAT"
+      "gpk_naam": "IJZER(III)OXIDEHYDROXIDESACCHAROSEZETMEELCOMPLEX"
     },
     {
       "fk_geneesmiddel": "choriongonadotropine alfa",
@@ -291,162 +291,162 @@
     },
         {
       "fk_geneesmiddel": "follitropine alfa",
-      "gpk_naam": ""
+      "gpk_naam": "FOLLITROPINE"
     },
         {
       "fk_geneesmiddel": "follitropine beta",
-      "gpk_naam": ""
+      "gpk_naam": "FOLLITROPINE"
     },
         {
       "fk_geneesmiddel": "follitropine delta",
-      "gpk_naam": ""
+      "gpk_naam": "FOLLITROPINE"
     },
         {
       "fk_geneesmiddel": "follitropine/lutropine",
-      "gpk_naam": ""
+      "gpk_naam": "FOLLITROPINE/LUTROPINE ALFA"
     },
         {
       "fk_geneesmiddel": "lutropine",
-      "gpk_naam": ""
+      "gpk_naam": "LUTROPINE ALFA"
     },
         {
       "fk_geneesmiddel": "tenofoviralafenamide",
-      "gpk_naam": ""
+      "gpk_naam": "TENOFOVIR ALAFENAMIDE"
     },
         {
       "fk_geneesmiddel": "tenofovirdisoproxil",
-      "gpk_naam": ""
+      "gpk_naam": "TENOFOVIR DISOPROXIL"
     },
         {
       "fk_geneesmiddel": "eucalyptusolie/kamfer/levomenthol",
-      "gpk_naam": ""
+      "gpk_naam": "KAMFER/LEVOMENTHOL/EUCALYPTUS"
     },
         {
       "fk_geneesmiddel": "klimopblad",
-      "gpk_naam": ""
+      "gpk_naam": "KLIMOP BLAD"
     },
         {
       "fk_geneesmiddel": "ijzercarboxymaltose",
-      "gpk_naam": ""
+      "gpk_naam": "FERINJECT"
     },
         {
       "fk_geneesmiddel": "ijzerderisomaltose",
-      "gpk_naam": ""
+      "gpk_naam": "FERRIDERISOMALTOSE"
     },
         {
       "fk_geneesmiddel": "cytomegalovirus-immunoglobuline",
-      "gpk_naam": ""
+      "gpk_naam": "CYTOMEGALIE-IMMUNOGLOBULINE"
     },
         {
       "fk_geneesmiddel": "hepatitis b-immunoglobuline",
-      "gpk_naam": ""
+      "gpk_naam": "HEPATITIS-B-IMMUNOGLOBULINE"
     },
         {
       "fk_geneesmiddel": "normaal immunoglobuline",
-      "gpk_naam": ""
+      "gpk_naam": "IMMUNOGLOBULINE NORMAAL"
     },
         {
       "fk_geneesmiddel": "rhesusimmunoglobuline",
-      "gpk_naam": ""
+      "gpk_naam": "RHESUS(D)IMMUNOGLOBULINE"
     },
         {
       "fk_geneesmiddel": "mycofenolaatmofetil",
-      "gpk_naam": ""
+      "gpk_naam": "MYCOFENOLAAT MOFETIL"
     },
         {
       "fk_geneesmiddel": "thymocytenglobuline",
-      "gpk_naam": ""
+      "gpk_naam": "THYMOCYTENIMMUNOGLOBULINE"
     },
         {
       "fk_geneesmiddel": "indifferente  creme",
-      "gpk_naam": ""
+      "gpk_naam": "CETOMACROGOL CREME"
     },
         {
       "fk_geneesmiddel": "indifferente  zalf",
-      "gpk_naam": ""
+      "gpk_naam": "CETOMACROGOL ZALF"
     },    {
       "fk_geneesmiddel": "indifferente gel",
-      "gpk_naam": ""
+      "gpk_naam": "CARBOMEERWATERGEL 1%"
     },
         {
       "fk_geneesmiddel": "insuline aspart/insuline aspart protamine",
-      "gpk_naam": ""
+      "gpk_naam": "INSULINE ASPART/PROTAMINE"
     },
         {
       "fk_geneesmiddel": "insuline degludec/insuline aspart",
-      "gpk_naam": ""
+      "gpk_naam": "INSULINE DEGLUDEC/ASPART"
     },
         {
       "fk_geneesmiddel": "insuline lispro/insuline lispro protamine",
-      "gpk_naam": ""
+      "gpk_naam": "INSULINE LISPRO"
     },
         {
       "fk_geneesmiddel": "insuline, gewoon/insuline, isofaan",
-      "gpk_naam": ""
+      "gpk_naam": "INSULINE ISOFAAN"
     },
         {
       "fk_geneesmiddel": "insuline, isofaan",
-      "gpk_naam": ""
+      "gpk_naam": "INSULINE ISOFAAN"
     },
         {
       "fk_geneesmiddel": "interferon gamma",
-      "gpk_naam": ""
+      "gpk_naam": "INTERFERON GAMMA 1B"
     },
         {
       "fk_geneesmiddel": "peginterferon alfa-2a",
-      "gpk_naam": ""
+      "gpk_naam": "PEGINTERFERON ALFA 2A"
     },
         {
       "fk_geneesmiddel": "ropeginterferon alfa-2b",
-      "gpk_naam": ""
+      "gpk_naam": "PEGINTERFERON ALFA 2B"
     },
         {
       "fk_geneesmiddel": "calciumpolystyreensulfonaat",
-      "gpk_naam": ""
+      "gpk_naam": "POLYSTYREENSULFONAAT CALCIUM"
     },
         {
       "fk_geneesmiddel": "natriumpolystyreensulfonaat",
-      "gpk_naam": ""
+      "gpk_naam": "POLYSTYREENSULFONAAT NATRIUM"
     },
         {
       "fk_geneesmiddel": "brinzolamide/timolol",
-      "gpk_naam": ""
+      "gpk_naam": "TIMOLOL/BRINZOLAMIDE"
     },
         {
       "fk_geneesmiddel": "dorzolamide/timolol",
-      "gpk_naam": ""
+      "gpk_naam": "TIMOLOL/DORZOLAMIDE"
     },
             {
       "fk_geneesmiddel": "bastaardsmeerwortel",
-      "gpk_naam": ""
+      "gpk_naam": "BASTAARDSMEERWORTEL/BASTAARDSMEERWORTEL"
     },
         {
       "fk_geneesmiddel": "multikruidenextract",
-      "gpk_naam": ""
+      "gpk_naam": "IBEROGAST"
     },
             {
       "fk_geneesmiddel": "pepermuntolie",
-      "gpk_naam": ""
+      "gpk_naam": "PEPERMUNT OLIE"
     },
             {
       "fk_geneesmiddel": "carboxymethylcellulose",
-      "gpk_naam": ""
+      "gpk_naam": "CARBOXYMETHYLZETMEEL"
     },
             {
       "fk_geneesmiddel": "dextran/hypromellose",
-      "gpk_naam": ""
+      "gpk_naam": "DEXTRAN 70/HYPROMELLOSE"
     },
             {
       "fk_geneesmiddel": "paraffine/vaseline/wolvet",
-      "gpk_naam": ""
+      "gpk_naam": "VASELINE/PARAFFINE"
     },
             {
       "fk_geneesmiddel": "natriumdocusaat/glycerol",
-      "gpk_naam": ""
+      "gpk_naam": "NORGALAX"
     },
             {
       "fk_geneesmiddel": "natriumdocusaat/sorbitol",
-      "gpk_naam": ""
+      "gpk_naam": "KLYX"
     },
             {
       "fk_geneesmiddel": "natriumlaurylsulfoacetaat/natriumcitraat/sorbitol",

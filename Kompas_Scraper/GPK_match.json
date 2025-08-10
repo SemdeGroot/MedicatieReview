@@ -450,231 +450,231 @@
     },
             {
       "fk_geneesmiddel": "natriumlaurylsulfoacetaat/natriumcitraat/sorbitol",
-      "gpk_naam": ""
+      "gpk_naam": "MICROLAX"
     },
             {
       "fk_geneesmiddel": "picozwavelzuur/magnesiumoxide/citroenzuur",
-      "gpk_naam": ""
+      "gpk_naam": "PICOPREP"
     },
             {
       "fk_geneesmiddel": "sennosiden/psylliumzaad",
-      "gpk_naam": ""
+      "gpk_naam": "AGIOLAX"
     },
             {
       "fk_geneesmiddel": "macrogol/elektrolyten",
-      "gpk_naam": ""
+      "gpk_naam": "MACROGOL/ZOUTEN"
     },
             {
       "fk_geneesmiddel": "natrium-/kalium-/magnesiumsulfaat",
-      "gpk_naam": ""
+      "gpk_naam": "EZICLEN"
     },
             {
       "fk_geneesmiddel": "natriumfosfaat",
-      "gpk_naam": ""
+      "gpk_naam": "NATRIUMFOSFATEN"
     },
             {
       "fk_geneesmiddel": "psylliumzaad",
-      "gpk_naam": ""
+      "gpk_naam": "VOLCOLON"
     },
             {
       "fk_geneesmiddel": "omega-3-vetzuren",
-      "gpk_naam": ""
+      "gpk_naam": "OMACOR"
     },
             {
       "fk_geneesmiddel": "lithium",
-      "gpk_naam": ""
+      "gpk_naam": "LITHIUMCARBONAAT"
     },
             {
       "fk_geneesmiddel": "surfactant",
-      "gpk_naam": ""
+      "gpk_naam": "CUROSURF"
     },
             {
       "fk_geneesmiddel": "carglumaatzuur",
-      "gpk_naam": ""
+      "gpk_naam": "CARBAGLU"
     },
             {
       "fk_geneesmiddel": "l-carnitine",
-      "gpk_naam": ""
+      "gpk_naam": "CARNEUS"
     },
             {
       "fk_geneesmiddel": "natriumoxybaat",
-      "gpk_naam": ""
+      "gpk_naam": "XYREM"
     },
             {
       "fk_geneesmiddel": "natriumchloride hypertoon",
-      "gpk_naam": ""
+      "gpk_naam": "NATRIUMCHLORIDE"
     },
             {
       "fk_geneesmiddel": "natriumedetaat",
-      "gpk_naam": ""
+      "gpk_naam": "EDETAAT OOGDRUPPELS 0,4% FNA FLACON 10ML MR"
     },
             {
       "fk_geneesmiddel": "trastuzumab-deruxtecan",
-      "gpk_naam": ""
+      "gpk_naam": "TRASTUZUMAB"
     },
             {
       "fk_geneesmiddel": "trastuzumab-emtansine",
-      "gpk_naam": ""
+      "gpk_naam": "TRASTUZUMAB"
     },
             {
       "fk_geneesmiddel": "telotristat-ethyl",
-      "gpk_naam": ""
+      "gpk_naam": "TELOTRISTAT ETHYL"
     },
             {
       "fk_geneesmiddel": "interferon beta-1a",
-      "gpk_naam": ""
+      "gpk_naam": "INTERFERON BETA 1A"
     },
             {
       "fk_geneesmiddel": "interferon beta-1b",
-      "gpk_naam": ""
+      "gpk_naam": "INTERFERON BETA 1B"
     },
             {
       "fk_geneesmiddel": "peginterferon beta-1a",
-      "gpk_naam": ""
+      "gpk_naam": "PLEGRIDY"
     },
             {
       "fk_geneesmiddel": "dornase alfa",
-      "gpk_naam": ""
+      "gpk_naam": "DORNASE"
     },        
     {
       "fk_geneesmiddel": "pancreatine",
-      "gpk_naam": ""
+      "gpk_naam": "CREON"
     },
             {
       "fk_geneesmiddel": "carbacholinium",
-      "gpk_naam": ""
+      "gpk_naam": "CARBACHOL"
     },
             {
       "fk_geneesmiddel": "benzathinebenzylpenicilline",
-      "gpk_naam": ""
+      "gpk_naam": "EXTENCIN"
     },
             {
       "fk_geneesmiddel": "gemodificeerd gelatine",
-      "gpk_naam": ""
+      "gpk_naam": "GELATINE"
     },
             {
       "fk_geneesmiddel": "bimatoprost/timolol",
-      "gpk_naam": ""
+      "gpk_naam": "TIMOLOL/BIMATOPROST"
     },
             {
       "fk_geneesmiddel": "latanoprost/timolol",
-      "gpk_naam": ""
+      "gpk_naam": "TIMOLOL/LATANOPROST"
     },
             {
       "fk_geneesmiddel": "tafluprost/timolol",
-      "gpk_naam": ""
+      "gpk_naam": "TIMOLOL/TAFLUPROST"
     },
             {
       "fk_geneesmiddel": "pantoprazol/claritromycine/amoxicilline",
-      "gpk_naam": ""
+      "gpk_naam": "AMOXICILLINE/CLARITROMYCINE/PANTOPRAZOL"
     },
             {
       "fk_geneesmiddel": "5-fluoro-uracil",
-      "gpk_naam": ""
+      "gpk_naam": "FLUOROURACIL"
     },
             {
       "fk_geneesmiddel": "botulinetoxine a",
-      "gpk_naam": ""
+      "gpk_naam": "BOTULINE A TOXINE"
     },
             {
       "fk_geneesmiddel": "tamsulosine/dutasteride",
-      "gpk_naam": ""
+      "gpk_naam": "DUTASTERIDE/TAMSULOSINE"
     },
             {
       "fk_geneesmiddel": "tamsulosine/solifenacine",
-      "gpk_naam": ""
+      "gpk_naam": "SOLIFENACINE/TAMSULOSINE"
     },
             {
       "fk_geneesmiddel": "irinotecan in gepegyleerde liposomen",
-      "gpk_naam": ""
+      "gpk_naam": "IRINOTECAN"
     },
             {
       "fk_geneesmiddel": "clopidogrel/acetylsalicylzuur",
-      "gpk_naam": ""
+      "gpk_naam": "ACETYLSALICYLZUUR/CLOPIDOGREL"
     },
             {
       "fk_geneesmiddel": "polidocanol/ureum",
-      "gpk_naam": ""
+      "gpk_naam": "POLIDOCANOL 3%/ UREUM 5% VETCREME"
     },
             {
       "fk_geneesmiddel": "pentosanpolysulfaatnatrium",
-      "gpk_naam": ""
+      "gpk_naam": "ELMIRON"
     },
           {
       "fk_geneesmiddel": "bof-/mazelen-/rubellavaccin",
-      "gpk_naam": ""
+      "gpk_naam": "BOFVACCIN/MAZELENVACCIN/RUBELLAVACCIN"
     },
               {
       "fk_geneesmiddel": "choleravaccin, geinactiveerd, hele cel",
-      "gpk_naam": ""
+      "gpk_naam": "CHOLERAVACCIN"
     },
               {
       "fk_geneesmiddel": "choleravaccin, levend verzwakt",
-      "gpk_naam": ""
+      "gpk_naam": "CHOLERAVACCIN"
     },
               {
       "fk_geneesmiddel": "covid-19 mrna vaccin",
-      "gpk_naam": ""
+      "gpk_naam": "COVID-19 VACCIN PFIZER"
     },
               {
       "fk_geneesmiddel": "difterie-/acellulair kinkhoest-/tetanus-/polio-/haemophilus influenzae b-/hepatitis b-vaccin",
-      "gpk_naam": ""
+      "gpk_naam": "VAXELIS"
     },
               {
       "fk_geneesmiddel": "difterie-/acellulair kinkhoest-/tetanusvaccin",
-      "gpk_naam": ""
+      "gpk_naam": "BOOSTRIX"
     },
               {
       "fk_geneesmiddel": "difterie-/tetanus-/poliovaccin",
-      "gpk_naam": ""
+      "gpk_naam": "REVAXIS"
     },
               {
       "fk_geneesmiddel": "haemophilus influenzae b-vaccin",
-      "gpk_naam": ""
+      "gpk_naam": "HAEMOPHILUS-INFLUENZAE-B-VACCIN"
     },
               {
       "fk_geneesmiddel": "hepatitis a+b-vaccin",
-      "gpk_naam": ""
+      "gpk_naam": "HEPATITIS-A/HEPATITIS-B-VACCIN"
     },
               {
       "fk_geneesmiddel": "hepatitis a-vaccin",
-      "gpk_naam": ""
+      "gpk_naam": "HEPATITIS-A-VACCIN"
     },
               {
       "fk_geneesmiddel": "hepatitis b-vaccin",
-      "gpk_naam": ""
+      "gpk_naam": "HEPATITIS-B-VACCIN"
     },
               {
       "fk_geneesmiddel": "meningokokkenvaccin type a, c, w135, y",
-      "gpk_naam": ""
+      "gpk_naam": "MENINGOKOKKENVACCIN"
     },
               {
       "fk_geneesmiddel": "meningokokkenvaccin type b",
-      "gpk_naam": ""
+      "gpk_naam": "MENINGOKOKKENVACCIN"
     },
               {
       "fk_geneesmiddel": "meningokokkenvaccin type c",
-      "gpk_naam": ""
+      "gpk_naam": "MENINGOKOKKENVACCIN"
     },
               {
       "fk_geneesmiddel": "pokkenvaccin",
-      "gpk_naam": ""
+      "gpk_naam": "N/A"
     },
               {
       "fk_geneesmiddel": "rs-virusvaccin",
-      "gpk_naam": ""
+      "gpk_naam": "ABRYSVO"
     },
               {
       "fk_geneesmiddel": "tyfusvaccin",
-      "gpk_naam": ""
+      "gpk_naam": "TYFUSVACCIN"
     },
               {
       "fk_geneesmiddel": "varicella-zostervaccin",
-      "gpk_naam": ""
+      "gpk_naam": "VARICELLAZOSTERIMMUNOGLOBULINE"
     },
               {
       "fk_geneesmiddel": "ergocalciferol/fytomenadion/retinol/tocoferol",
-      "gpk_naam": ""
+      "gpk_naam": "VITINTRA"
     }
   ]
 }

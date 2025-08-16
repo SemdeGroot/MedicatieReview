@@ -1,6 +1,6 @@
 import sqlite3
 
-groep = "laxantia__combinatiepreparaten"
+groep = "laxantia__osmotisch_werkende"
 
 # Open database opnieuw (of gebruik bestaand 'conn')
 conn = sqlite3.connect("geneesmiddelen.db")

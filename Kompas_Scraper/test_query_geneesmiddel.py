@@ -1,6 +1,6 @@
 import sqlite3
 
-geneesmiddel = "ropinirol"
+geneesmiddel = "macrogol/elektrolyten"
 
 # Open database
 conn = sqlite3.connect("geneesmiddelen.db")

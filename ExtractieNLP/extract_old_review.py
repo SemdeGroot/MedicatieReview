@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 """
 Koppelt oude Word-discussies (Wie-blokken) aan Medimo per patiënt:
-- Fuzzy patient matching (naam + geboortedatum)
+
+- Fuzzy patient matching (naam en/of geboortedatum; match ook als slechts één aanwezig is)
 - Fuzzy medicatie matching op KERNAAM (niet de hele regel)
-- Alleen aliassen uit extern JSON-bestand (geen ingebouwde alias-map)
-- Discussie: van middel-startregel t/m regel vóór volgende middel
+- Aliassen ENKEL via extern JSON (Data/aliases.json); aliassen worden ALLEEN op Word-zinnen toegepast
+- Kernbepaling:
+    * haakjes-inhoud verwijderd
+    * stoppen bij eerste vorm/eenheid (bijv. 'pdr', 'drank', 'mg', 'v', etc.)
+    * slash genormaliseerd ("/" -> spatie) voor matching
+- Discussie = regels van middel-start t/m regel vóór de volgende middel-start
 - GFR/eGFR extractie
-- Optioneel zins-splitsing met spaCy (fallback zonder spaCy)
+- GEEN spaCy/NLP (snel)
+- Laatste woord uit elk middelblok verwijderd (strip groepsheaders zoals 'Psychofarmaca')
 
 Uitvoer (incl. debug): ExtractieNLP/nlp_koppeling_debug.json
 """
@@ -20,7 +26,7 @@ from typing import List, Dict, Optional, Tuple
 # -------------------- PADEN --------------------
 DOCX_PATH = "Data/argusvlinder november 2024.docx"
 MEDIMO_PATH = "Data/medimo_input.txt"
-ALIASES_JSON = "ExtractieNLP/aliases.json"    # <-- Voor geneesmiddel aliases
+ALIASES_JSON = "ExtractieNLP/aliases.json"          # optioneel; aliassen uitsluitend uit dit bestand
 OUTPUT_JSON = "ExtractieNLP/nlp_koppeling_debug.json"
 
 # -------------------- FUZZY BACKEND --------------------
@@ -50,7 +56,6 @@ def _partial_ratio(a: str, b: str) -> int:
     elif _FUZZ_BACKEND == "fuzzywuzzy":
         return int(_fz_fuzz.partial_ratio(a, b))
     else:
-        # heel simpele fallback
         return _ratio(a, b)
 
 def _token_sort_ratio(a: str, b: str) -> int:
@@ -62,24 +67,6 @@ def _token_sort_ratio(a: str, b: str) -> int:
         sa = " ".join(sorted(a.split()))
         sb = " ".join(sorted(b.split()))
         return _ratio(sa, sb)
-
-# -------------------- NLP (optioneel) --------------------
-_NLP = None
-try:
-    import spacy
-    try:
-        _NLP = spacy.load("nl_core_news_sm")
-    except Exception:
-        _NLP = None
-except Exception:
-    _NLP = None
-
-def nlp_sentences(text: str) -> List[str]:
-    if not _NLP:
-        parts = re.split(r"(?<=[\.\?!])\s+|\n", text)
-        return [p.strip() for p in parts if p.strip()]
-    doc = _NLP(text)
-    return [s.text.strip() for s in doc.sents if s.text.strip()]
 
 # -------------------- HULPFUNCTIES: normalisatie --------------------
 def normalize_text_basic(s: str) -> str:
@@ -117,21 +104,28 @@ def normalize_dob(dob: str) -> str:
     return dob
 
 def normalize_line_for_match(line: str) -> str:
-    return normalize_text_basic(line)
+    s = normalize_text_basic(line)
+    s = s.replace("/", " ")          # <-- neutraliseer slash voor fuzzy matching
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+def strip_parentheses(s: str) -> str:
+    # verwijder ( ... ) en [ ... ] inhoud
+    s = re.sub(r"\([^)]*\)", " ", s)
+    s = re.sub(r"\[[^\]]*\]", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
 
 # -------------------- ALIASES (enkel extern JSON) --------------------
 def load_external_aliases(path: str) -> Dict[str, str]:
     """
     Laadt aliassen uit JSON: { "alias": "canonieke_naam", ... }
-    Slechts dit bestand bepaalt aliassen; geen defaults in code.
-    Keys en values worden genormaliseerd (lowercase, ascii-fication).
+    Slechts dit bestand bepaalt aliassen; keys/values genormaliseerd.
     """
     try:
         if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 data = json.load(f)
             if isinstance(data, dict):
-                # normaliseer keys/values
                 norm = {}
                 for k, v in data.items():
                     norm[normalize_text_basic(k)] = normalize_text_basic(v)
@@ -229,121 +223,170 @@ def parse_medimo(filepath: str) -> List[Dict]:
 FORM_WORDS = {
     "tablet","tabletten","capsule","caps","drank","pdr","poeder","gel","zalf","creme","crème",
     "aerosol","spray","inhalator","inhalatie","injsusp","injvlst","infuus",
-    "kauwtablet","msr","filmomhuld","fo","edo","ellipta","flacon","fl","oogdruppels"
+    "kauwtablet","msr","filmomhuld","fo","edo","ellipta","flacon","fl","oogdruppels",
+    "v"  # <--- belangrijk bij 'pdr v drank'
 }
 UNITS = {"mg","mcg","ug","µg","g","gram","ie","ml","%","ppm","mg/ml"}
 
-def extract_drug_core(text: str, alias_map: Dict[str,str]) -> str:
+def extract_drug_core(text: str, alias_map: Dict[str,str], *, apply_alias: bool) -> str:
     """
-    Bepaal een 'kernnaam' (1-3 tokens) uit medimo-regel of vrije tekst,
-    waarbij eerst aliasvervanging wordt toegepast (alleen extern JSON).
+    Bepaal kernnaam (1-3 tokens) uit een regel.
+    - apply_alias=False voor Medimo (canoniek)
+    - apply_alias=True  voor Word-zinnen
+    - haakjesinhoud strippen
+    - STOP bij eerste vorm/eenheid/cijfer
+    - slash -> spatie normalisatie
     """
-    s = apply_aliases(text, alias_map)
-    # split tokens (letters en slash-combo's blijven)
+    s = normalize_text_basic(text)
+    if apply_alias and alias_map:
+        for alias in sorted(alias_map.keys(), key=len, reverse=True):
+            s = re.sub(rf"\b{re.escape(alias)}\b", alias_map[alias], s)
+    s = strip_parentheses(s)
+
     tokens = re.findall(r"[a-zA-Z/]+|\d+[a-zA-Z%/]*", s)
     core_tokens = []
     for tok in tokens:
         t = tok.lower()
-        if t.isdigit():
+        if t.isdigit() or re.search(r"\d", t):
             break
         if t in UNITS or t in FORM_WORDS:
-            continue
-        if re.search(r"\d", t):
             break
         core_tokens.append(t)
         if len(core_tokens) >= 3:
             break
+
     if not core_tokens and tokens:
         core_tokens = [re.sub(r"[^a-z/]", "", tokens[0].lower())]
-    core = " ".join([t for t in core_tokens if t])
-    return core.strip()
+
+    core = " ".join([t.replace("/", " ") for t in core_tokens if t])
+    core = re.sub(r"\s+", " ", core).strip()
+    return core
 
 # -------------------- WORD PARSER (Wie-blokken) --------------------
 def parse_word_docx(docx_path: str) -> List[Dict]:
+    """
+    Parseert Wie-blokken. Probeert eerst naam + DOB op de 'Wie'-regel.
+    Als dat niet lukt, accepteert ook blocks met ALLEEN naam of ALLEEN DOB (voor latere matching).
+    """
     from docx import Document
     doc = Document(docx_path)
     full_text = "\n".join([p.text for p in doc.paragraphs])
 
-    # split op patiëntblokken beginnend met 'Wie'
     raw_blocks = re.split(r"\nWie\s+", full_text)
     patients = []
     for raw in raw_blocks[1:]:
         block = "Wie " + raw.strip()
-        # naam + DOB zoeken met toleranties tabs/spaties
-        m = re.search(r"^Wie\s+([^\t\n]+?)\s+(\d{2}-\d{2}-\d{4})", block, re.MULTILINE)
-        naam, dob = None, None
-        if m:
-            naam, dob = m.group(1).strip(), m.group(2).strip()
-        else:
-            m2 = re.search(r"^Wie\s+([^\n]+?)\s+(\d{2}-\d{2}-\d{4})", block, re.MULTILINE)
-            if m2:
-                naam, dob = m2.group(1).strip(), m2.group(2).strip()
+        lines = [ln.strip() for ln in block.splitlines() if ln.strip()]
+        header = lines[0] if lines else ""
 
+        # 1) Probeer naam + DOB op de eerste regel
+        naam, dob = None, None
+        m = re.match(r"^Wie\s+(.+?)\s+(\d{2}[-/]\d{2}[-/]\d{4})\b", header)
+        if m:
+            naam, dob = m.group(1).strip(), m.group(2).replace("/", "-").strip()
+        else:
+            # 2) Probeer alleen naam op de header
+            m_name = re.match(r"^Wie\s+(.+?)\s*$", header)
+            if m_name:
+                naam = m_name.group(1).strip()
+            # 3) Probeer DOB ergens in het blok (eerste datum)
+            m_dob = re.search(r"\b(\d{2}[-/]\d{2}[-/]\d{4})\b", block)
+            if m_dob:
+                dob = m_dob.group(1).replace("/", "-").strip()
+
+        # GFR/eGFR (ergens in het blok)
         gfr_m = re.search(r"(?:^|\n)\s*(e?gfr\s*[: ]\s*[^\n]+)", block, flags=re.IGNORECASE)
         gfr_text = gfr_m.group(1).strip() if gfr_m else None
 
-        lines = [ln.strip() for ln in block.splitlines() if ln.strip()]
-        if naam:
+        if naam or dob:
             patients.append({
-                "naam": naam,
-                "geboortedatum": dob,
+                "naam": naam or "",
+                "geboortedatum": dob or "",
                 "gfr_text": gfr_text,
                 "lines": lines
             })
-            print(f"✅ Word-patiënt: {naam} ({dob}) | GFR: {gfr_text or '-'}")
+            tag = f"{naam or '—'} ({dob or '—'})"
+            print(f"✅ Word-patiënt (minstens één veld): {tag} | GFR: {gfr_text or '-'}")
         else:
-            print("⚠️ Kon geen naam/geboortedatum vinden in een 'Wie'-blok.")
-    print(f"📄 Word: {len(patients)} patiënten gevonden")
+            print("⚠️ Kon GEEN naam of geboortedatum vinden in een 'Wie'-blok; blok overgeslagen.")
+    print(f"📄 Word: {len(patients)} patiënten gevonden (minstens één herkenbaar veld)")
     return patients
 
 # -------------------- PATIENT MATCHING --------------------
 def match_patients(word_pats: List[Dict], medimo_pats: List[Dict], threshold: int = 80)\
         -> List[Tuple[Dict, Optional[Dict], int]]:
+    """
+    Matcht op wat beschikbaar is:
+      - Naam + DOB → gemiddelde van beide scores
+      - Alleen naam → score = name_score
+      - Alleen DOB  → score = dob_score
+    """
     matches = []
     for wp in word_pats:
         best, best_score = None, 0
-        w_name = strip_initials(normalize_title_and_name(wp["naam"]))
-        w_dob = normalize_dob(wp["geboortedatum"] or "") if wp.get("geboortedatum") else ""
+        w_name = strip_initials(normalize_title_and_name(wp.get("naam",""))) if wp.get("naam") else ""
+        w_dob = normalize_dob(wp.get("geboortedatum","")) if wp.get("geboortedatum") else ""
 
         for mp in medimo_pats:
             m_name = strip_initials(normalize_title_and_name(mp["naam"]))
             m_dob = normalize_dob(mp.get("geboortedatum",""))
 
-            name_score = _token_sort_ratio(w_name, m_name)
+            name_score = _token_sort_ratio(w_name, m_name) if w_name and m_name else 0
             dob_score = _ratio(w_dob, m_dob) if w_dob and m_dob else 0
-            score = int((name_score + dob_score) / (2 if w_dob and m_dob else 1))
+
+            components = []
+            if w_name and m_name:
+                components.append(name_score)
+            if w_dob and m_dob:
+                components.append(dob_score)
+            score = int(sum(components) / len(components)) if components else 0
+
             if score > best_score:
                 best, best_score = mp, score
 
         if best and best_score >= threshold:
-            print(f"🤝 Match: {wp['naam']} ({wp['geboortedatum']}) ↔ {best['naam']} ({best.get('geboortedatum','')}) | score={best_score}")
+            print(f"🤝 Match: {wp.get('naam','—')} ({wp.get('geboortedatum','—')}) ↔ {best['naam']} ({best.get('geboortedatum','')}) | score={best_score}")
             matches.append((wp, best, best_score))
         else:
-            print(f"❌ Geen (goede) match voor: {wp['naam']} ({wp.get('geboortedatum','')}) | beste score={best_score}")
+            print(f"❌ Geen (goede) match voor: {wp.get('naam','—')} ({wp.get('geboortedatum','—')}) | beste score={best_score}")
             matches.append((wp, None, best_score))
     return matches
+
+# -------------------- (optioneel) headers die we niet als start willen ----------
+_GROUP_HEADER_RE = re.compile(
+    r"^(psychofarmaca|cvrm|fractuur|pijn|maag|darm|overig|huid|oog|ogen|luchtwegen|urologie|dermatologie)\b",
+    re.IGNORECASE
+)
 
 # -------------------- MEDICATIE MATCHING + DISCUSSIE --------------------
 def find_med_starts_for_patient(word_lines: List[str], medimo_meds: List[Dict], alias_map: Dict[str,str], min_score: int = 70)\
         -> List[Tuple[int, int, str, int]]:
     """
-    Fuzzy partial match op KERNAAM (incl. aliasvervanging via extern JSON) om startregels in Word te vinden.
+    Fuzzy partial match op KERNAAM (Medimo-kern ZONDER alias; Word-regels MET alias) om startregels in Word te vinden.
     Return: lijst (line_index, medimo_index, med_core, score), gesorteerd op line_index.
     """
     starts = []
-    med_cores = [extract_drug_core(m["clean"], alias_map) for m in medimo_meds]
+    # Kern voor Medimo ZONDER alias (voorkomt macrogol/zouten -> macrogol/zouten/zouten)
+    med_cores = [extract_drug_core(m["clean"], alias_map, apply_alias=False) for m in medimo_meds]
+
     for j, core in enumerate(med_cores):
         if not core:
             continue
         best_i, best_sc = None, 0
         for i, ln in enumerate(word_lines):
+            if _GROUP_HEADER_RE.match(ln):
+                continue
+            # Aliassen ALLEEN op Word-regel
             norm_line = apply_aliases(ln, alias_map)
-            sc = _partial_ratio(core, normalize_line_for_match(norm_line))
+            norm_line = normalize_line_for_match(norm_line)
+
+            sc = _partial_ratio(core, norm_line)
             if sc > best_sc:
                 best_i, best_sc = i, sc
         if best_i is not None and best_sc >= min_score:
             starts.append((best_i, j, core, best_sc))
-    # Conflicten oplossen: per regel één middel (hoogste score)
+
+    # Per regel slechts één middel (hoogste score wint)
     starts.sort(key=lambda x: (x[0], -x[3]))
     dedup, used = [], set()
     for s in starts:
@@ -362,6 +405,27 @@ def chunk_by_starts(lines: List[str], starts: List[Tuple[int,int,str,int]]) -> L
         end = idxs[k+1] if k+1 < len(idxs) else len(lines)
         chunks.append((start, end))
     return chunks
+
+def _remove_last_word_from_lines(lines_block: List[str]) -> List[str]:
+    """
+    Verwijder het LAATSTE WOORD uit de hele bloktekst (meestal een groepsheader aan het eind).
+    Werkt op de laatste niet-lege regel:
+      - snijdt het laatste token weg; blijft de regel leeg → verwijder de regel.
+    """
+    if not lines_block:
+        return lines_block
+    new_lines = list(lines_block)
+    for idx in range(len(new_lines) - 1, -1, -1):
+        line = new_lines[idx].strip()
+        if not line:
+            continue
+        updated = re.sub(r"\s*\S+\s*$", "", line).strip()
+        if updated == "":
+            new_lines = new_lines[:idx] + new_lines[idx+1:]
+        else:
+            new_lines[idx] = updated
+        break
+    return new_lines
 
 # -------------------- PIPELINE --------------------
 def run_pipeline(docx_path: str, medimo_path: str, out_json: str) -> str:
@@ -384,17 +448,17 @@ def run_pipeline(docx_path: str, medimo_path: str, out_json: str) -> str:
         discussions = []
         for (start_i, end_i), start_meta in zip(chunks, starts):
             line_idx, medimo_idx, med_core, match_sc = start_meta
-            lines_block = wp["lines"][start_i:end_i]
-            block_text = "\n".join(lines_block).strip()
-            sentences = nlp_sentences(block_text)
+
+            original_block_lines = wp["lines"][start_i:end_i]
+            trimmed_block_lines = _remove_last_word_from_lines(original_block_lines)
+            block_text = "\n".join(trimmed_block_lines).strip()
             med_raw = medimo_meds[medimo_idx] if medimo_meds else None
 
             discussions.append({
                 "start_line_index": line_idx,
                 "docx_first_line": wp["lines"][line_idx],
-                "docx_lines": lines_block,
+                "docx_lines_trimmed": trimmed_block_lines,
                 "block_text": block_text,
-                "sentences": sentences,
                 "match_core": med_core,
                 "match_score": match_sc,
                 "medimo_middel": med_raw  # {origineel, clean, gebruik, opmerking}
@@ -402,7 +466,7 @@ def run_pipeline(docx_path: str, medimo_path: str, out_json: str) -> str:
 
         result.append({
             "patient_word": {
-                "naam": wp["naam"],
+                "naam": wp.get("naam",""),
                 "geboortedatum": wp.get("geboortedatum",""),
                 "gfr_text": wp.get("gfr_text")
             },

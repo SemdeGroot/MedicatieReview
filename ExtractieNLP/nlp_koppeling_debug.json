@@ -24,16 +24,10 @@
       {
         "start_line_index": 6,
         "docx_first_line": "Colecalciferol 2800IE 1x per week 2; gestart t.o.v. vorige review.",
-        "docx_lines": [
-          "Colecalciferol 2800IE 1x per week 2; gestart t.o.v. vorige review.",
-          "Pijnstilling"
+        "docx_lines_trimmed": [
+          "Colecalciferol 2800IE 1x per week 2; gestart t.o.v. vorige review."
         ],
-        "block_text": "Colecalciferol 2800IE 1x per week 2; gestart t.o.v. vorige review.\nPijnstilling",
-        "sentences": [
-          "Colecalciferol 2800IE",
-          "1x per week 2; gestart t.o.v. vorige review.",
-          "Pijnstilling"
-        ],
+        "block_text": "Colecalciferol 2800IE 1x per week 2; gestart t.o.v. vorige review.",
         "match_core": "colecalciferol",
         "match_score": 100,
         "medimo_middel": {
@@ -46,16 +40,10 @@
       {
         "start_line_index": 8,
         "docx_first_line": "Pcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?",
-        "docx_lines": [
-          "Pcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?",
-          "Psychofarmaca"
+        "docx_lines_trimmed": [
+          "Pcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?"
         ],
-        "block_text": "Pcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?\nPsychofarmaca",
-        "sentences": [
-          "Pcm 3dd 500mg zn;",
-          "zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?",
-          "Psychofarmaca"
-        ],
+        "block_text": "Pcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?",
         "match_core": "paracetamol",
         "match_score": 100,
         "medimo_middel": {
@@ -68,39 +56,11 @@
       {
         "start_line_index": 10,
         "docx_first_line": "Clozapine 6,25mg 1-4-0 \tHoe gaat het nu met gedrag? Evt ruimte voor afbouw? Onrust, eind van de dag, aanpassen van 21 uur naar 17 uur; t.o.v. vorige review, ante nocte 25mg wordt nu gegeven om 17.00. Is dit bewust? Ook tussentijds geprobeerd af te bouwen? Nu weer op zelfde dosering.",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Clozapine 6,25mg 1-4-0 \tHoe gaat het nu met gedrag? Evt ruimte voor afbouw? Onrust, eind van de dag, aanpassen van 21 uur naar 17 uur; t.o.v. vorige review, ante nocte 25mg wordt nu gegeven om 17.00. Is dit bewust? Ook tussentijds geprobeerd af te bouwen? Nu weer op zelfde dosering.",
-          "LAB NIET MEER PRIKKEN , RECENT NOG WEL AFGEBOUWD WAARNA MEER ONRUST DUS TERUGGEZET EN NU GAAT GOED",
-          "Maag/darm",
-          "Macrogol 1dd 1 zakje + zn: zn regel stoppen (niet afgetekend in toedienlijsten)? JA MAG STOP",
-          "Overig"
+          "LAB NIET MEER PRIKKEN , RECENT NOG WEL AFGEBOUWD WAARNA MEER ONRUST DUS TERUGGEZET EN NU GAAT GOED"
         ],
-        "block_text": "Clozapine 6,25mg 1-4-0 \tHoe gaat het nu met gedrag? Evt ruimte voor afbouw? Onrust, eind van de dag, aanpassen van 21 uur naar 17 uur; t.o.v. vorige review, ante nocte 25mg wordt nu gegeven om 17.00. Is dit bewust? Ook tussentijds geprobeerd af te bouwen? Nu weer op zelfde dosering.\nLAB NIET MEER PRIKKEN , RECENT NOG WEL AFGEBOUWD WAARNA MEER ONRUST DUS TERUGGEZET EN NU GAAT GOED\nMaag/darm\nMacrogol 1dd 1 zakje + zn: zn regel stoppen (niet afgetekend in toedienlijsten)? JA MAG STOP\nOverig",
-        "sentences": [
-          "Clozapine 6,25mg 1-4-0",
-          "Hoe gaat het nu met gedrag?",
-          "Evt ruimte voor afbouw?",
-          "Onrust, eind van de dag, aanpassen van 21 uur naar 17 uur; t.o.v. vorige review, ante nocte 25mg wordt nu gegeven om 17.00.",
-          "Is dit bewust?",
-          "Ook tussentijds geprobeerd af te bouwen?",
-          "Nu weer op zelfde dosering.\nLAB NIET MEER PRIKKEN , RECENT NOG",
-          "WEL",
-          "AFGEBOUWD",
-          "WAARNA",
-          "MEER",
-          "ONRUST",
-          "DUS",
-          "TERUGGEZET",
-          "EN NU",
-          "GAAT",
-          "GOED\nMaag/darm",
-          "Macrogol",
-          "1dd",
-          "1 zakje + zn:",
-          "zn regel stoppen (niet afgetekend in toedienlijsten)?",
-          "JA MAG STOP",
-          "Overig"
-        ],
+        "block_text": "Clozapine 6,25mg 1-4-0 \tHoe gaat het nu met gedrag? Evt ruimte voor afbouw? Onrust, eind van de dag, aanpassen van 21 uur naar 17 uur; t.o.v. vorige review, ante nocte 25mg wordt nu gegeven om 17.00. Is dit bewust? Ook tussentijds geprobeerd af te bouwen? Nu weer op zelfde dosering.\nLAB NIET MEER PRIKKEN , RECENT NOG WEL AFGEBOUWD WAARNA MEER ONRUST DUS TERUGGEZET EN NU GAAT GOED",
         "match_core": "clozapine",
         "match_score": 100,
         "medimo_middel": {
@@ -111,25 +71,23 @@
         }
       },
       {
-        "start_line_index": 15,
-        "docx_first_line": "Duraphat tandpasta 1dd; tandarts",
-        "docx_lines": [
+        "start_line_index": 13,
+        "docx_first_line": "Macrogol 1dd 1 zakje + zn: zn regel stoppen (niet afgetekend in toedienlijsten)? JA MAG STOP",
+        "docx_lines_trimmed": [
+          "Macrogol 1dd 1 zakje + zn: zn regel stoppen (niet afgetekend in toedienlijsten)? JA MAG STOP",
+          "Overig",
           "Duraphat tandpasta 1dd; tandarts",
           "Malen: nee",
-          "Buiten Formularium b3.0"
+          "Buiten Formularium"
         ],
-        "block_text": "Duraphat tandpasta 1dd; tandarts\nMalen: nee\nBuiten Formularium b3.0",
-        "sentences": [
-          "Duraphat tandpasta",
-          "1dd; tandarts\nMalen: nee\nBuiten Formularium b3.0"
-        ],
-        "match_core": "duraphat tandpasta",
+        "block_text": "Macrogol 1dd 1 zakje + zn: zn regel stoppen (niet afgetekend in toedienlijsten)? JA MAG STOP\nOverig\nDuraphat tandpasta 1dd; tandarts\nMalen: nee\nBuiten Formularium",
+        "match_core": "macrogol zouten",
         "match_score": 100,
         "medimo_middel": {
-          "origineel": "Duraphat tandpasta 5000ppm\t0-0-x gram, dagelijks, Continu",
-          "clean": "Duraphat tandpasta 5000ppm",
-          "gebruik": "0-0-x gram, dagelijks, Continu",
-          "opmerking": "Op verzoek tandarts"
+          "origineel": "Macrogol/zouten pdr v drank (movic/molax/gen citr)\t1-0-0 stuks, dagelijks, Continu",
+          "clean": "Macrogol/zouten pdr v drank (movic/molax/gen citr)",
+          "gebruik": "1-0-0 stuks, dagelijks, Continu",
+          "opmerking": ""
         }
       }
     ]
@@ -159,15 +117,10 @@
       {
         "start_line_index": 7,
         "docx_first_line": "Colecalciferol 5600IE wekelijks",
-        "docx_lines": [
-          "Colecalciferol 5600IE wekelijks",
-          "Pijnstilling"
+        "docx_lines_trimmed": [
+          "Colecalciferol 5600IE wekelijks"
         ],
-        "block_text": "Colecalciferol 5600IE wekelijks\nPijnstilling",
-        "sentences": [
-          "Colecalciferol 5600IE wekelijks",
-          "Pijnstilling"
-        ],
+        "block_text": "Colecalciferol 5600IE wekelijks",
         "match_core": "colecalciferol",
         "match_score": 100,
         "medimo_middel": {
@@ -180,22 +133,10 @@
       {
         "start_line_index": 9,
         "docx_first_line": "Pcm 500mg 2-0-2 vast + zn 1000mg extra\tPijn onder controle? Vaste dosering nog actueel? chronische rugpijn; Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald. Geen zn gebruik sinds verlaging dosering. PIJN ONDER CONTROLE",
-        "docx_lines": [
-          "Pcm 500mg 2-0-2 vast + zn 1000mg extra\tPijn onder controle? Vaste dosering nog actueel? chronische rugpijn; Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald. Geen zn gebruik sinds verlaging dosering. PIJN ONDER CONTROLE",
-          "Psychofarmaca"
+        "docx_lines_trimmed": [
+          "Pcm 500mg 2-0-2 vast + zn 1000mg extra\tPijn onder controle? Vaste dosering nog actueel? chronische rugpijn; Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald. Geen zn gebruik sinds verlaging dosering. PIJN ONDER CONTROLE"
         ],
-        "block_text": "Pcm 500mg 2-0-2 vast + zn 1000mg extra\tPijn onder controle? Vaste dosering nog actueel? chronische rugpijn; Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald. Geen zn gebruik sinds verlaging dosering. PIJN ONDER CONTROLE\nPsychofarmaca",
-        "sentences": [
-          "Pcm 500mg 2-0-2 vast",
-          "+ zn 1000",
-          "mg extra",
-          "Pijn onder controle?",
-          "Vaste dosering nog actueel?",
-          "chronische rugpijn;",
-          "Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald.",
-          "Geen zn gebruik sinds verlaging dosering.",
-          "PIJN ONDER CONTROLE\nPsychofarmaca"
-        ],
+        "block_text": "Pcm 500mg 2-0-2 vast + zn 1000mg extra\tPijn onder controle? Vaste dosering nog actueel? chronische rugpijn; Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald. Geen zn gebruik sinds verlaging dosering. PIJN ONDER CONTROLE",
         "match_core": "paracetamol",
         "match_score": 100,
         "medimo_middel": {
@@ -208,13 +149,8 @@
       {
         "start_line_index": 11,
         "docx_first_line": "mirtazapine",
-        "docx_lines": [
-          "mirtazapine"
-        ],
-        "block_text": "mirtazapine",
-        "sentences": [
-          "mirtazapine"
-        ],
+        "docx_lines_trimmed": [],
+        "block_text": "",
         "match_core": "mirtazapine",
         "match_score": 100,
         "medimo_middel": {
@@ -227,40 +163,16 @@
       {
         "start_line_index": 12,
         "docx_first_line": "Clozapine 1dd 25mg an ;\tt.o.v vorige review gebruik omlaag gebracht van 31,25mg 25mg.",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Clozapine 1dd 25mg an ;\tt.o.v vorige review gebruik omlaag gebracht van 31,25mg 25mg.",
           "Hoe gaat het nu met gedrag? Ruimte voor afbouw? Slaapt weinig, in de nacht claimend. Trazodon gaat stop. Clozapine onvoldoende effect.",
           "VEEL GEFOE GEHAD RONDOM SLAPEN, OPTIMALISEREN LASTIG. BESPREKEN OF MIRTA WEL NODIG IS, SLAAPT NIET BETER",
           "CI ziekte van Parkinson: parkinsonisme of echt Parkinson? Geen Parkinson medicatie. Klopt CI wel?",
           "NIET DUIDELIJK, KAN OOK LBD ZIJN",
           "IN VERL LEVOD > GEEN EFFECT.",
-          "WEL REKENING HOUDEN MET HALDOL",
-          "Maag/darm"
+          "WEL REKENING HOUDEN MET HALDOL"
         ],
-        "block_text": "Clozapine 1dd 25mg an ;\tt.o.v vorige review gebruik omlaag gebracht van 31,25mg 25mg.\nHoe gaat het nu met gedrag? Ruimte voor afbouw? Slaapt weinig, in de nacht claimend. Trazodon gaat stop. Clozapine onvoldoende effect.\nVEEL GEFOE GEHAD RONDOM SLAPEN, OPTIMALISEREN LASTIG. BESPREKEN OF MIRTA WEL NODIG IS, SLAAPT NIET BETER\nCI ziekte van Parkinson: parkinsonisme of echt Parkinson? Geen Parkinson medicatie. Klopt CI wel?\nNIET DUIDELIJK, KAN OOK LBD ZIJN\nIN VERL LEVOD > GEEN EFFECT.\nWEL REKENING HOUDEN MET HALDOL\nMaag/darm",
-        "sentences": [
-          "Clozapine",
-          "1dd",
-          "25mg an ;\tt.o.v vorige review gebruik omlaag gebracht van 31,25mg 25mg.",
-          "Hoe gaat het nu met gedrag?",
-          "Ruimte voor afbouw?",
-          "Slaapt weinig, in de nacht claimend.",
-          "Trazodon gaat stop.",
-          "Clozapine onvoldoende effect.",
-          "VEEL GEFOE",
-          "GEHAD",
-          "RONDOM SLAPEN, OPTIMALISEREN LASTIG.",
-          "BESPREKEN OF MIRTA",
-          "WEL",
-          "NODIG IS, SLAAPT NIET",
-          "BETER\nCI ziekte van Parkinson: parkinsonisme of echt Parkinson?",
-          "Geen Parkinson medicatie.",
-          "Klopt CI wel?\nNIET DUIDELIJK, KAN OOK",
-          "LBD ZIJN\nIN VERL LEVOD > GEEN EFFECT.",
-          "WEL REKENING HOUDEN",
-          "MET HALDOL",
-          "Maag/darm"
-        ],
+        "block_text": "Clozapine 1dd 25mg an ;\tt.o.v vorige review gebruik omlaag gebracht van 31,25mg 25mg.\nHoe gaat het nu met gedrag? Ruimte voor afbouw? Slaapt weinig, in de nacht claimend. Trazodon gaat stop. Clozapine onvoldoende effect.\nVEEL GEFOE GEHAD RONDOM SLAPEN, OPTIMALISEREN LASTIG. BESPREKEN OF MIRTA WEL NODIG IS, SLAAPT NIET BETER\nCI ziekte van Parkinson: parkinsonisme of echt Parkinson? Geen Parkinson medicatie. Klopt CI wel?\nNIET DUIDELIJK, KAN OOK LBD ZIJN\nIN VERL LEVOD > GEEN EFFECT.\nWEL REKENING HOUDEN MET HALDOL",
         "match_core": "clozapine",
         "match_score": 100,
         "medimo_middel": {
@@ -273,23 +185,17 @@
       {
         "start_line_index": 20,
         "docx_first_line": "Macrogol 1dd 1",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Macrogol 1dd 1",
           "Overig",
           "CI jicht: onder controle? Geen medicatie (ook geen colchicine ooit gehad volgens Medimo). Onder controle",
           "ONDER CONTROLE",
           "Malen: nee",
-          "Buiten Formularium b3.0"
+          "Buiten Formularium"
         ],
-        "block_text": "Macrogol 1dd 1\nOverig\nCI jicht: onder controle? Geen medicatie (ook geen colchicine ooit gehad volgens Medimo). Onder controle\nONDER CONTROLE\nMalen: nee\nBuiten Formularium b3.0",
-        "sentences": [
-          "Macrogol",
-          "1dd 1\nOverig\nCI jicht: onder controle?",
-          "Geen medicatie (ook geen colchicine ooit gehad volgens Medimo).",
-          "Onder controle\nONDER CONTROLE\nMalen: nee\nBuiten Formularium b3.0"
-        ],
-        "match_core": "macrogol/zouten v movic/molax/gen",
-        "match_score": 72,
+        "block_text": "Macrogol 1dd 1\nOverig\nCI jicht: onder controle? Geen medicatie (ook geen colchicine ooit gehad volgens Medimo). Onder controle\nONDER CONTROLE\nMalen: nee\nBuiten Formularium",
+        "match_core": "macrogol zouten",
+        "match_score": 100,
         "medimo_middel": {
           "origineel": "Macrogol/zouten pdr v drank (movic/molax/gen citr)\t1-0-0 stuks, dagelijks, Continu",
           "clean": "Macrogol/zouten pdr v drank (movic/molax/gen citr)",
@@ -314,16 +220,11 @@
       {
         "start_line_index": 7,
         "docx_first_line": "Vit d 5600ie wekelijks; waarom capsules ipv tabletten?",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Vit d 5600ie wekelijks; waarom capsules ipv tabletten?",
-          "OMZETTEN",
-          "Pijnstilling"
+          "OMZETTEN"
         ],
-        "block_text": "Vit d 5600ie wekelijks; waarom capsules ipv tabletten?\nOMZETTEN\nPijnstilling",
-        "sentences": [
-          "Vit d 5600ie wekelijks;",
-          "waarom capsules ipv tabletten?\nOMZETTEN\nPijnstilling"
-        ],
+        "block_text": "Vit d 5600ie wekelijks; waarom capsules ipv tabletten?\nOMZETTEN",
         "match_core": "colecalciferol",
         "match_score": 100,
         "medimo_middel": {
@@ -336,14 +237,10 @@
       {
         "start_line_index": 10,
         "docx_first_line": "Pcm zn",
-        "docx_lines": [
-          "Pcm zn",
-          "Psychofarmaca"
+        "docx_lines_trimmed": [
+          "Pcm zn"
         ],
-        "block_text": "Pcm zn\nPsychofarmaca",
-        "sentences": [
-          "Pcm zn\nPsychofarmaca"
-        ],
+        "block_text": "Pcm zn",
         "match_core": "paracetamol",
         "match_score": 100,
         "medimo_middel": {
@@ -356,17 +253,12 @@
       {
         "start_line_index": 12,
         "docx_first_line": "Haldol drank; 1d5druppel AN",
-        "docx_lines": [
-          "Haldol drank; 1d5druppel AN"
+        "docx_lines_trimmed": [
+          "Haldol drank; 1d5druppel"
         ],
-        "block_text": "Haldol drank; 1d5druppel AN",
-        "sentences": [
-          "Haldol drank;",
-          "1d5druppel",
-          "AN"
-        ],
+        "block_text": "Haldol drank; 1d5druppel",
         "match_core": "haldol",
-        "match_score": 100,
+        "match_score": 80,
         "medimo_middel": {
           "origineel": "Haldol drank 2mg/ml\t0-0-5 druppels, dagelijks, Continu",
           "clean": "Haldol drank 2mg/ml",
@@ -377,17 +269,10 @@
       {
         "start_line_index": 13,
         "docx_first_line": "Quetiapine 50 mg AN; 2 AP? Aan het af – opbouwen? Gsu besprekingen nu stabiel.; nog steeds 2 AP, ruimte voor afbouwen?",
-        "docx_lines": [
-          "Quetiapine 50 mg AN; 2 AP? Aan het af – opbouwen? Gsu besprekingen nu stabiel.; nog steeds 2 AP, ruimte voor afbouwen?"
+        "docx_lines_trimmed": [
+          "Quetiapine 50 mg AN; 2 AP? Aan het af – opbouwen? Gsu besprekingen nu stabiel.; nog steeds 2 AP, ruimte voor"
         ],
-        "block_text": "Quetiapine 50 mg AN; 2 AP? Aan het af – opbouwen? Gsu besprekingen nu stabiel.; nog steeds 2 AP, ruimte voor afbouwen?",
-        "sentences": [
-          "Quetiapine 50",
-          "mg AN; 2 AP?",
-          "Aan het af – opbouwen?",
-          "Gsu besprekingen nu stabiel.;",
-          "nog steeds 2 AP, ruimte voor afbouwen?"
-        ],
+        "block_text": "Quetiapine 50 mg AN; 2 AP? Aan het af – opbouwen? Gsu besprekingen nu stabiel.; nog steeds 2 AP, ruimte voor",
         "match_core": "quetiapine",
         "match_score": 100,
         "medimo_middel": {
@@ -400,26 +285,16 @@
       {
         "start_line_index": 14,
         "docx_first_line": "Nortrip 50 1dd ’s ocht.",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Nortrip 50 1dd ’s ocht.",
           "Hoe gaat het met stemming/gedrag nu? Ruimte voor afbouw? Psychiatrische voorgeschiedenis, afgelopen week meer dwang, somber. Geen afbouw mogelijk.",
           "Ruimte voor afbouw?",
           "NU RELatief stabiel, niet meer aankomen",
-          "Huid",
-          "Maag/darm"
+          "Huid"
         ],
-        "block_text": "Nortrip 50 1dd ’s ocht.\nHoe gaat het met stemming/gedrag nu? Ruimte voor afbouw? Psychiatrische voorgeschiedenis, afgelopen week meer dwang, somber. Geen afbouw mogelijk.\nRuimte voor afbouw?\nNU RELatief stabiel, niet meer aankomen\nHuid\nMaag/darm",
-        "sentences": [
-          "Nortrip 50 1dd ’s ocht.",
-          "Hoe gaat het met stemming/gedrag nu?",
-          "Ruimte voor afbouw?",
-          "Psychiatrische voorgeschiedenis, afgelopen week meer dwang, somber.",
-          "Geen afbouw mogelijk.",
-          "Ruimte voor afbouw?",
-          "NU RELatief stabiel, niet meer aankomen\nHuid\nMaag/darm"
-        ],
+        "block_text": "Nortrip 50 1dd ’s ocht.\nHoe gaat het met stemming/gedrag nu? Ruimte voor afbouw? Psychiatrische voorgeschiedenis, afgelopen week meer dwang, somber. Geen afbouw mogelijk.\nRuimte voor afbouw?\nNU RELatief stabiel, niet meer aankomen\nHuid",
         "match_core": "nortriptyline",
-        "match_score": 100,
+        "match_score": 70,
         "medimo_middel": {
           "origineel": "Nortriptyline tablet 50mg\t1-0-0 stuks, dagelijks, Continu",
           "clean": "Nortriptyline tablet 50mg",
@@ -430,16 +305,12 @@
       {
         "start_line_index": 20,
         "docx_first_line": "Macrogol 1dd 1",
-        "docx_lines": [
-          "Macrogol 1dd 1"
+        "docx_lines_trimmed": [
+          "Macrogol 1dd"
         ],
-        "block_text": "Macrogol 1dd 1",
-        "sentences": [
-          "Macrogol",
-          "1dd 1"
-        ],
-        "match_core": "macrogol/zouten v movic/molax/gen",
-        "match_score": 72,
+        "block_text": "Macrogol 1dd",
+        "match_core": "macrogol zouten",
+        "match_score": 100,
         "medimo_middel": {
           "origineel": "Macrogol/zouten pdr v drank (movic/molax/gen citr)\t1-0-0 stuks, dagelijks, Continu",
           "clean": "Macrogol/zouten pdr v drank (movic/molax/gen citr)",
@@ -450,18 +321,10 @@
       {
         "start_line_index": 21,
         "docx_first_line": "Pantoprazol 40 1dd; indicatie; refluxziekten, naar 20? Is geprobeerd, bewust op 40 mg blijven; niet meer vragen",
-        "docx_lines": [
-          "Pantoprazol 40 1dd; indicatie; refluxziekten, naar 20? Is geprobeerd, bewust op 40 mg blijven; niet meer vragen",
-          "Overig"
+        "docx_lines_trimmed": [
+          "Pantoprazol 40 1dd; indicatie; refluxziekten, naar 20? Is geprobeerd, bewust op 40 mg blijven; niet meer vragen"
         ],
-        "block_text": "Pantoprazol 40 1dd; indicatie; refluxziekten, naar 20? Is geprobeerd, bewust op 40 mg blijven; niet meer vragen\nOverig",
-        "sentences": [
-          "Pantoprazol 40",
-          "1dd; indicatie; refluxziekten, naar 20?",
-          "Is geprobeerd, bewust op 40 mg blijven;",
-          "niet meer vragen",
-          "Overig"
-        ],
+        "block_text": "Pantoprazol 40 1dd; indicatie; refluxziekten, naar 20? Is geprobeerd, bewust op 40 mg blijven; niet meer vragen",
         "match_core": "pantoprazol",
         "match_score": 100,
         "medimo_middel": {
@@ -474,19 +337,11 @@
       {
         "start_line_index": 23,
         "docx_first_line": "Allopurinol 100mg 1dd; jicht\tja gaat goed",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Allopurinol 100mg 1dd; jicht\tja gaat goed",
-          "Hylan zn\t\t\t\tActueel? Laatste levering aug 2023. Stop; Nog steeds in overzicht en geen gebruik, stoppen? Mag stop"
+          "Hylan zn\t\t\t\tActueel? Laatste levering aug 2023. Stop; Nog steeds in overzicht en geen gebruik, stoppen? Mag"
         ],
-        "block_text": "Allopurinol 100mg 1dd; jicht\tja gaat goed\nHylan zn\t\t\t\tActueel? Laatste levering aug 2023. Stop; Nog steeds in overzicht en geen gebruik, stoppen? Mag stop",
-        "sentences": [
-          "Allopurinol 100",
-          "mg 1dd; jicht\tja gaat goed\nHylan zn\t\t\t\tActueel?",
-          "Laatste levering aug 2023.",
-          "Stop;",
-          "Nog steeds in overzicht en geen gebruik, stoppen?",
-          "Mag stop"
-        ],
+        "block_text": "Allopurinol 100mg 1dd; jicht\tja gaat goed\nHylan zn\t\t\t\tActueel? Laatste levering aug 2023. Stop; Nog steeds in overzicht en geen gebruik, stoppen? Mag",
         "match_core": "allopurinol",
         "match_score": 100,
         "medimo_middel": {
@@ -499,25 +354,145 @@
       {
         "start_line_index": 25,
         "docx_first_line": "Foster 200/6 ; 2d1\t\t\tAstma onder controle? Onder controle, inhaleren gaat goed; astma onder controle? Gaat goed met vzk",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Foster 200/6 ; 2d1\t\t\tAstma onder controle? Onder controle, inhaleren gaat goed; astma onder controle? Gaat goed met vzk",
           "Malen: ja",
-          "Buiten formularium: foster, quetiapine"
+          "Buiten formularium: foster,"
         ],
-        "block_text": "Foster 200/6 ; 2d1\t\t\tAstma onder controle? Onder controle, inhaleren gaat goed; astma onder controle? Gaat goed met vzk\nMalen: ja\nBuiten formularium: foster, quetiapine",
-        "sentences": [
-          "Foster 200/6 ; 2d1\t\t\tAstma onder controle?",
-          "Onder controle, inhaleren gaat goed;",
-          "astma onder controle?",
-          "Gaat goed met vzk\nMalen: ja\nBuiten formularium: foster, quetiapine"
-        ],
-        "match_core": "beclometason/formoterol",
-        "match_score": 95,
+        "block_text": "Foster 200/6 ; 2d1\t\t\tAstma onder controle? Onder controle, inhaleren gaat goed; astma onder controle? Gaat goed met vzk\nMalen: ja\nBuiten formularium: foster,",
+        "match_core": "beclometason formoterol",
+        "match_score": 100,
         "medimo_middel": {
           "origineel": "Beclometason/formoterol aerosol 200/6ug/do 180do i\t1-1-0 doses, dagelijks, Continu",
           "clean": "Beclometason/formoterol aerosol 200/6ug/do 180do i",
           "gebruik": "1-1-0 doses, dagelijks, Continu",
           "opmerking": "=foster"
+        }
+      }
+    ]
+  },
+  {
+    "patient_word": {
+      "naam": "Dhr Darwin",
+      "geboortedatum": "",
+      "gfr_text": "eGfr: 5-2024 37ml/min"
+    },
+    "patient_medimo": {
+      "naam": "Dhr. C Darwin",
+      "geboortedatum": "07-01-1950"
+    },
+    "patient_match_score": 100,
+    "discussions": [
+      {
+        "start_line_index": 5,
+        "docx_first_line": "Losartan 50 1dd 1",
+        "docx_lines_trimmed": [
+          "Losartan 50 1dd"
+        ],
+        "block_text": "Losartan 50 1dd",
+        "match_core": "losartan",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Losartan tablet fo 50mg\t1-0-0 stuks, dagelijks, Continu",
+          "clean": "Losartan tablet fo 50mg",
+          "gebruik": "1-0-0 stuks, dagelijks, Continu",
+          "opmerking": ""
+        }
+      },
+      {
+        "start_line_index": 6,
+        "docx_first_line": "Metoprolol mga 25 1dd 1",
+        "docx_lines_trimmed": [
+          "Metoprolol mga 25 1dd 1",
+          "Metoprolol 50 zn 0,5; bij hartkloppingen",
+          "Xarelto 15 1dd 1",
+          "RR? Ok 138/85 p41 symptomatisch beleid",
+          "fractuurpreventie",
+          "Vit d 2800ie wekelijks 2"
+        ],
+        "block_text": "Metoprolol mga 25 1dd 1\nMetoprolol 50 zn 0,5; bij hartkloppingen\nXarelto 15 1dd 1\nRR? Ok 138/85 p41 symptomatisch beleid\nfractuurpreventie\nVit d 2800ie wekelijks 2",
+        "match_core": "metoprolol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Metoprolol tablet mga 25mg (succinaat)\t1-0-0 stuks, dagelijks, Continu",
+          "clean": "Metoprolol tablet mga 25mg (succinaat)",
+          "gebruik": "1-0-0 stuks, dagelijks, Continu",
+          "opmerking": ""
+        }
+      },
+      {
+        "start_line_index": 13,
+        "docx_first_line": "Paracetamol zn",
+        "docx_lines_trimmed": [
+          "Paracetamol zn",
+          "Psychofarmaca",
+          "Pipamperon 10 1dd 1 an; laag gedoseerd?",
+          "Lorazepam 1 zn 2dd 1; niet meer nodig? afgelopen 12 weken niet afgetekend.",
+          "Wisselt per dag , redelijk stabiel , uitzoeken waarom pipam, evt afbouwen",
+          "Huid",
+          "Maag/darm"
+        ],
+        "block_text": "Paracetamol zn\nPsychofarmaca\nPipamperon 10 1dd 1 an; laag gedoseerd?\nLorazepam 1 zn 2dd 1; niet meer nodig? afgelopen 12 weken niet afgetekend.\nWisselt per dag , redelijk stabiel , uitzoeken waarom pipam, evt afbouwen\nHuid\nMaag/darm",
+        "match_core": "paracetamol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Paracetamol tablet 500mg\t0-0-0 stuks, dagelijks, Zo nodig",
+          "clean": "Paracetamol tablet 500mg",
+          "gebruik": "0-0-0 stuks, dagelijks, Zo nodig",
+          "opmerking": "zn tot 3dd 2 tbt."
+        }
+      },
+      {
+        "start_line_index": 21,
+        "docx_first_line": "Artelac edo oogdruppels 4dd 1; links",
+        "docx_lines_trimmed": [
+          "Artelac edo oogdruppels 4dd 1;"
+        ],
+        "block_text": "Artelac edo oogdruppels 4dd 1;",
+        "match_core": "artelac",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Artelac edo oogdruppels 3,2mg/ml tube 0,6ml\t08:00u 1-12:00u 1-17:00u 1-21:00u 1 druppels, dagelijks, Continu (Stop: 26-03-2025 11:21)",
+          "clean": "Artelac edo oogdruppels 3,2mg/ml tube 0,6ml",
+          "gebruik": "08:00u 1-12:00u 1-17:00u 1-21:00u 1 druppels, dagelijks, Continu (Stop: 26-03-2025 11:21)",
+          "opmerking": "4dd 1 druppel in het linkeroog (en bij klachten van irritatie ook in rechteroog) = vidisic"
+        }
+      },
+      {
+        "start_line_index": 22,
+        "docx_first_line": "Timolol/brinzolamide oogdruppels 2dd 1; rechts",
+        "docx_lines_trimmed": [
+          "Timolol/brinzolamide oogdruppels 2dd 1; rechts",
+          "Glaucoom rechts , geen"
+        ],
+        "block_text": "Timolol/brinzolamide oogdruppels 2dd 1; rechts\nGlaucoom rechts , geen",
+        "match_core": "timolol brinzolamide oogdr",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Timolol/brinzolamide oogdr 5/10mg/ml fl 5ml benz\t1-0-1 druppels, dagelijks, Continu (Stop: 26-03-2025 11:20)",
+          "clean": "Timolol/brinzolamide oogdr 5/10mg/ml fl 5ml benz",
+          "gebruik": "1-0-1 druppels, dagelijks, Continu (Stop: 26-03-2025 11:20)",
+          "opmerking": "2dd 1 druppel in het rechteroog"
+        }
+      },
+      {
+        "start_line_index": 24,
+        "docx_first_line": "Levothyroxine 100ug 1dd 1",
+        "docx_lines_trimmed": [
+          "Levothyroxine 100ug 1dd 1",
+          "Levothyroxine 25ug 1dd 2; goed ingesteld? In plaats van 3 tabletten 1 tablet 150ug mogelijk?",
+          "Ja goed",
+          "Malen: Nee",
+          "Buiten Formularium b3.0"
+        ],
+        "block_text": "Levothyroxine 100ug 1dd 1\nLevothyroxine 25ug 1dd 2; goed ingesteld? In plaats van 3 tabletten 1 tablet 150ug mogelijk?\nJa goed\nMalen: Nee\nBuiten Formularium b3.0",
+        "match_core": "levothyroxine",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Levothyroxine tablet 100ug (natrium)\t1-0-0 stuks, dagelijks, Continu",
+          "clean": "Levothyroxine tablet 100ug (natrium)",
+          "gebruik": "1-0-0 stuks, dagelijks, Continu",
+          "opmerking": ""
         }
       }
     ]
@@ -537,14 +512,10 @@
       {
         "start_line_index": 8,
         "docx_first_line": "Pcm 3dd 1000mg zn",
-        "docx_lines": [
-          "Pcm 3dd 1000mg zn",
-          "Psychofarmaca"
+        "docx_lines_trimmed": [
+          "Pcm 3dd 1000mg zn"
         ],
-        "block_text": "Pcm 3dd 1000mg zn\nPsychofarmaca",
-        "sentences": [
-          "Pcm 3dd 1000mg zn\nPsychofarmaca"
-        ],
+        "block_text": "Pcm 3dd 1000mg zn",
         "match_core": "paracetamol",
         "match_score": 100,
         "medimo_middel": {
@@ -557,18 +528,12 @@
       {
         "start_line_index": 10,
         "docx_first_line": "Citalopram 10 1dd 2 an; Meer dan een jaar geleden gestart, afbouwen mogelijk?",
-        "docx_lines": [
-          "Citalopram 10 1dd 2 an; Meer dan een jaar geleden gestart, afbouwen mogelijk?"
+        "docx_lines_trimmed": [
+          "Citalopram 10 1dd 2 an; Meer dan een jaar geleden gestart, afbouwen"
         ],
-        "block_text": "Citalopram 10 1dd 2 an; Meer dan een jaar geleden gestart, afbouwen mogelijk?",
-        "sentences": [
-          "Citalopram 10",
-          "1dd",
-          "2 an;",
-          "Meer dan een jaar geleden gestart, afbouwen mogelijk?"
-        ],
-        "match_core": "citalopram omhuld",
-        "match_score": 78,
+        "block_text": "Citalopram 10 1dd 2 an; Meer dan een jaar geleden gestart, afbouwen",
+        "match_core": "citalopram",
+        "match_score": 100,
         "medimo_middel": {
           "origineel": "Citalopram tablet omhuld 10mg\t0-0-2 stuks, dagelijks, Continu",
           "clean": "Citalopram tablet omhuld 10mg",
@@ -579,39 +544,40 @@
       {
         "start_line_index": 11,
         "docx_first_line": "Risperidon 0,5    0-0,5-0,5 + zn 1",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Risperidon 0,5    0-0,5-0,5 + zn 1",
           "Aantal wijzigingen geweest, risperidon afbouwen mogelijk?",
           "Trauma’s vanuit verleden , combi cital plus risp advies so, nu stabiel en vrolijk, zo laten",
-          "Huid",
-          "Maag/darm",
+          "Huid"
+        ],
+        "block_text": "Risperidon 0,5    0-0,5-0,5 + zn 1\nAantal wijzigingen geweest, risperidon afbouwen mogelijk?\nTrauma’s vanuit verleden , combi cital plus risp advies so, nu stabiel en vrolijk, zo laten\nHuid",
+        "match_core": "risperidon",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Risperidon tablet omhuld 0,5mg\t12:00u 0.5-17:00u 0.5 stuks, dagelijks, Continu",
+          "clean": "Risperidon tablet omhuld 0,5mg",
+          "gebruik": "12:00u 0.5-17:00u 0.5 stuks, dagelijks, Continu",
+          "opmerking": ""
+        }
+      },
+      {
+        "start_line_index": 16,
+        "docx_first_line": "Macrogol 1dd 1 + zn",
+        "docx_lines_trimmed": [
           "Macrogol 1dd 1 + zn",
           "Overig",
           "CI diabetes: HbA1c/glucose? Onder controle? Geen medicatie. Glucose stijgt wat (9 en 13); geen medicatie starten",
           "Suikers nog altijd tussen die waardes, symptom beleid",
           "Malen: nee",
-          "Buiten Formularium b3.0"
+          "Buiten Formularium"
         ],
-        "block_text": "Risperidon 0,5    0-0,5-0,5 + zn 1\nAantal wijzigingen geweest, risperidon afbouwen mogelijk?\nTrauma’s vanuit verleden , combi cital plus risp advies so, nu stabiel en vrolijk, zo laten\nHuid\nMaag/darm\nMacrogol 1dd 1 + zn\nOverig\nCI diabetes: HbA1c/glucose? Onder controle? Geen medicatie. Glucose stijgt wat (9 en 13); geen medicatie starten\nSuikers nog altijd tussen die waardes, symptom beleid\nMalen: nee\nBuiten Formularium b3.0",
-        "sentences": [
-          "Risperidon 0,5    0-0,5-0,5",
-          "+ zn 1\nAantal wijzigingen geweest, risperidon afbouwen mogelijk?",
-          "Trauma’s vanuit verleden , combi",
-          "cital plus risp advies so, nu stabiel en vrolijk, zo laten\nHuid\nMaag/darm\nMacrogol",
-          "1dd",
-          "1 + zn\nOverig\nCI diabetes: HbA1c/glucose?",
-          "Onder controle?",
-          "Geen medicatie.",
-          "Glucose stijgt wat (9 en 13); geen medicatie starten\nSuikers nog altijd tussen die waardes, symptom beleid",
-          "Malen: nee\nBuiten Formularium",
-          "b3.0"
-        ],
-        "match_core": "risperidon omhuld",
-        "match_score": 78,
+        "block_text": "Macrogol 1dd 1 + zn\nOverig\nCI diabetes: HbA1c/glucose? Onder controle? Geen medicatie. Glucose stijgt wat (9 en 13); geen medicatie starten\nSuikers nog altijd tussen die waardes, symptom beleid\nMalen: nee\nBuiten Formularium",
+        "match_core": "macrogol zouten",
+        "match_score": 100,
         "medimo_middel": {
-          "origineel": "Risperidon tablet omhuld 0,5mg\t12:00u 0.5-17:00u 0.5 stuks, dagelijks, Continu",
-          "clean": "Risperidon tablet omhuld 0,5mg",
-          "gebruik": "12:00u 0.5-17:00u 0.5 stuks, dagelijks, Continu",
+          "origineel": "Macrogol/zouten pdr v drank (movic/molax/gen citr)\t1-0-0 stuks, dagelijks, Continu",
+          "clean": "Macrogol/zouten pdr v drank (movic/molax/gen citr)",
+          "gebruik": "1-0-0 stuks, dagelijks, Continu",
           "opmerking": ""
         }
       }
@@ -632,18 +598,13 @@
       {
         "start_line_index": 8,
         "docx_first_line": "PCM zn 3dd 1000mg",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "PCM zn 3dd 1000mg",
           "Psychofarmaca",
           "Huid",
-          "Maag/darm",
-          "Overig"
+          "Maag/darm"
         ],
-        "block_text": "PCM zn 3dd 1000mg\nPsychofarmaca\nHuid\nMaag/darm\nOverig",
-        "sentences": [
-          "PCM zn 3dd 1000mg\nPsychofarmaca\nHuid\nMaag/darm",
-          "Overig"
-        ],
+        "block_text": "PCM zn 3dd 1000mg\nPsychofarmaca\nHuid\nMaag/darm",
         "match_core": "paracetamol",
         "match_score": 100,
         "medimo_middel": {
@@ -656,19 +617,12 @@
       {
         "start_line_index": 13,
         "docx_first_line": "Euthyrox 50ug 1dd \t\t\tGoed ingesteld? Goed; goed ingesteld? Ja",
-        "docx_lines": [
-          "Euthyrox 50ug 1dd \t\t\tGoed ingesteld? Goed; goed ingesteld? Ja"
+        "docx_lines_trimmed": [
+          "Euthyrox 50ug 1dd \t\t\tGoed ingesteld? Goed; goed ingesteld?"
         ],
-        "block_text": "Euthyrox 50ug 1dd \t\t\tGoed ingesteld? Goed; goed ingesteld? Ja",
-        "sentences": [
-          "Euthyrox",
-          "50ug",
-          "1dd \t\t\tGoed ingesteld?",
-          "Goed; goed ingesteld?",
-          "Ja"
-        ],
+        "block_text": "Euthyrox 50ug 1dd \t\t\tGoed ingesteld? Goed; goed ingesteld?",
         "match_core": "euthyrox",
-        "match_score": 100,
+        "match_score": 75,
         "medimo_middel": {
           "origineel": "Euthyrox tablet 50mcg\t1-0-0 stuks, dagelijks, Continu",
           "clean": "Euthyrox tablet 50mcg",
@@ -679,16 +633,10 @@
       {
         "start_line_index": 14,
         "docx_first_line": "Cyanocobalamine 1000ug 1dd 1; indicatie/hb? Bij goed hb 3 maanden doorgebruiken en mag stop.",
-        "docx_lines": [
-          "Cyanocobalamine 1000ug 1dd 1; indicatie/hb? Bij goed hb 3 maanden doorgebruiken en mag stop."
+        "docx_lines_trimmed": [
+          "Cyanocobalamine 1000ug 1dd 1; indicatie/hb? Bij goed hb 3 maanden doorgebruiken en mag"
         ],
-        "block_text": "Cyanocobalamine 1000ug 1dd 1; indicatie/hb? Bij goed hb 3 maanden doorgebruiken en mag stop.",
-        "sentences": [
-          "Cyanocobalamine 1000ug",
-          "1dd",
-          "1; indicatie/hb?",
-          "Bij goed hb 3 maanden doorgebruiken en mag stop."
-        ],
+        "block_text": "Cyanocobalamine 1000ug 1dd 1; indicatie/hb? Bij goed hb 3 maanden doorgebruiken en mag",
         "match_core": "cyanocobalamine",
         "match_score": 100,
         "medimo_middel": {
@@ -701,21 +649,13 @@
       {
         "start_line_index": 15,
         "docx_first_line": "Foliumzuur 0,5  1dd 1 ; suppletie nodig?",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Foliumzuur 0,5  1dd 1 ; suppletie nodig?",
           "Onverklaarbare deficienties van beide, na stop daalt hb, niet meer stoppen",
           "Malen: Ja",
-          "Buiten Formularium b3.0"
+          "Buiten Formularium"
         ],
-        "block_text": "Foliumzuur 0,5  1dd 1 ; suppletie nodig?\nOnverklaarbare deficienties van beide, na stop daalt hb, niet meer stoppen\nMalen: Ja\nBuiten Formularium b3.0",
-        "sentences": [
-          "Foliumzuur 0,5  1dd",
-          "1 ; suppletie nodig?",
-          "Onverklaarbare deficienties van beide, na stop daalt hb, niet meer stoppen",
-          "Malen:",
-          "Ja\nBuiten Formularium",
-          "b3.0"
-        ],
+        "block_text": "Foliumzuur 0,5  1dd 1 ; suppletie nodig?\nOnverklaarbare deficienties van beide, na stop daalt hb, niet meer stoppen\nMalen: Ja\nBuiten Formularium",
         "match_core": "foliumzuur",
         "match_score": 100,
         "medimo_middel": {
@@ -742,17 +682,10 @@
       {
         "start_line_index": 5,
         "docx_first_line": "Clopidogrel 1dd 75mg -indicatie?",
-        "docx_lines": [
-          "Clopidogrel 1dd 75mg -indicatie?",
-          "fractuurpreventie"
+        "docx_lines_trimmed": [
+          "Clopidogrel 1dd 75mg -indicatie?"
         ],
-        "block_text": "Clopidogrel 1dd 75mg -indicatie?\nfractuurpreventie",
-        "sentences": [
-          "Clopidogrel",
-          "1dd",
-          "75mg -indicatie?",
-          "fractuurpreventie"
-        ],
+        "block_text": "Clopidogrel 1dd 75mg -indicatie?",
         "match_core": "clopidogrel",
         "match_score": 100,
         "medimo_middel": {
@@ -765,16 +698,10 @@
       {
         "start_line_index": 7,
         "docx_first_line": "Calci chew 500-800ie /dag\tindicatie voor ca suppletie? Niet voldoende, continueren",
-        "docx_lines": [
-          "Calci chew 500-800ie /dag\tindicatie voor ca suppletie? Niet voldoende, continueren",
-          "Pijnstilling"
+        "docx_lines_trimmed": [
+          "Calci chew 500-800ie /dag\tindicatie voor ca suppletie? Niet voldoende, continueren"
         ],
-        "block_text": "Calci chew 500-800ie /dag\tindicatie voor ca suppletie? Niet voldoende, continueren\nPijnstilling",
-        "sentences": [
-          "Calci chew",
-          "500-800ie /dag\tindicatie voor ca suppletie?",
-          "Niet voldoende, continueren\nPijnstilling"
-        ],
+        "block_text": "Calci chew 500-800ie /dag\tindicatie voor ca suppletie? Niet voldoende, continueren",
         "match_core": "calci chew d",
         "match_score": 95,
         "medimo_middel": {
@@ -787,17 +714,10 @@
       {
         "start_line_index": 9,
         "docx_first_line": "Pcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis? afbouwfase",
-        "docx_lines": [
-          "Pcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis? afbouwfase"
+        "docx_lines_trimmed": [
+          "Pcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis?"
         ],
-        "block_text": "Pcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis? afbouwfase",
-        "sentences": [
-          "Pcm",
-          "500mg  3dd 1 +",
-          "zn;",
-          "ophogen naar 3dd 2 ivm subtherapeutische dosis?",
-          "afbouwfase"
-        ],
+        "block_text": "Pcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis?",
         "match_core": "paracetamol",
         "match_score": 100,
         "medimo_middel": {
@@ -810,16 +730,11 @@
       {
         "start_line_index": 10,
         "docx_first_line": "Diclofenac gel 23,2mg/g 3dd",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Diclofenac gel 23,2mg/g 3dd",
-          "Pijnbestrijding naar wens? ja",
-          "Psychofarmaca"
+          "Pijnbestrijding naar wens? ja"
         ],
-        "block_text": "Diclofenac gel 23,2mg/g 3dd\nPijnbestrijding naar wens? ja\nPsychofarmaca",
-        "sentences": [
-          "Diclofenac gel 23,2mg/g 3dd\nPijnbestrijding naar wens?",
-          "ja\nPsychofarmaca"
-        ],
+        "block_text": "Diclofenac gel 23,2mg/g 3dd\nPijnbestrijding naar wens? ja",
         "match_core": "diclofenac",
         "match_score": 100,
         "medimo_middel": {
@@ -832,38 +747,16 @@
       {
         "start_line_index": 13,
         "docx_first_line": "Rivastigmine 6mg cap 1dd",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Rivastigmine 6mg cap 1dd",
           "Geen bijwerkingen? Nog doorgaan? Dementie. Geen bijwerkingen, familie continueert graag ivm cognitieve achteruitgang bij eerdere stoppoging. Mogelijk switch naar pleister wordt overwogen.; 2dd ipv 1dd? Nog doorgaan? is er progressie van dementie? Heeft de patiënt last van MDK klachten?",
           "Geen bijw, fam wil door.  Fam is bang dat achteruitgang harder gaat bij stop",
           "Huid",
           "TCA om de dag vast + 1ddzn\t\tActueel? Start sinds dec 2023. Ja;  wordt het nog gebruikt?",
           "Allergie  nu stabiel",
-          "Maag/darm",
-          "Overig"
+          "Maag/darm"
         ],
-        "block_text": "Rivastigmine 6mg cap 1dd\nGeen bijwerkingen? Nog doorgaan? Dementie. Geen bijwerkingen, familie continueert graag ivm cognitieve achteruitgang bij eerdere stoppoging. Mogelijk switch naar pleister wordt overwogen.; 2dd ipv 1dd? Nog doorgaan? is er progressie van dementie? Heeft de patiënt last van MDK klachten?\nGeen bijw, fam wil door.  Fam is bang dat achteruitgang harder gaat bij stop\nHuid\nTCA om de dag vast + 1ddzn\t\tActueel? Start sinds dec 2023. Ja;  wordt het nog gebruikt?\nAllergie  nu stabiel\nMaag/darm\nOverig",
-        "sentences": [
-          "Rivastigmine 6mg cap",
-          "1dd\nGeen bijwerkingen?",
-          "Nog doorgaan?",
-          "Dementie.",
-          "Geen bijwerkingen, familie continueert graag ivm cognitieve achteruitgang bij eerdere stoppoging.",
-          "Mogelijk switch naar pleister wordt overwogen.;",
-          "2dd ipv 1dd?",
-          "Nog doorgaan?",
-          "is er progressie van dementie?",
-          "Heeft de patiënt last van MDK klachten?",
-          "Geen bijw, fam wil door.",
-          "Fam is bang dat achteruitgang harder gaat bij stop\nHuid\nTCA om de dag vast",
-          "+",
-          "1ddzn",
-          "Actueel?",
-          "Start sinds dec 2023.",
-          "Ja;  wordt het nog gebruikt?",
-          "Allergie  nu stabiel\nMaag/darm",
-          "Overig"
-        ],
+        "block_text": "Rivastigmine 6mg cap 1dd\nGeen bijwerkingen? Nog doorgaan? Dementie. Geen bijwerkingen, familie continueert graag ivm cognitieve achteruitgang bij eerdere stoppoging. Mogelijk switch naar pleister wordt overwogen.; 2dd ipv 1dd? Nog doorgaan? is er progressie van dementie? Heeft de patiënt last van MDK klachten?\nGeen bijw, fam wil door.  Fam is bang dat achteruitgang harder gaat bij stop\nHuid\nTCA om de dag vast + 1ddzn\t\tActueel? Start sinds dec 2023. Ja;  wordt het nog gebruikt?\nAllergie  nu stabiel\nMaag/darm",
         "match_core": "rivastigmine",
         "match_score": 100,
         "medimo_middel": {
@@ -876,14 +769,11 @@
       {
         "start_line_index": 21,
         "docx_first_line": "Salbutamol aer zn",
-        "docx_lines": [
-          "Salbutamol aer zn"
+        "docx_lines_trimmed": [
+          "Salbutamol aer zn",
+          "Relvar ellipta (Vilanterol/​fluticasonfuroaat) 1dd \tAstma onder controle? Ja, inhaleren gaat goed ; astma onder controle?"
         ],
-        "block_text": "Salbutamol aer zn",
-        "sentences": [
-          "Salbutamol aer",
-          "zn"
-        ],
+        "block_text": "Salbutamol aer zn\nRelvar ellipta (Vilanterol/​fluticasonfuroaat) 1dd \tAstma onder controle? Ja, inhaleren gaat goed ; astma onder controle?",
         "match_core": "salbutamol",
         "match_score": 100,
         "medimo_middel": {
@@ -894,41 +784,15 @@
         }
       },
       {
-        "start_line_index": 22,
-        "docx_first_line": "Relvar ellipta (Vilanterol/​fluticasonfuroaat) 1dd \tAstma onder controle? Ja, inhaleren gaat goed ; astma onder controle? Ja",
-        "docx_lines": [
-          "Relvar ellipta (Vilanterol/​fluticasonfuroaat) 1dd \tAstma onder controle? Ja, inhaleren gaat goed ; astma onder controle? Ja"
-        ],
-        "block_text": "Relvar ellipta (Vilanterol/​fluticasonfuroaat) 1dd \tAstma onder controle? Ja, inhaleren gaat goed ; astma onder controle? Ja",
-        "sentences": [
-          "Relvar ellipta (Vilanterol/​fluticasonfuroaat)",
-          "1dd \tAstma onder controle?",
-          "Ja, inhaleren gaat goed ;",
-          "astma onder controle?",
-          "Ja"
-        ],
-        "match_core": "relvar inhpdr",
-        "match_score": 72,
-        "medimo_middel": {
-          "origineel": "Relvar ellipta inhpdr 92/22mcg 30do\t1-0-0 doses, dagelijks, Continu",
-          "clean": "Relvar ellipta inhpdr 92/22mcg 30do",
-          "gebruik": "1-0-0 doses, dagelijks, Continu",
-          "opmerking": ""
-        }
-      },
-      {
         "start_line_index": 23,
         "docx_first_line": "Loratadine 10mg 1d - Chronische indicatie? Jeuk",
-        "docx_lines": [
-          "Loratadine 10mg 1d - Chronische indicatie? Jeuk"
+        "docx_lines_trimmed": [
+          "Loratadine 10mg 1d - Chronische indicatie? Jeuk",
+          "Saflutan oogdr 1dd glaucoom",
+          "Malen: nee",
+          "Buiten Formularium b3.0;"
         ],
-        "block_text": "Loratadine 10mg 1d - Chronische indicatie? Jeuk",
-        "sentences": [
-          "Loratadine 10",
-          "mg",
-          "1d - Chronische indicatie?",
-          "Jeuk"
-        ],
+        "block_text": "Loratadine 10mg 1d - Chronische indicatie? Jeuk\nSaflutan oogdr 1dd glaucoom\nMalen: nee\nBuiten Formularium b3.0;",
         "match_core": "loratadine",
         "match_score": 100,
         "medimo_middel": {
@@ -936,31 +800,6 @@
           "clean": "Loratadine tablet 10mg",
           "gebruik": "0-1-0 stuks, dagelijks, Continu",
           "opmerking": ""
-        }
-      },
-      {
-        "start_line_index": 24,
-        "docx_first_line": "Saflutan oogdr 1dd glaucoom",
-        "docx_lines": [
-          "Saflutan oogdr 1dd glaucoom",
-          "Malen: nee",
-          "Buiten Formularium b3.0; relvar"
-        ],
-        "block_text": "Saflutan oogdr 1dd glaucoom\nMalen: nee\nBuiten Formularium b3.0; relvar",
-        "sentences": [
-          "Saflutan oogdr",
-          "1dd glaucoom",
-          "Malen: nee\nBuiten Formularium",
-          "b3.0;",
-          "relvar"
-        ],
-        "match_core": "saflutan",
-        "match_score": 100,
-        "medimo_middel": {
-          "origineel": "Saflutan oogdruppels 15mcg/ml flacon 0,3ml\t0-0-1 druppels, dagelijks, Continu",
-          "clean": "Saflutan oogdruppels 15mcg/ml flacon 0,3ml",
-          "gebruik": "0-0-1 druppels, dagelijks, Continu",
-          "opmerking": "beide ogen"
         }
       }
     ]
@@ -978,45 +817,12 @@
     "patient_match_score": 100,
     "discussions": [
       {
-        "start_line_index": 5,
-        "docx_first_line": "Xarelto 10mg 1dd (indicatie VTE) in overleg internist levenslang halve dosering 10mg gebruiken.;",
-        "docx_lines": [
-          "Xarelto 10mg 1dd (indicatie VTE) in overleg internist levenslang halve dosering 10mg gebruiken.;",
-          "Hoe is rr? Onder controle?niet standaard, 11/10/2024  152/79, p92",
-          "Fractuurpreventie"
-        ],
-        "block_text": "Xarelto 10mg 1dd (indicatie VTE) in overleg internist levenslang halve dosering 10mg gebruiken.;\nHoe is rr? Onder controle?niet standaard, 11/10/2024  152/79, p92\nFractuurpreventie",
-        "sentences": [
-          "Xarelto 10",
-          "mg 1dd (indicatie VTE)",
-          "in overleg internist levenslang halve dosering 10mg gebruiken.",
-          ";",
-          "Hoe is rr?",
-          "Onder controle?",
-          "niet standaard, 11/10/2024  152/79, p92",
-          "Fractuurpreventie"
-        ],
-        "match_core": "rivaroxaban",
-        "match_score": 100,
-        "medimo_middel": {
-          "origineel": "Xarelto tablet filmomhuld 10mg\t1-0-0 stuks, dagelijks, Continu",
-          "clean": "Xarelto tablet filmomhuld 10mg",
-          "gebruik": "1-0-0 stuks, dagelijks, Continu",
-          "opmerking": ""
-        }
-      },
-      {
         "start_line_index": 8,
         "docx_first_line": "Vit d 5600ie wekelijks",
-        "docx_lines": [
-          "Vit d 5600ie wekelijks",
-          "Pijnstilling"
+        "docx_lines_trimmed": [
+          "Vit d 5600ie wekelijks"
         ],
-        "block_text": "Vit d 5600ie wekelijks\nPijnstilling",
-        "sentences": [
-          "Vit d 5600ie wekelijks",
-          "Pijnstilling"
-        ],
+        "block_text": "Vit d 5600ie wekelijks",
         "match_core": "colecalciferol",
         "match_score": 100,
         "medimo_middel": {
@@ -1029,17 +835,10 @@
       {
         "start_line_index": 10,
         "docx_first_line": "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?",
-        "docx_lines": [
-          "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?",
-          "Psychofarmaca"
+        "docx_lines_trimmed": [
+          "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?"
         ],
-        "block_text": "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?\nPsychofarmaca",
-        "sentences": [
-          "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle?",
-          "Vaste dosering actueel?",
-          "Ja; waarom is de laatste dosering 1 tablet?",
-          "Psychofarmaca"
-        ],
+        "block_text": "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?",
         "match_core": "paracetamol",
         "match_score": 100,
         "medimo_middel": {
@@ -1052,20 +851,11 @@
       {
         "start_line_index": 12,
         "docx_first_line": "Clozapine 6.25: 1-2; indicatie? (Bij probleemgedrag bij ouderen met dementie van 3 maanden proberen af te bouwen.(start 19-11)  afbouwen mogelijk? Onrust, hallucinaties, angstig. Ivm sufheid geprobeerd af te bouwen, relapse, nu op deze dosis weer acceptabel. Nog steeds? Blijft op deze dosering  acceptabel; is nodig in deze dosering",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Clozapine 6.25: 1-2; indicatie? (Bij probleemgedrag bij ouderen met dementie van 3 maanden proberen af te bouwen.(start 19-11)  afbouwen mogelijk? Onrust, hallucinaties, angstig. Ivm sufheid geprobeerd af te bouwen, relapse, nu op deze dosis weer acceptabel. Nog steeds? Blijft op deze dosering  acceptabel; is nodig in deze dosering",
-          "Zo laten",
-          "Huid"
+          "Zo laten"
         ],
-        "block_text": "Clozapine 6.25: 1-2; indicatie? (Bij probleemgedrag bij ouderen met dementie van 3 maanden proberen af te bouwen.(start 19-11)  afbouwen mogelijk? Onrust, hallucinaties, angstig. Ivm sufheid geprobeerd af te bouwen, relapse, nu op deze dosis weer acceptabel. Nog steeds? Blijft op deze dosering  acceptabel; is nodig in deze dosering\nZo laten\nHuid",
-        "sentences": [
-          "Clozapine 6.25: 1-2; indicatie?",
-          "(Bij probleemgedrag bij ouderen met dementie van 3 maanden proberen af te bouwen.(start 19-11)  afbouwen mogelijk?",
-          "Onrust, hallucinaties, angstig.",
-          "Ivm sufheid geprobeerd af te bouwen, relapse, nu op deze dosis weer acceptabel.",
-          "Nog steeds?",
-          "Blijft op deze dosering  acceptabel; is nodig in deze dosering\nZo laten\nHuid"
-        ],
+        "block_text": "Clozapine 6.25: 1-2; indicatie? (Bij probleemgedrag bij ouderen met dementie van 3 maanden proberen af te bouwen.(start 19-11)  afbouwen mogelijk? Onrust, hallucinaties, angstig. Ivm sufheid geprobeerd af te bouwen, relapse, nu op deze dosis weer acceptabel. Nog steeds? Blijft op deze dosering  acceptabel; is nodig in deze dosering\nZo laten",
         "match_core": "clozapine",
         "match_score": 100,
         "medimo_middel": {
@@ -1078,27 +868,11 @@
       {
         "start_line_index": 15,
         "docx_first_line": "Triamcinolonacetonide 1 mg/g  1dd + zn sinds okt 22, door? Evt intermitterend? Mogelijk eczematisch beeld. Ooit geprobeerd, toen ging mevr. weer meer krabben. Blijft ter evaluatie. Op labia is dagelijks nodig, zn op benen is nodig; eczeem onder controle?",
-        "docx_lines": [
+        "docx_lines_trimmed": [
           "Triamcinolonacetonide 1 mg/g  1dd + zn sinds okt 22, door? Evt intermitterend? Mogelijk eczematisch beeld. Ooit geprobeerd, toen ging mevr. weer meer krabben. Blijft ter evaluatie. Op labia is dagelijks nodig, zn op benen is nodig; eczeem onder controle?",
-          "Hiermee onder controle, zo laten",
-          "Maag/darm",
-          "Macrogol 1dd1 + zn"
+          "Hiermee onder controle, zo laten"
         ],
-        "block_text": "Triamcinolonacetonide 1 mg/g  1dd + zn sinds okt 22, door? Evt intermitterend? Mogelijk eczematisch beeld. Ooit geprobeerd, toen ging mevr. weer meer krabben. Blijft ter evaluatie. Op labia is dagelijks nodig, zn op benen is nodig; eczeem onder controle?\nHiermee onder controle, zo laten\nMaag/darm\nMacrogol 1dd1 + zn",
-        "sentences": [
-          "Triamcinolonacetonide",
-          "1 mg/g  1dd + zn sinds okt 22, door?",
-          "Evt intermitterend?",
-          "Mogelijk eczematisch beeld.",
-          "Ooit geprobeerd, toen ging mevr. weer meer krabben.",
-          "Blijft ter evaluatie.",
-          "Op labia is dagelijks nodig, zn op benen is nodig;",
-          "eczeem onder controle?",
-          "Hiermee onder controle, zo laten\nMaag/darm",
-          "Macrogol 1dd1",
-          "+",
-          "zn"
-        ],
+        "block_text": "Triamcinolonacetonide 1 mg/g  1dd + zn sinds okt 22, door? Evt intermitterend? Mogelijk eczematisch beeld. Ooit geprobeerd, toen ging mevr. weer meer krabben. Blijft ter evaluatie. Op labia is dagelijks nodig, zn op benen is nodig; eczeem onder controle?\nHiermee onder controle, zo laten",
         "match_core": "triamcinolonacetonide",
         "match_score": 100,
         "medimo_middel": {
@@ -1109,22 +883,32 @@
         }
       },
       {
+        "start_line_index": 18,
+        "docx_first_line": "Macrogol 1dd1 + zn",
+        "docx_lines_trimmed": [
+          "Macrogol 1dd1 +"
+        ],
+        "block_text": "Macrogol 1dd1 +",
+        "match_core": "macrogol zouten",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Macrogol/zouten pdr v drank (movic/molax/gen citr)\t1-0-0 stuks, dagelijks, Continu",
+          "clean": "Macrogol/zouten pdr v drank (movic/molax/gen citr)",
+          "gebruik": "1-0-0 stuks, dagelijks, Continu",
+          "opmerking": ""
+        }
+      },
+      {
         "start_line_index": 19,
         "docx_first_line": "Mebeverine 200mg 2dd – effectief? Ja. Ontlasting gaat goed; afbouwen mogelijk? Nog geïndiceerd?",
-        "docx_lines": [
-          "Mebeverine 200mg 2dd – effectief? Ja. Ontlasting gaat goed; afbouwen mogelijk? Nog geïndiceerd?"
+        "docx_lines_trimmed": [
+          "Mebeverine 200mg 2dd – effectief? Ja. Ontlasting gaat goed; afbouwen mogelijk? Nog geïndiceerd?",
+          "Microlax zn",
+          "Gaat goed"
         ],
-        "block_text": "Mebeverine 200mg 2dd – effectief? Ja. Ontlasting gaat goed; afbouwen mogelijk? Nog geïndiceerd?",
-        "sentences": [
-          "Mebeverine",
-          "200mg 2dd – effectief?",
-          "Ja.",
-          "Ontlasting gaat goed;",
-          "afbouwen mogelijk?",
-          "Nog geïndiceerd?"
-        ],
-        "match_core": "mebeverine mga",
-        "match_score": 88,
+        "block_text": "Mebeverine 200mg 2dd – effectief? Ja. Ontlasting gaat goed; afbouwen mogelijk? Nog geïndiceerd?\nMicrolax zn\nGaat goed",
+        "match_core": "mebeverine",
+        "match_score": 100,
         "medimo_middel": {
           "origineel": "Mebeverine capsule mga 200mg\t1-1-0 stuks, dagelijks, Continu",
           "clean": "Mebeverine capsule mga 200mg",
@@ -1133,46 +917,12 @@
         }
       },
       {
-        "start_line_index": 20,
-        "docx_first_line": "Microlax zn",
-        "docx_lines": [
-          "Microlax zn",
-          "Gaat goed",
-          "Overig"
-        ],
-        "block_text": "Microlax zn\nGaat goed\nOverig",
-        "sentences": [
-          "Microlax zn\nGaat goed",
-          "Overig"
-        ],
-        "match_core": "microlax klysma",
-        "match_score": 90,
-        "medimo_middel": {
-          "origineel": "Microlax klysma flacon 5ml\t0-0-0 milliliter, dagelijks, Zo nodig",
-          "clean": "Microlax klysma flacon 5ml",
-          "gebruik": "0-0-0 milliliter, dagelijks, Zo nodig",
-          "opmerking": ""
-        }
-      },
-      {
         "start_line_index": 23,
         "docx_first_line": "Metformine 500mg 1d goed ingesteld? weer herstart ivm gestegen glucose, geen diarreeklachten. Goed ingesteld.  ja. HbA1c/glucose? Goed ingesteld? onder controle; HbA1c? goed ingesteld? Stoppen mogelijk? 10-15, zo laten, symp beleid",
-        "docx_lines": [
-          "Metformine 500mg 1d goed ingesteld? weer herstart ivm gestegen glucose, geen diarreeklachten. Goed ingesteld.  ja. HbA1c/glucose? Goed ingesteld? onder controle; HbA1c? goed ingesteld? Stoppen mogelijk? 10-15, zo laten, symp beleid"
+        "docx_lines_trimmed": [
+          "Metformine 500mg 1d goed ingesteld? weer herstart ivm gestegen glucose, geen diarreeklachten. Goed ingesteld.  ja. HbA1c/glucose? Goed ingesteld? onder controle; HbA1c? goed ingesteld? Stoppen mogelijk? 10-15, zo laten, symp"
         ],
-        "block_text": "Metformine 500mg 1d goed ingesteld? weer herstart ivm gestegen glucose, geen diarreeklachten. Goed ingesteld.  ja. HbA1c/glucose? Goed ingesteld? onder controle; HbA1c? goed ingesteld? Stoppen mogelijk? 10-15, zo laten, symp beleid",
-        "sentences": [
-          "Metformine 500mg 1d goed ingesteld?",
-          "weer herstart ivm gestegen glucose, geen diarreeklachten.",
-          "Goed ingesteld.  ja.",
-          "HbA1c/glucose?",
-          "Goed ingesteld?",
-          "onder controle; HbA1c?",
-          "goed ingesteld?",
-          "Stoppen mogelijk?",
-          "10-15, zo laten, symp",
-          "beleid"
-        ],
+        "block_text": "Metformine 500mg 1d goed ingesteld? weer herstart ivm gestegen glucose, geen diarreeklachten. Goed ingesteld.  ja. HbA1c/glucose? Goed ingesteld? onder controle; HbA1c? goed ingesteld? Stoppen mogelijk? 10-15, zo laten, symp",
         "match_core": "metformine",
         "match_score": 100,
         "medimo_middel": {
@@ -1185,15 +935,13 @@
       {
         "start_line_index": 24,
         "docx_first_line": "Steriskin handalcohol; op ontstoken vinger/nagel= actueel;; wordt dit nog steeds gebruikt?",
-        "docx_lines": [
-          "Steriskin handalcohol; op ontstoken vinger/nagel= actueel;; wordt dit nog steeds gebruikt?"
+        "docx_lines_trimmed": [
+          "Steriskin handalcohol; op ontstoken vinger/nagel= actueel;; wordt dit nog steeds gebruikt?",
+          "Duraphat 2dd",
+          "Malen: Ja",
+          "Buiten Formularium"
         ],
-        "block_text": "Steriskin handalcohol; op ontstoken vinger/nagel= actueel;; wordt dit nog steeds gebruikt?",
-        "sentences": [
-          "Steriskin handalcohol;",
-          "op ontstoken vinger/nagel= actueel;",
-          "; wordt dit nog steeds gebruikt?"
-        ],
+        "block_text": "Steriskin handalcohol; op ontstoken vinger/nagel= actueel;; wordt dit nog steeds gebruikt?\nDuraphat 2dd\nMalen: Ja\nBuiten Formularium",
         "match_core": "steriskin handalcohol",
         "match_score": 100,
         "medimo_middel": {
@@ -1201,30 +949,6 @@
           "clean": "Steriskin handalcohol",
           "gebruik": "0-0-x milliliter, dagelijks, Continu",
           "opmerking": "Op vingers/nagels 1x per dag"
-        }
-      },
-      {
-        "start_line_index": 25,
-        "docx_first_line": "Duraphat 2dd",
-        "docx_lines": [
-          "Duraphat 2dd",
-          "Malen: Ja",
-          "Buiten Formularium b3.0"
-        ],
-        "block_text": "Duraphat 2dd\nMalen: Ja\nBuiten Formularium b3.0",
-        "sentences": [
-          "Duraphat",
-          "2dd\nMalen:",
-          "Ja\nBuiten Formularium",
-          "b3.0"
-        ],
-        "match_core": "duraphat tandpasta",
-        "match_score": 85,
-        "medimo_middel": {
-          "origineel": "Duraphat tandpasta 5000ppm\tx-0-x gram, dagelijks, Continu",
-          "clean": "Duraphat tandpasta 5000ppm",
-          "gebruik": "x-0-x gram, dagelijks, Continu",
-          "opmerking": ""
         }
       }
     ]

@@ -26,17 +26,13 @@
         "docx_first_line": "Colecalciferol 2800IE 1x per week 2; gestart t.o.v. vorige review.",
         "docx_lines": [
           "Colecalciferol 2800IE 1x per week 2; gestart t.o.v. vorige review.",
-          "Pijnstilling",
-          "Pcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?",
-          "Psychofarmaca"
+          "Pijnstilling"
         ],
-        "block_text": "Colecalciferol 2800IE 1x per week 2; gestart t.o.v. vorige review.\nPijnstilling\nPcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?\nPsychofarmaca",
+        "block_text": "Colecalciferol 2800IE 1x per week 2; gestart t.o.v. vorige review.\nPijnstilling",
         "sentences": [
           "Colecalciferol 2800IE",
           "1x per week 2; gestart t.o.v. vorige review.",
-          "Pijnstilling\nPcm 3dd 500mg zn;",
-          "zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?",
-          "Psychofarmaca"
+          "Pijnstilling"
         ],
         "match_core": "colecalciferol",
         "match_score": 100,
@@ -45,6 +41,28 @@
           "clean": "Colecalciferol tablet 2800ie",
           "gebruik": "2-0-0 stuks, 1x per week, Continu",
           "opmerking": "=Vitamine D, mag gemalen worden"
+        }
+      },
+      {
+        "start_line_index": 8,
+        "docx_first_line": "Pcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?",
+        "docx_lines": [
+          "Pcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?",
+          "Psychofarmaca"
+        ],
+        "block_text": "Pcm 3dd 500mg zn; zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?\nPsychofarmaca",
+        "sentences": [
+          "Pcm 3dd 500mg zn;",
+          "zn 1 tablet is subtherapeutisch, 2 tabletten zn van maken?",
+          "Psychofarmaca"
+        ],
+        "match_core": "paracetamol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Paracetamol tablet 500mg\t0-0-0 stuks, dagelijks, Continu",
+          "clean": "Paracetamol tablet 500mg",
+          "gebruik": "0-0-0 stuks, dagelijks, Continu",
+          "opmerking": ""
         }
       },
       {
@@ -143,15 +161,32 @@
         "docx_first_line": "Colecalciferol 5600IE wekelijks",
         "docx_lines": [
           "Colecalciferol 5600IE wekelijks",
-          "Pijnstilling",
+          "Pijnstilling"
+        ],
+        "block_text": "Colecalciferol 5600IE wekelijks\nPijnstilling",
+        "sentences": [
+          "Colecalciferol 5600IE wekelijks",
+          "Pijnstilling"
+        ],
+        "match_core": "colecalciferol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Colecalciferol tablet 2800ie\t2-0-0 stuks, 1x per week, Continu",
+          "clean": "Colecalciferol tablet 2800ie",
+          "gebruik": "2-0-0 stuks, 1x per week, Continu",
+          "opmerking": "=Vitamine D, mag gemalen worden"
+        }
+      },
+      {
+        "start_line_index": 9,
+        "docx_first_line": "Pcm 500mg 2-0-2 vast + zn 1000mg extra\tPijn onder controle? Vaste dosering nog actueel? chronische rugpijn; Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald. Geen zn gebruik sinds verlaging dosering. PIJN ONDER CONTROLE",
+        "docx_lines": [
           "Pcm 500mg 2-0-2 vast + zn 1000mg extra\tPijn onder controle? Vaste dosering nog actueel? chronische rugpijn; Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald. Geen zn gebruik sinds verlaging dosering. PIJN ONDER CONTROLE",
           "Psychofarmaca"
         ],
-        "block_text": "Colecalciferol 5600IE wekelijks\nPijnstilling\nPcm 500mg 2-0-2 vast + zn 1000mg extra\tPijn onder controle? Vaste dosering nog actueel? chronische rugpijn; Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald. Geen zn gebruik sinds verlaging dosering. PIJN ONDER CONTROLE\nPsychofarmaca",
+        "block_text": "Pcm 500mg 2-0-2 vast + zn 1000mg extra\tPijn onder controle? Vaste dosering nog actueel? chronische rugpijn; Gebruik t.o.v vorige review omlaag, middagdoseringen eruit gehaald. Geen zn gebruik sinds verlaging dosering. PIJN ONDER CONTROLE\nPsychofarmaca",
         "sentences": [
-          "Colecalciferol 5600IE wekelijks",
-          "Pijnstilling\nPcm",
-          "500mg 2-0-2 vast",
+          "Pcm 500mg 2-0-2 vast",
           "+ zn 1000",
           "mg extra",
           "Pijn onder controle?",
@@ -161,13 +196,13 @@
           "Geen zn gebruik sinds verlaging dosering.",
           "PIJN ONDER CONTROLE\nPsychofarmaca"
         ],
-        "match_core": "colecalciferol",
+        "match_core": "paracetamol",
         "match_score": 100,
         "medimo_middel": {
-          "origineel": "Colecalciferol tablet 2800ie\t2-0-0 stuks, 1x per week, Continu",
-          "clean": "Colecalciferol tablet 2800ie",
-          "gebruik": "2-0-0 stuks, 1x per week, Continu",
-          "opmerking": "=Vitamine D, mag gemalen worden"
+          "origineel": "Paracetamol tablet 500mg\t2-0-2 stuks, dagelijks, Continu",
+          "clean": "Paracetamol tablet 500mg",
+          "gebruik": "2-0-2 stuks, dagelijks, Continu",
+          "opmerking": ""
         }
       },
       {
@@ -277,6 +312,48 @@
     "patient_match_score": 100,
     "discussions": [
       {
+        "start_line_index": 7,
+        "docx_first_line": "Vit d 5600ie wekelijks; waarom capsules ipv tabletten?",
+        "docx_lines": [
+          "Vit d 5600ie wekelijks; waarom capsules ipv tabletten?",
+          "OMZETTEN",
+          "Pijnstilling"
+        ],
+        "block_text": "Vit d 5600ie wekelijks; waarom capsules ipv tabletten?\nOMZETTEN\nPijnstilling",
+        "sentences": [
+          "Vit d 5600ie wekelijks;",
+          "waarom capsules ipv tabletten?\nOMZETTEN\nPijnstilling"
+        ],
+        "match_core": "colecalciferol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Colecalciferol tablet 2800ie\t2-0-0 stuks, 1x per week, Continu",
+          "clean": "Colecalciferol tablet 2800ie",
+          "gebruik": "2-0-0 stuks, 1x per week, Continu",
+          "opmerking": "=Vitamine D, mag gemalen worden"
+        }
+      },
+      {
+        "start_line_index": 10,
+        "docx_first_line": "Pcm zn",
+        "docx_lines": [
+          "Pcm zn",
+          "Psychofarmaca"
+        ],
+        "block_text": "Pcm zn\nPsychofarmaca",
+        "sentences": [
+          "Pcm zn\nPsychofarmaca"
+        ],
+        "match_core": "paracetamol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Paracetamol tablet 500mg\t0-0-0 stuks, dagelijks, Zo nodig",
+          "clean": "Paracetamol tablet 500mg",
+          "gebruik": "0-0-0 stuks, dagelijks, Zo nodig",
+          "opmerking": ""
+        }
+      },
+      {
         "start_line_index": 12,
         "docx_first_line": "Haldol drank; 1d5druppel AN",
         "docx_lines": [
@@ -342,7 +419,7 @@
           "NU RELatief stabiel, niet meer aankomen\nHuid\nMaag/darm"
         ],
         "match_core": "nortriptyline",
-        "match_score": 70,
+        "match_score": 100,
         "medimo_middel": {
           "origineel": "Nortriptyline tablet 50mg\t1-0-0 stuks, dagelijks, Continu",
           "clean": "Nortriptyline tablet 50mg",
@@ -399,24 +476,16 @@
         "docx_first_line": "Allopurinol 100mg 1dd; jicht\tja gaat goed",
         "docx_lines": [
           "Allopurinol 100mg 1dd; jicht\tja gaat goed",
-          "Hylan zn\t\t\t\tActueel? Laatste levering aug 2023. Stop; Nog steeds in overzicht en geen gebruik, stoppen? Mag stop",
-          "Foster 200/6 ; 2d1\t\t\tAstma onder controle? Onder controle, inhaleren gaat goed; astma onder controle? Gaat goed met vzk",
-          "Malen: ja",
-          "Buiten formularium: foster, quetiapine"
+          "Hylan zn\t\t\t\tActueel? Laatste levering aug 2023. Stop; Nog steeds in overzicht en geen gebruik, stoppen? Mag stop"
         ],
-        "block_text": "Allopurinol 100mg 1dd; jicht\tja gaat goed\nHylan zn\t\t\t\tActueel? Laatste levering aug 2023. Stop; Nog steeds in overzicht en geen gebruik, stoppen? Mag stop\nFoster 200/6 ; 2d1\t\t\tAstma onder controle? Onder controle, inhaleren gaat goed; astma onder controle? Gaat goed met vzk\nMalen: ja\nBuiten formularium: foster, quetiapine",
+        "block_text": "Allopurinol 100mg 1dd; jicht\tja gaat goed\nHylan zn\t\t\t\tActueel? Laatste levering aug 2023. Stop; Nog steeds in overzicht en geen gebruik, stoppen? Mag stop",
         "sentences": [
           "Allopurinol 100",
           "mg 1dd; jicht\tja gaat goed\nHylan zn\t\t\t\tActueel?",
           "Laatste levering aug 2023.",
           "Stop;",
           "Nog steeds in overzicht en geen gebruik, stoppen?",
-          "Mag stop\nFoster",
-          "200/6",
-          "; 2d1\t\t\tAstma onder controle?",
-          "Onder controle, inhaleren gaat goed;",
-          "astma onder controle?",
-          "Gaat goed met vzk\nMalen: ja\nBuiten formularium: foster, quetiapine"
+          "Mag stop"
         ],
         "match_core": "allopurinol",
         "match_score": 100,
@@ -425,6 +494,30 @@
           "clean": "Allopurinol tablet 100mg",
           "gebruik": "1-0-0 stuks, dagelijks, Continu",
           "opmerking": ""
+        }
+      },
+      {
+        "start_line_index": 25,
+        "docx_first_line": "Foster 200/6 ; 2d1\t\t\tAstma onder controle? Onder controle, inhaleren gaat goed; astma onder controle? Gaat goed met vzk",
+        "docx_lines": [
+          "Foster 200/6 ; 2d1\t\t\tAstma onder controle? Onder controle, inhaleren gaat goed; astma onder controle? Gaat goed met vzk",
+          "Malen: ja",
+          "Buiten formularium: foster, quetiapine"
+        ],
+        "block_text": "Foster 200/6 ; 2d1\t\t\tAstma onder controle? Onder controle, inhaleren gaat goed; astma onder controle? Gaat goed met vzk\nMalen: ja\nBuiten formularium: foster, quetiapine",
+        "sentences": [
+          "Foster 200/6 ; 2d1\t\t\tAstma onder controle?",
+          "Onder controle, inhaleren gaat goed;",
+          "astma onder controle?",
+          "Gaat goed met vzk\nMalen: ja\nBuiten formularium: foster, quetiapine"
+        ],
+        "match_core": "beclometason/formoterol",
+        "match_score": 95,
+        "medimo_middel": {
+          "origineel": "Beclometason/formoterol aerosol 200/6ug/do 180do i\t1-1-0 doses, dagelijks, Continu",
+          "clean": "Beclometason/formoterol aerosol 200/6ug/do 180do i",
+          "gebruik": "1-1-0 doses, dagelijks, Continu",
+          "opmerking": "=foster"
         }
       }
     ]
@@ -441,6 +534,26 @@
     },
     "patient_match_score": 100,
     "discussions": [
+      {
+        "start_line_index": 8,
+        "docx_first_line": "Pcm 3dd 1000mg zn",
+        "docx_lines": [
+          "Pcm 3dd 1000mg zn",
+          "Psychofarmaca"
+        ],
+        "block_text": "Pcm 3dd 1000mg zn\nPsychofarmaca",
+        "sentences": [
+          "Pcm 3dd 1000mg zn\nPsychofarmaca"
+        ],
+        "match_core": "paracetamol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Paracetamol tablet 500mg\t0-0-0 stuks, dagelijks, Zo nodig",
+          "clean": "Paracetamol tablet 500mg",
+          "gebruik": "0-0-0 stuks, dagelijks, Zo nodig",
+          "opmerking": "zn 3dd2 stuks bij pijn en/of koorts"
+        }
+      },
       {
         "start_line_index": 10,
         "docx_first_line": "Citalopram 10 1dd 2 an; Meer dan een jaar geleden gestart, afbouwen mogelijk?",
@@ -516,6 +629,30 @@
     },
     "patient_match_score": 100,
     "discussions": [
+      {
+        "start_line_index": 8,
+        "docx_first_line": "PCM zn 3dd 1000mg",
+        "docx_lines": [
+          "PCM zn 3dd 1000mg",
+          "Psychofarmaca",
+          "Huid",
+          "Maag/darm",
+          "Overig"
+        ],
+        "block_text": "PCM zn 3dd 1000mg\nPsychofarmaca\nHuid\nMaag/darm\nOverig",
+        "sentences": [
+          "PCM zn 3dd 1000mg\nPsychofarmaca\nHuid\nMaag/darm",
+          "Overig"
+        ],
+        "match_core": "paracetamol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Paracetamol tablet 500mg\t0-0-0 stuks, dagelijks, Zo nodig",
+          "clean": "Paracetamol tablet 500mg",
+          "gebruik": "0-0-0 stuks, dagelijks, Zo nodig",
+          "opmerking": "zn tot 3x daags 2tabl bij koorts (indien niet kunnen slikken dan 1 paracetamol zetpil van 1 gram geven)"
+        }
+      },
       {
         "start_line_index": 13,
         "docx_first_line": "Euthyrox 50ug 1dd \t\t\tGoed ingesteld? Goed; goed ingesteld? Ja",
@@ -630,19 +767,13 @@
         "docx_first_line": "Calci chew 500-800ie /dag\tindicatie voor ca suppletie? Niet voldoende, continueren",
         "docx_lines": [
           "Calci chew 500-800ie /dag\tindicatie voor ca suppletie? Niet voldoende, continueren",
-          "Pijnstilling",
-          "Pcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis? afbouwfase"
+          "Pijnstilling"
         ],
-        "block_text": "Calci chew 500-800ie /dag\tindicatie voor ca suppletie? Niet voldoende, continueren\nPijnstilling\nPcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis? afbouwfase",
+        "block_text": "Calci chew 500-800ie /dag\tindicatie voor ca suppletie? Niet voldoende, continueren\nPijnstilling",
         "sentences": [
           "Calci chew",
           "500-800ie /dag\tindicatie voor ca suppletie?",
-          "Niet voldoende, continueren\nPijnstilling",
-          "Pcm",
-          "500mg  3dd 1 +",
-          "zn;",
-          "ophogen naar 3dd 2 ivm subtherapeutische dosis?",
-          "afbouwfase"
+          "Niet voldoende, continueren\nPijnstilling"
         ],
         "match_core": "calci chew d",
         "match_score": 95,
@@ -651,6 +782,29 @@
           "clean": "Calci chew d3 kauwtablet 500mg/800ie",
           "gebruik": "0-1-0 stuks, dagelijks, Continu",
           "opmerking": ""
+        }
+      },
+      {
+        "start_line_index": 9,
+        "docx_first_line": "Pcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis? afbouwfase",
+        "docx_lines": [
+          "Pcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis? afbouwfase"
+        ],
+        "block_text": "Pcm 500mg  3dd 1 + zn; ophogen naar 3dd 2 ivm subtherapeutische dosis? afbouwfase",
+        "sentences": [
+          "Pcm",
+          "500mg  3dd 1 +",
+          "zn;",
+          "ophogen naar 3dd 2 ivm subtherapeutische dosis?",
+          "afbouwfase"
+        ],
+        "match_core": "paracetamol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Paracetamol tablet 500mg\t2-2-2 stuks, dagelijks, Continu",
+          "clean": "Paracetamol tablet 500mg",
+          "gebruik": "2-2-2 stuks, dagelijks, Continu",
+          "opmerking": "Ivm nekpijn"
         }
       },
       {
@@ -829,13 +983,9 @@
         "docx_lines": [
           "Xarelto 10mg 1dd (indicatie VTE) in overleg internist levenslang halve dosering 10mg gebruiken.;",
           "Hoe is rr? Onder controle?niet standaard, 11/10/2024  152/79, p92",
-          "Fractuurpreventie",
-          "Vit d 5600ie wekelijks",
-          "Pijnstilling",
-          "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?",
-          "Psychofarmaca"
+          "Fractuurpreventie"
         ],
-        "block_text": "Xarelto 10mg 1dd (indicatie VTE) in overleg internist levenslang halve dosering 10mg gebruiken.;\nHoe is rr? Onder controle?niet standaard, 11/10/2024  152/79, p92\nFractuurpreventie\nVit d 5600ie wekelijks\nPijnstilling\nPcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?\nPsychofarmaca",
+        "block_text": "Xarelto 10mg 1dd (indicatie VTE) in overleg internist levenslang halve dosering 10mg gebruiken.;\nHoe is rr? Onder controle?niet standaard, 11/10/2024  152/79, p92\nFractuurpreventie",
         "sentences": [
           "Xarelto 10",
           "mg 1dd (indicatie VTE)",
@@ -844,20 +994,58 @@
           "Hoe is rr?",
           "Onder controle?",
           "niet standaard, 11/10/2024  152/79, p92",
-          "Fractuurpreventie",
-          "Vit d 5600ie wekelijks",
-          "Pijnstilling\nPcm",
-          "500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle?",
-          "Vaste dosering actueel?",
-          "Ja; waarom is de laatste dosering 1 tablet?",
-          "Psychofarmaca"
+          "Fractuurpreventie"
         ],
-        "match_core": "xarelto",
+        "match_core": "rivaroxaban",
         "match_score": 100,
         "medimo_middel": {
           "origineel": "Xarelto tablet filmomhuld 10mg\t1-0-0 stuks, dagelijks, Continu",
           "clean": "Xarelto tablet filmomhuld 10mg",
           "gebruik": "1-0-0 stuks, dagelijks, Continu",
+          "opmerking": ""
+        }
+      },
+      {
+        "start_line_index": 8,
+        "docx_first_line": "Vit d 5600ie wekelijks",
+        "docx_lines": [
+          "Vit d 5600ie wekelijks",
+          "Pijnstilling"
+        ],
+        "block_text": "Vit d 5600ie wekelijks\nPijnstilling",
+        "sentences": [
+          "Vit d 5600ie wekelijks",
+          "Pijnstilling"
+        ],
+        "match_core": "colecalciferol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Colecalciferol tablet 2800ie\t2-0-0 stuks, 1x per week, Continu",
+          "clean": "Colecalciferol tablet 2800ie",
+          "gebruik": "2-0-0 stuks, 1x per week, Continu",
+          "opmerking": "=Vitamine D, mag gemalen worden"
+        }
+      },
+      {
+        "start_line_index": 10,
+        "docx_first_line": "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?",
+        "docx_lines": [
+          "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?",
+          "Psychofarmaca"
+        ],
+        "block_text": "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle? Vaste dosering actueel? Ja; waarom is de laatste dosering 1 tablet?\nPsychofarmaca",
+        "sentences": [
+          "Pcm 500mg 2-2-1 vast en zn; (ARTHROSE)\tPijn onder controle?",
+          "Vaste dosering actueel?",
+          "Ja; waarom is de laatste dosering 1 tablet?",
+          "Psychofarmaca"
+        ],
+        "match_core": "paracetamol",
+        "match_score": 100,
+        "medimo_middel": {
+          "origineel": "Paracetamol tablet 500mg\t2-2-1 stuks, dagelijks, Continu",
+          "clean": "Paracetamol tablet 500mg",
+          "gebruik": "2-2-1 stuks, dagelijks, Continu",
           "opmerking": ""
         }
       },

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Koppelt oude Word-discussies (Wie-blokken) aan Medimo per patiënt met:
+Koppelt oude Word-discussies (Wie-blokken) aan Medimo per patiënt:
 - Fuzzy patient matching (naam + geboortedatum)
 - Fuzzy medicatie matching op KERNAAM (niet de hele regel)
+- Alleen aliassen uit extern JSON-bestand (geen ingebouwde alias-map)
 - Discussie: van middel-startregel t/m regel vóór volgende middel
 - GFR/eGFR extractie
 - Optioneel zins-splitsing met spaCy (fallback zonder spaCy)
@@ -19,6 +20,7 @@ from typing import List, Dict, Optional, Tuple
 # -------------------- PADEN --------------------
 DOCX_PATH = "Data/argusvlinder november 2024.docx"
 MEDIMO_PATH = "Data/medimo_input.txt"
+ALIASES_JSON = "ExtractieNLP/aliases.json"    # <-- Voor geneesmiddel aliases
 OUTPUT_JSON = "ExtractieNLP/nlp_koppeling_debug.json"
 
 # -------------------- FUZZY BACKEND --------------------
@@ -48,7 +50,7 @@ def _partial_ratio(a: str, b: str) -> int:
     elif _FUZZ_BACKEND == "fuzzywuzzy":
         return int(_fz_fuzz.partial_ratio(a, b))
     else:
-        # simpele fallback
+        # heel simpele fallback
         return _ratio(a, b)
 
 def _token_sort_ratio(a: str, b: str) -> int:
@@ -74,7 +76,6 @@ except Exception:
 
 def nlp_sentences(text: str) -> List[str]:
     if not _NLP:
-        # fallback: simpele zinsplits
         parts = re.split(r"(?<=[\.\?!])\s+|\n", text)
         return [p.strip() for p in parts if p.strip()]
     doc = _NLP(text)
@@ -116,9 +117,43 @@ def normalize_dob(dob: str) -> str:
     return dob
 
 def normalize_line_for_match(line: str) -> str:
-    # Voor fuzzy match tegen kernnaam: lowercase, strip, verwijder dubbele spaties
-    line = normalize_text_basic(line)
-    return line
+    return normalize_text_basic(line)
+
+# -------------------- ALIASES (enkel extern JSON) --------------------
+def load_external_aliases(path: str) -> Dict[str, str]:
+    """
+    Laadt aliassen uit JSON: { "alias": "canonieke_naam", ... }
+    Slechts dit bestand bepaalt aliassen; geen defaults in code.
+    Keys en values worden genormaliseerd (lowercase, ascii-fication).
+    """
+    try:
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if isinstance(data, dict):
+                # normaliseer keys/values
+                norm = {}
+                for k, v in data.items():
+                    norm[normalize_text_basic(k)] = normalize_text_basic(v)
+                return norm
+        else:
+            print(f"ℹ️ Geen aliases.json gevonden op: {path} (script draait door zonder aliassen)")
+    except Exception as e:
+        print(f"⚠️ Kon aliases.json niet laden: {e}")
+    return {}
+
+def apply_aliases(text: str, alias_map: Dict[str, str]) -> str:
+    """
+    Vervang losse alias-termen (woordgrens) door canonieke vorm.
+    Langste alias eerst om 'vit d' vóór 'vit' te vervangen.
+    """
+    s = normalize_text_basic(text)
+    if not alias_map:
+        return s
+    for alias in sorted(alias_map.keys(), key=len, reverse=True):
+        pat = rf"\b{re.escape(alias)}\b"
+        s = re.sub(pat, alias_map[alias], s)
+    return s
 
 # -------------------- MEDIMO PARSING (zoals jouw main.py) --------------------
 def extract_patient_blocks(filepath: str) -> List[str]:
@@ -144,13 +179,11 @@ def parse_medimo_block(block: str) -> Dict:
     header = lines[0].strip()
     m = re.match(r"^(Mevr\.|Dhr\.)\s+([^\(]+)\((\d{2}-\d{2}-\d{4})\)", header)
     if not m:
-        # fallback: anders probeer ruimer
         m = re.search(r"(Mevr\.|Dhr\.)\s+([^\(]+)\((\d{2}-\d{2}-\d{4})\)", header)
     if m:
         naam = f"{m.group(1)} {m.group(2).strip()}"
         geboortedatum = m.group(3)
     else:
-        # naam/dob onbekend → hele header in naam, dob leeg
         naam = header
         geboortedatum = ""
 
@@ -200,16 +233,13 @@ FORM_WORDS = {
 }
 UNITS = {"mg","mcg","ug","µg","g","gram","ie","ml","%","ppm","mg/ml"}
 
-def extract_drug_core(text: str) -> str:
+def extract_drug_core(text: str, alias_map: Dict[str,str]) -> str:
     """
-    Neem de 'kernnaam' van een medimo-regel of vrije tekstregel:
-    - lowercase
-    - neem de eerste 1-3 tokens die geen vorm/eenheid zijn
-    - behoud slash-combinaties (beclometason/formoterol)
-    - stop vóór getallen/eenheden
+    Bepaal een 'kernnaam' (1-3 tokens) uit medimo-regel of vrije tekst,
+    waarbij eerst aliasvervanging wordt toegepast (alleen extern JSON).
     """
-    s = normalize_text_basic(text)
-    # splits op niet-alfanumeriek behalve slash
+    s = apply_aliases(text, alias_map)
+    # split tokens (letters en slash-combo's blijven)
     tokens = re.findall(r"[a-zA-Z/]+|\d+[a-zA-Z%/]*", s)
     core_tokens = []
     for tok in tokens:
@@ -218,17 +248,13 @@ def extract_drug_core(text: str) -> str:
             break
         if t in UNITS or t in FORM_WORDS:
             continue
-        # als token bevat digits (20mg) → stoppen
         if re.search(r"\d", t):
             break
         core_tokens.append(t)
-        # meestal 1-2 tokens genoeg, maar laat tot 3 toe
         if len(core_tokens) >= 3:
             break
-    # als niets gevonden, fallback naar eerste woord
     if not core_tokens and tokens:
         core_tokens = [re.sub(r"[^a-z/]", "", tokens[0].lower())]
-    # join; behoud slash in token zelf
     core = " ".join([t for t in core_tokens if t])
     return core.strip()
 
@@ -298,33 +324,32 @@ def match_patients(word_pats: List[Dict], medimo_pats: List[Dict], threshold: in
     return matches
 
 # -------------------- MEDICATIE MATCHING + DISCUSSIE --------------------
-def find_med_starts_for_patient(word_lines: List[str], medimo_meds: List[Dict], min_score: int = 70)\
+def find_med_starts_for_patient(word_lines: List[str], medimo_meds: List[Dict], alias_map: Dict[str,str], min_score: int = 70)\
         -> List[Tuple[int, int, str, int]]:
     """
-    Zoek in de Word-regels de start van elk Medimo-middel via fuzzy partial match op KERNAAM.
+    Fuzzy partial match op KERNAAM (incl. aliasvervanging via extern JSON) om startregels in Word te vinden.
     Return: lijst (line_index, medimo_index, med_core, score), gesorteerd op line_index.
     """
     starts = []
-    # vooraf: voor elk medimo item kernnaam bepalen
-    med_cores = [extract_drug_core(m["clean"]) for m in medimo_meds]
+    med_cores = [extract_drug_core(m["clean"], alias_map) for m in medimo_meds]
     for j, core in enumerate(med_cores):
         if not core:
             continue
         best_i, best_sc = None, 0
         for i, ln in enumerate(word_lines):
-            sc = _partial_ratio(core, normalize_line_for_match(ln))
+            norm_line = apply_aliases(ln, alias_map)
+            sc = _partial_ratio(core, normalize_line_for_match(norm_line))
             if sc > best_sc:
                 best_i, best_sc = i, sc
         if best_i is not None and best_sc >= min_score:
             starts.append((best_i, j, core, best_sc))
-    # resolve conflicts (als twee middelen dezelfde startregel kregen → houd hoogste score)
+    # Conflicten oplossen: per regel één middel (hoogste score)
     starts.sort(key=lambda x: (x[0], -x[3]))
-    dedup = []
-    used_lines = set()
+    dedup, used = [], set()
     for s in starts:
-        if s[0] in used_lines:
+        if s[0] in used:
             continue
-        used_lines.add(s[0])
+        used.add(s[0])
         dedup.append(s)
     return sorted(dedup, key=lambda x: x[0])
 
@@ -342,6 +367,9 @@ def chunk_by_starts(lines: List[str], starts: List[Tuple[int,int,str,int]]) -> L
 def run_pipeline(docx_path: str, medimo_path: str, out_json: str) -> str:
     os.makedirs(os.path.dirname(out_json), exist_ok=True)
 
+    alias_map = load_external_aliases(ALIASES_JSON)  # <-- alleen extern JSON
+    print(f"🔤 Aliases geladen: {len(alias_map)} (bron: {ALIASES_JSON})")
+
     medimo_pats = parse_medimo(medimo_path)
     word_pats = parse_word_docx(docx_path)
 
@@ -350,7 +378,7 @@ def run_pipeline(docx_path: str, medimo_path: str, out_json: str) -> str:
     result = []
     for wp, mp, score in matched:
         medimo_meds = mp["geneesmiddelen"] if mp else []
-        starts = find_med_starts_for_patient(wp["lines"], medimo_meds, min_score=70)
+        starts = find_med_starts_for_patient(wp["lines"], medimo_meds, alias_map, min_score=70)
         chunks = chunk_by_starts(wp["lines"], starts)
 
         discussions = []
@@ -359,7 +387,6 @@ def run_pipeline(docx_path: str, medimo_path: str, out_json: str) -> str:
             lines_block = wp["lines"][start_i:end_i]
             block_text = "\n".join(lines_block).strip()
             sentences = nlp_sentences(block_text)
-
             med_raw = medimo_meds[medimo_idx] if medimo_meds else None
 
             discussions.append({

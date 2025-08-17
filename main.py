@@ -4,7 +4,7 @@ from datetime import datetime
 from docx import Document
 from docx.shared import RGBColor, Cm
 from docx.oxml.ns import qn
-from docx.oxml import OxmlElement
+from docx.oxml import OxmlElement, parse_xml
 from Parsers import parse_medimo
 from START_STOP.check_start_stop import check_stopp_criteria
 from Anticholinerge_Score.check_acb import bereken_acb_score
@@ -16,6 +16,25 @@ def maak_in_klapbare_heading(paragraph, text):
     rStyle = OxmlElement('w:rStyle')
     rStyle.set(qn('w:val'), 'Heading3')
     rPr.append(rStyle)
+
+def collapse_heading(paragraph, collapsed=True):
+    """
+    Zet 'Collapsed by default' op een heading-paragraaf (Word 2013+).
+    paragraph: python-docx Paragraph die al een Heading-stijl heeft.
+    """
+    p = paragraph._p
+    pPr = p.get_or_add_pPr()
+
+    # Verwijder bestaande w15:collapsed nodes (als je herhaald aanroept)
+    for child in list(pPr):
+        if child.tag == '{http://schemas.microsoft.com/office/word/2012/wordml}collapsed':
+            pPr.remove(child)
+
+    if collapsed:
+        node = parse_xml(
+            r'<w15:collapsed xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml"/>'
+        )
+        pPr.append(node)
 
 def genereer_word_document(patiënten_data, afdeling):
     doc = Document()
@@ -41,7 +60,7 @@ def genereer_word_document(patiënten_data, afdeling):
         print(f"Waarschuwing: Fout bij toevoegen van logo: {str(e)}")
 
     # Hoofdtitel
-    doc.add_heading(f"Medicatie Review - Afdeling {afdeling}", level=1)
+    doc.add_heading(f"Medicatiebeoordeling - Afdeling {afdeling}", level=1)
     doc.paragraphs[-1].runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
 
     vandaag = datetime.today().strftime("%d-%m-%Y")
@@ -50,16 +69,17 @@ def genereer_word_document(patiënten_data, afdeling):
         heading = doc.add_heading(f"{patiënt['naam']}", level=2)
         heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
 
-        # Arts, apotheker, datum
+        # Arts, apotheker, datum, eGFR
         para = doc.add_paragraph()
-        for label, value in [("Arts:", ""), ("Apotheker:", ""), ("Datum:", vandaag)]:
+        for label, value in [("Arts:", ""), ("Apotheker:", ""), ("Datum:", vandaag), ("eGFR:", "")]:
             run = para.add_run(f"{label} ")
             run.bold = True
             para.add_run(f"{value}\n")
 
         # STOPP criteria
-        heading = doc.add_heading("STOPP-criteria:", level=3)
+        heading = doc.add_heading("Mogelijke STOPP-criteria:", level=3)
         heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
+        collapse_heading(heading, True)
 
         if patiënt["stopp"]:
             table = doc.add_table(rows=1, cols=5)
@@ -81,24 +101,67 @@ def genereer_word_document(patiënten_data, afdeling):
             doc.add_paragraph("Geen STOPP-criteria getriggerd.")
 
         # Dubbelmedicatie
-        heading = doc.add_heading("Dubbelmedicatie:", level=3)
+        heading = doc.add_heading("Mogelijke dubbelmedicatie:", level=3)
         heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
+        collapse_heading(heading, True)
 
         if patiënt["dubbelmedicatie"]:
+            table = doc.add_table(rows=1, cols=2)
+            table.style = 'Table Grid'
+            hdr_cells = table.rows[0].cells
+            headers = ["Groep", "Geneesmiddelen"]
+            for i, text in enumerate(headers):
+                run = hdr_cells[i].paragraphs[0].add_run(text)
+                run.bold = True
+
             for item in patiënt["dubbelmedicatie"]:
-                doc.add_paragraph(f"Groep: {item['groep']}", style='List Bullet')
-                doc.add_paragraph(f"Middelen: {', '.join(item['middelen'])}")
+                row_cells = table.add_row().cells
+                row_cells[0].text = str(item['groep']) if item['groep'] else "Onbekend"
+                
+                # Robuuste behandeling van middelen
+                middelen = item.get('middelen', [])
+                if isinstance(middelen, list):
+                    geneesmiddelen_text = ", ".join(str(middel) for middel in middelen if middel)
+                elif isinstance(middelen, str):
+                    geneesmiddelen_text = middelen
+                else:
+                    geneesmiddelen_text = str(middelen) if middelen else "Geen middelen"
+                    
+                row_cells[1].text = geneesmiddelen_text if geneesmiddelen_text else "Geen middelen"
         else:
             doc.add_paragraph("Geen dubbelmedicatie gevonden.")
-
+        
         # ACB-score
         heading = doc.add_heading("Anticholinerge belastingscore (ACB-score):", level=3)
         heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
+        collapse_heading(heading, True)
+
         score, interpretatie, middelen_met_bijdrage = patiënt["acb"]
-        doc.add_paragraph(f"Totale score: {score} ({interpretatie})")
+
+        para = doc.add_paragraph()
+        run = para.add_run("Totale score: ")
+        run.bold = True
+        para.add_run(f"{score} ({interpretatie})")
+
         if middelen_met_bijdrage:
-            lijst = ", ".join(f"{m['middel']} (ACB-score: {m['score']})" for m in middelen_met_bijdrage)
-            doc.add_paragraph("Bijdragende middelen: " + lijst)
+            para = doc.add_paragraph()
+            run = para.add_run("Bijdragende geneesmiddelen:")
+            run.bold = True
+            
+            table = doc.add_table(rows=1, cols=2)
+            table.style = 'Table Grid'
+            hdr_cells = table.rows[0].cells
+            headers = ["Geneesmiddel", "ACB-Score"]
+            for i, text in enumerate(headers):
+                run = hdr_cells[i].paragraphs[0].add_run(text)
+                run.bold = True
+
+            for middel_info in middelen_met_bijdrage:
+                row_cells = table.add_row().cells
+                row_cells[0].text = middel_info['middel']
+                row_cells[1].text = str(middel_info['score'])
+        else:
+            doc.add_paragraph("Geen bijdragende middelen.")
 
         # Medicatieoverzicht per groep
         heading = doc.add_heading("Medicatieoverzicht:", level=3)
@@ -119,7 +182,7 @@ def genereer_word_document(patiënten_data, afdeling):
             table = doc.add_table(rows=1, cols=4)
             table.style = 'Table Grid'
             hdr_cells = table.rows[0].cells
-            headers = ["Geneesmiddel", "Geneesmiddelgroep", "Gebruik", "Opmerking"]
+            headers = ["Geneesmiddel", "Geneesmiddelgroep", "Gebruik", "Opmerking Medimo"]
             for i, text in enumerate(headers):
                 run = hdr_cells[i].paragraphs[0].add_run(text)
                 run.bold = True
@@ -131,7 +194,15 @@ def genereer_word_document(patiënten_data, afdeling):
                 row_cells[2].text = gm["gebruik"]
                 row_cells[3].text = gm["opmerking"]
 
-            doc.add_paragraph("Opmerking apotheker:\n")
+            para = doc.add_paragraph()
+            run = para.add_run("Eerder besproken:")
+            run.bold = True
+            para = doc.add_paragraph()
+            run = para.add_run("Opmerking apotheker:")
+            run.bold = True
+            para = doc.add_paragraph()
+            run = para.add_run("Opmerking arts:\n")
+            run.bold = True
 
     os.makedirs("Output", exist_ok=True)
     doc_path = f"Output/MedicatieReview_{afdeling}.docx"

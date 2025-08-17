@@ -58,7 +58,7 @@ HTML_PAGE = r"""<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Medicatie Review – Frontend</title>
+  <title>Medicatiebeoordeling Voorbereider</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -188,13 +188,10 @@ HTML_PAGE = r"""<!doctype html>
     }
     
     header img:hover {
-      transform: scale(1.05);
-      background: rgba(255, 255, 255, 1);
-      box-shadow: 
-        var(--shadow-md),
-        0 0 15px rgba(0, 0, 0, 0.15),
-        0 0 25px rgba(29, 78, 216, 0.1);
-      border-color: rgba(29, 78, 216, 0.2);
+    transform: none !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: var(--shadow-sm), 0 0 10px rgba(0, 0, 0, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
     }
     
     header h1 {
@@ -236,8 +233,8 @@ HTML_PAGE = r"""<!doctype html>
     }
     
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    transform: none !important;
+    box-shadow: var(--shadow-lg) !important; /* zelfde als de basis .card */
     }
 
     .card .head {
@@ -542,28 +539,32 @@ HTML_PAGE = r"""<!doctype html>
   <header>
     <div class="header-content">
       <img src="/static/logo_apotheek_rgb.jpg" alt="Apotheek Jansen logo" />
-      <h1>Medicatie Review Generator</h1>
+      <h1>Medicatiebeoordeling Voorbereider</h1>
     </div>
   </header>
 
   <main>
     <section class="card">
       <div class="head">
-        <h2>Plak hier je <code>medimo_input.txt</code></h2>
+        <h2>Automatiseer de voorbereiding van medicatiebeoordelingen</h2>
       </div>
       <div class="content">
         <div class="row">
           <div>
-            <label for="medimo">medimo_input.txt inhoud</label>
+            <label for="medimo">Plak hier het VOLLEDIGE medicatieoverzicht uit Medimo van de afdeling</label>
             <textarea 
               id="medimo" 
-              placeholder="Plak hier de inhoud van medimo_input.txt...
-              
-Bijvoorbeeld:
-Patient ID: 12345
-Naam: Jan Jansen
-Geboortedatum: 01-01-1980
-Medicatie: ..."></textarea>
+              placeholder="Bijvoorbeeld...:
+
+Overzicht medicatie Afdeling X
+Een overzicht van alle actieve medicatie in afdeling Afdeling X. Per patient wordt weergegeven of en zo ja welke geneesmiddelen deze mensen gebruiken.
+
+10 records in selectie.
+________________________________________
+Dhr. A Einstein (14-03-1879)
+C   Clozapine tablet 6,25mg	1-0-0 stuks, dagelijks, Continu
+Z   Paracetamol tablet 500mg	0-0-0 stuks, dagelijks, Zo nodig
+Etc..."></textarea>
           </div>
           <div>
             <div class="btns">
@@ -577,7 +578,7 @@ Medicatie: ..."></textarea>
             <div id="status" class="status info">Klaar om te verwerken.</div>
             <div id="download" class="download">
               <span>Gereed!</span>
-              <a id="downloadLink" href="#" download>Download .docx</a>
+              <a id="downloadLink" href="#" download>Download Word Document (.docx)</a>
             </div>
           </div>
         </div>

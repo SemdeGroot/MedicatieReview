@@ -11,7 +11,7 @@ Koppelt oude Word-discussies (Wie-blokken) aan Medimo per patiënt:
     * slash genormaliseerd ("/" -> spatie) voor matching
 - Discussie = regels van middel-start t/m regel vóór de volgende middel-start
 - GFR/eGFR extractie
-- GEEN spaCy/NLP (snel)
+- GEEN spaCy (sneller)
 - Laatste woord uit elk middelblok verwijderd (strip groepsheaders zoals 'Psychofarmaca')
 
 Uitvoer (incl. debug): ExtractieNLP/nlp_koppeling_debug.json

@@ -614,7 +614,7 @@
     },
               {
       "fk_geneesmiddel": "covid-19 mrna vaccin",
-      "gpk_naam": "COVID-19 VACCIN PFIZER"
+      "gpk_naam": "COVID-19 VACCIN"
     },
               {
       "fk_geneesmiddel": "difterie-/acellulair kinkhoest-/tetanus-/polio-/haemophilus influenzae b-/hepatitis b-vaccin",

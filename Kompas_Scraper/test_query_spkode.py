@@ -1,6 +1,6 @@
 import sqlite3
 
-spkode = "00041793"  # Vervang dit door de SPKode die je wilt testen
+spkode = "00023914"  # Vervang dit door de SPKode die je wilt testen
 
 # Open database
 conn = sqlite3.connect("geneesmiddelen.db")

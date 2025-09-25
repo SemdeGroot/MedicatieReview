@@ -98,19 +98,27 @@ def exact_nmnr_match(name: str, bst020):
 # -----------------------------
 # NMNR → SPKode via routes
 # -----------------------------
-def _attempt_resolve_sp(nmnr, bst052, bst004, bst070, bst711):
+def _attempt_resolve_sp(nmnr, bst052, bst004, bst070, bst711, bst031, debug=False):
     """
-    Drie routes NMNR → SPKode. Retourneert (nmnr, hpkode, spkode) of None.
+    Alle routes NMNR → SPKode. Retourneert (nmnr, hpkode, spkode) of None.
+
+    Routes:
+      (1) 711-direct:    GPNMNR/GPSTNR → SPKODE
+      (2) PR→GP→SP:      PRNMNR (BST052) → GPKODE → SPKODE (BST711)
+      (3) ATNMNR→HP→GP→SP: ATNMNR (BST004) → HPKODE → GPKODE (BST070) → SPKODE (BST711)
+      (4) HPNAMN→HP→GP→SP: HPNAMN (BST031) → HPKODE → GPKODE (BST070) → SPKODE (BST711)
     """
     if not nmnr:
+        if debug:
+            print("    [_attempt] nmnr=None → stop")
         return None
 
-    mogelijke_spkodes = []
+    mogelijke = []  # (route, hpkode, gpkode, spkode)
 
     # (1) Direct via BST711T
     for row in bst711:
         if row["SPKODE"] and (row["GPSTNR"] == nmnr or row["GPNMNR"] == nmnr):
-            mogelijke_spkodes.append((None, row["SPKODE"]))
+            mogelijke.append(("711-direct", None, row.get("GPKODE"), row["SPKODE"]))
 
     # (2) Via PR → GP → SP
     for row in bst052:
@@ -118,26 +126,47 @@ def _attempt_resolve_sp(nmnr, bst052, bst004, bst070, bst711):
             gpkode = row["GPKODE"]
             for rij in bst711:
                 if rij["SPKODE"] and (rij["GPKODE"] == gpkode or rij["GSKODE"] == gpkode):
-                    mogelijke_spkodes.append((None, rij["SPKODE"]))
+                    mogelijke.append(("PR→GP→SP", None, gpkode, rij["SPKODE"]))
 
-    # (3) Via HP → GP → SP
-    hpkodes = [r["HPKODE"] for r in bst004 if r["ATNMNR"] == nmnr]
-    for hpkode in hpkodes:
+    # (3) Via ATNMNR→HP→GP→SP (BST004 → BST070 → BST711)
+    hpkodes_via_bst004 = [r["HPKODE"] for r in bst004 if r["ATNMNR"] == nmnr]
+    for hpkode in hpkodes_via_bst004:
         for row in bst070:
             if row["HPKODE"] == hpkode:
                 gpkode = row["GPKODE"]
                 for rij in bst711:
                     if rij["SPKODE"] and (rij["GPKODE"] == gpkode or rij["GSKODE"] == gpkode):
-                        mogelijke_spkodes.append((hpkode, rij["SPKODE"]))
+                        mogelijke.append(("ATNMNR→HP→GP→SP", hpkode, gpkode, rij["SPKODE"]))
 
-    if mogelijke_spkodes:
+    # (4) Via HPNAMN→HP→GP→SP (BST031 → BST070 → BST711)
+    hpkodes_via_bst031 = [r["HPKODE"] for r in bst031 if r["HPNAMN"] == nmnr]
+    for hpkode in hpkodes_via_bst031:
+        for row in bst070:
+            if row["HPKODE"] == hpkode:
+                gpkode = row["GPKODE"]
+                for rij in bst711:
+                    if rij["SPKODE"] and (rij["GPKODE"] == gpkode or rij["GSKODE"] == gpkode):
+                        mogelijke.append(("HPNAMN→HP→GP→SP", hpkode, gpkode, rij["SPKODE"]))
+
+    if debug:
+        if not mogelijke:
+            print("    [_attempt] geen SPKODE via routes gevonden.")
+        else:
+            print(f"    [_attempt] {len(mogelijke)} mogelijkheden:")
+            for route, hp, gp, sp in mogelijke[:5]:
+                print(f"      - route={route} | HP={hp} | GP={gp} | SP={sp}")
+
+    if mogelijke:
         # eenvoudige strategie: eerste hit teruggeven
-        return nmnr, mogelijke_spkodes[0][0], mogelijke_spkodes[0][1]
+        route, hpkode, gpkode, spkode = mogelijke[0]
+        if debug:
+            print(f"    [_attempt] keuze: route={route} | HP={hpkode} | GP={gpkode} | SP={spkode}")
+        return nmnr, hpkode, spkode
 
     return None
 
 
-def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711):
+def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711, bst031, debug=False):
     """
     PRIMAIRE UITKOMST: SPKode vinden m.b.v. gm_naam uit parse_medimo_block.
     Strategie:
@@ -146,32 +175,42 @@ def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711):
          (N-1) woorden, dan (N-2), ... tot 1 woord over is.
       3) Voor elke kandidaatnaam:
            - NMNR = exact_nmnr_match(kandidaat, BST020)
-           - Probeer SP via _attempt_resolve_sp (routes: direct/PR/HP)
+           - Probeer SP via _attempt_resolve_sp (routes: 711-direct / PR→GP→SP / ATNMNR→HP→GP→SP / HPNAMN→HP→GP→SP)
 
     Retourneert: (nmnr, hpkode, spkode)
     """
     full_clean = clean_name(gm_clean)
     if not full_clean:
+        if debug:
+            print("[match] gm_clean leeg na clean_name()")
         return None, None, None
 
     tokens = full_clean.split()
     n = len(tokens)
 
+    def dbg(*args):
+        if debug:
+            print(*args)
+
     # 0) Volledige naam
     nmnr_full = exact_nmnr_match(full_clean, bst020)
-    res_full = _attempt_resolve_sp(nmnr_full, bst052, bst004, bst070, bst711) if nmnr_full else None
+    dbg(f"[match full] cand='{full_clean}' → NMNR={nmnr_full}")
+    res_full = _attempt_resolve_sp(nmnr_full, bst052, bst004, bst070, bst711, bst031, debug=debug) if nmnr_full else None
+    dbg(f"[match full] SP={res_full[2] if res_full else None}")
     if res_full:
         return res_full  # (nmnr, hpkode, spkode)
 
-    # 1) Prefixen: van N-1 naar 1 woord (telkens laatste woord eraf)
+    # 1) Prefixen: N-1 → 1 woord (telkens laatste woord eraf)
     for k in range(n - 1, 0, -1):
         candidate = " ".join(tokens[:k])
         nmnr_k = exact_nmnr_match(candidate, bst020)
-        res_k = _attempt_resolve_sp(nmnr_k, bst052, bst004, bst070, bst711) if nmnr_k else None
+        dbg(f"[match k={k}] cand='{candidate}' → NMNR={nmnr_k}")
+        res_k = _attempt_resolve_sp(nmnr_k, bst052, bst004, bst070, bst711, bst031, debug=debug) if nmnr_k else None
+        dbg(f"[match k={k}] SP={res_k[2] if res_k else None}")
         if res_k:
-            return res_k  # (nmnr, hpkode, spkode)
+            return res_k
 
-    # 2) Geen SPKode gevonden
+    dbg("[match] geen SPKode gevonden na alle prefixes.")
     return None, None, None
 
 
@@ -233,6 +272,7 @@ def main():
     bst052_path = os.path.join(dir_path, "BST052T")
     bst070_path = os.path.join(dir_path, "BST070T")
     bst711_path = os.path.join(dir_path, "BST711T")
+    bst031_path = os.path.join(dir_path, "BST031T")
     medimo_path = "Data/medimo_input.txt"
 
     # Kolommen (posities conform jouw scripts)
@@ -246,6 +286,12 @@ def main():
         ("SPKODE", 104, 112),
         ("ATC", 118, 126),  # <-- ATC-code direct uit BST711
     ]
+    bst031_cols = [  # velden en posities volgens jouw fixed-width stijl
+    ("HPKODE", 5, 13),   # 006-013 → 0-based [5:13)
+    ("PRKODE", 13, 21),  # 014-021 → [13:21)
+    ("MHKODE", 21, 29),  # 022-029 → [21:29)
+    ("HPNAMN", 29, 36),  # 030-036 → [29:36) (7 lang)
+    ]
 
     # Inlezen G-Standaard
     bst020 = load_fixed_width_file(bst020_path, bst020_cols)
@@ -253,6 +299,7 @@ def main():
     bst052 = load_fixed_width_file(bst052_path, bst052_cols)
     bst070 = load_fixed_width_file(bst070_path, bst070_cols)
     bst711 = load_fixed_width_file(bst711_path, bst711_cols)
+    bst031 = load_fixed_width_file(bst031_path, bst031_cols)
 
     # SPKode → ATC mapping opbouwen
     spkode_to_atc = build_spkode_to_atc_map(bst711)
@@ -267,7 +314,7 @@ def main():
         gm_list = parse_medimo_block(patiënt)
         for gm in gm_list:
             nmnr, hpkode, spkode = match_to_spkode(
-                gm["clean"], bst020, bst052, bst004, bst070, bst711
+            gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=True  # zet debug=True wanneer nodig
             )
 
             atc_code = spkode_to_atc.get(spkode)
@@ -294,6 +341,7 @@ def run_parser():
     bst052_path = os.path.join(dir_path, "BST052T")
     bst070_path = os.path.join(dir_path, "BST070T")
     bst711_path = os.path.join(dir_path, "BST711T")
+    bst031_path = os.path.join(dir_path, "BST031T")
     medimo_path = "Data/medimo_input.txt"
 
     bst020_cols = [("NMNR", 5, 12), ("NMNAAM", 85, 135)]
@@ -306,12 +354,20 @@ def run_parser():
         ("SPKODE", 104, 112),
         ("ATC", 118, 126),
     ]
+    bst031_cols = [  # velden en posities volgens jouw fixed-width stijl
+    ("HPKODE", 5, 13),   # 006-013 → 0-based [5:13)
+    ("PRKODE", 13, 21),  # 014-021 → [13:21)
+    ("MHKODE", 21, 29),  # 022-029 → [21:29)
+    ("HPNAMN", 29, 36),  # 030-036 → [29:36) (7 lang)
+    ]
 
     bst020 = load_fixed_width_file(bst020_path, bst020_cols)
     bst004 = load_fixed_width_file(bst004_path, bst004_cols)
     bst052 = load_fixed_width_file(bst052_path, bst052_cols)
     bst070 = load_fixed_width_file(bst070_path, bst070_cols)
     bst711 = load_fixed_width_file(bst711_path, bst711_cols)
+    bst031 = load_fixed_width_file(bst031_path, bst031_cols)
+
 
     spkode_to_atc = build_spkode_to_atc_map(bst711)
 
@@ -327,7 +383,7 @@ def run_parser():
         gm_list = parse_medimo_block(patiënt)
         for gm in gm_list:
             nmnr, hpkode, spkode = match_to_spkode(
-                gm["clean"], bst020, bst052, bst004, bst070, bst711
+            gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=True  # zet debug=True wanneer nodig
             )
             atc_code = spkode_to_atc.get(spkode)
             atc3 = atc_to_group3(atc_code)

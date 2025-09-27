@@ -157,14 +157,12 @@ def _attempt_resolve_sp(nmnr, bst052, bst004, bst070, bst711, bst031, debug=Fals
                 print(f"      - route={route} | HP={hp} | GP={gp} | SP={sp}")
 
     if mogelijke:
-        # eenvoudige strategie: eerste hit teruggeven
         route, hpkode, gpkode, spkode = mogelijke[0]
         if debug:
             print(f"    [_attempt] keuze: route={route} | HP={hpkode} | GP={gpkode} | SP={spkode}")
         return nmnr, hpkode, spkode
 
     return None
-
 
 def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711, bst031, debug=False):
     """
@@ -173,11 +171,11 @@ def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711, bst031, de
       1) Probeer VOLLEDIGE gm_naam → NMNR → (routes) → SPKode.
       2) Als géén SPKode: herhaal met prefixen door telkens het LAATSTE woord te verwijderen:
          (N-1) woorden, dan (N-2), ... tot 1 woord over is.
-      3) Voor elke kandidaatnaam:
-           - NMNR = exact_nmnr_match(kandidaat, BST020)
-           - Probeer SP via _attempt_resolve_sp (routes: 711-direct / PR→GP→SP / ATNMNR→HP→GP→SP / HPNAMN→HP→GP→SP)
-
-    Retourneert: (nmnr, hpkode, spkode)
+         - Bij zo'n prefix: als geen SPKode, doe een prefix-scan over BST020:
+           * pak alle NMNAAM die beginnen met die prefix, maar alléén als er
+             een woordgrens/scheidingsteken volgt (spatie, -, /, _, of einde).
+           * probeer per gevonden NMNR de routes; STOP zodra een SPKode is gevonden.
+      3) Retourneert: (nmnr, hpkode, spkode)
     """
     full_clean = clean_name(gm_clean)
     if not full_clean:
@@ -192,13 +190,16 @@ def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711, bst031, de
         if debug:
             print(*args)
 
+    def _norm(s: str) -> str:
+        return clean_name(s).lower()
+
     # 0) Volledige naam
     nmnr_full = exact_nmnr_match(full_clean, bst020)
     dbg(f"[match full] cand='{full_clean}' → NMNR={nmnr_full}")
     res_full = _attempt_resolve_sp(nmnr_full, bst052, bst004, bst070, bst711, bst031, debug=debug) if nmnr_full else None
     dbg(f"[match full] SP={res_full[2] if res_full else None}")
     if res_full:
-        return res_full  # (nmnr, hpkode, spkode)
+        return res_full
 
     # 1) Prefixen: N-1 → 1 woord (telkens laatste woord eraf)
     for k in range(n - 1, 0, -1):
@@ -210,9 +211,27 @@ def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711, bst031, de
         if res_k:
             return res_k
 
-    dbg("[match] geen SPKode gevonden na alle prefixes.")
-    return None, None, None
+        # ★ Prefix-scan met woordgrens/scheidingsteken
+        cand_norm = _norm(candidate)
+        # Regex: begin ^cand_norm gevolgd door (woordgrens of spatie of - of / of _ of einde $)
+        boundary_pat = re.compile(r'^' + re.escape(cand_norm) + r'(?:\b|[ \-/_]|$)')
+        prefix_hits = []
+        for row in bst020:
+            nmnaam_norm = _norm(row["NMNAAM"])
+            if boundary_pat.match(nmnaam_norm):
+                prefix_hits.append((row["NMNR"], row["NMNAAM"]))
 
+        if debug:
+            dbg(f"[match k={k}] prefix-scan '{candidate}' (wb) → {len(prefix_hits)} NMNR-hits")
+
+        for nmnr_pref, nmnaam_raw in prefix_hits:
+            res_pref = _attempt_resolve_sp(nmnr_pref, bst052, bst004, bst070, bst711, bst031, debug=debug)
+            dbg(f"[match k={k}]   try NMNAAM startswith(wb) '{candidate}': '{nmnaam_raw}' → SP={res_pref[2] if res_pref else None}")
+            if res_pref:
+                return res_pref  # STOP bij eerste SPKode
+
+    dbg("[match] geen SPKode gevonden na alle prefixes + prefix-scan.")
+    return None, None, None
 
 # -----------------------------
 # SPKode → ATC (BST711 kolom 118:126)

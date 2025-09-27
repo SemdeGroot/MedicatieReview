@@ -2,9 +2,11 @@
 # -------------------------------------------------
 # Parseert Medimo-export en koppelt per geneesmiddel:
 # - NMNR (BST020T) op basis van naam
-# - SPKode via 3 routes (BST711 direct, via PR, via HP)
+# - SPKode via 3/4 routes (BST711 direct, via PR, via HP, via HPNAMN)
 # - ATC-code via BST711 (kolom 118:126) o.b.v. SPKode
-# - ATC-groep (eerste 3 tekens) + omschrijving uit ATC_groepen.db
+# - ATC3/4/5/7 codes + omschrijvingen:
+#     * ATC3: omschrijving + Jansen-omschrijving uit ATC_groepen.db
+#     * ATC4/5/7: NL-omschrijving direct uit BST801T (géén DB)
 #
 # Geen gebruik van 'geneesmiddelen.db'.
 
@@ -28,7 +30,6 @@ def load_fixed_width_file(file_path, columns, encoding='utf-8'):
             data.append(row)
     return data
 
-
 # -----------------------------
 # Medimo parsing
 # -----------------------------
@@ -42,13 +43,11 @@ def extract_patient_blocks(filepath):
     raw_blocks = re.split(r'(?=Dhr\. |Mevr\. )', content)
     return [block.strip() for block in raw_blocks if block.strip().startswith(("Dhr.", "Mevr."))]
 
-
 def clean_name(name):
     name = unicodedata.normalize('NFKD', name).encode('ASCII', 'ignore').decode('ASCII')
     name = re.sub(r"\(.*?\)", "", name)
     name = name.replace("\u200b", "")
     return name.strip()
-
 
 def parse_medimo_block(block):
     lines = block.strip().split("\n")
@@ -79,7 +78,6 @@ def parse_medimo_block(block):
         i += 1
     return geneesmiddelen
 
-
 # -----------------------------
 # Naam → NMNR (BST020T)
 # -----------------------------
@@ -94,7 +92,6 @@ def exact_nmnr_match(name: str, bst020):
             return row["NMNR"]
     return None
 
-
 # -----------------------------
 # NMNR → SPKode via routes
 # -----------------------------
@@ -102,6 +99,12 @@ def _attempt_resolve_sp(nmnr, bst052, bst004, bst070, bst711, bst031, debug=Fals
     """
     Alle routes NMNR → SPKode. Retourneert (nmnr, hpkode, spkode) of None.
     Stop direct bij de eerste SPKode-hit (short-circuit).
+
+    Routes:
+      (1) 711-direct:    GPNMNR/GPSTNR → SPKODE
+      (2) PR→GP→SP:      PRNMNR (BST052) → GPKODE → SPKODE (BST711)
+      (3) ATNMNR→HP→GP→SP: ATNMNR (BST004) → HPKODE → GPKODE (BST070) → SPKODE (BST711)
+      (4) HPNAMN→HP→GP→SP: HPNAMN (BST031) → HPKODE → GPKODE (BST070) → SPKODE (BST711)
     """
     if not nmnr:
         if debug:
@@ -154,7 +157,6 @@ def _attempt_resolve_sp(nmnr, bst052, bst004, bst070, bst711, bst031, debug=Fals
     if debug:
         print("    [_attempt] geen SPKODE via routes gevonden.")
     return None
-
 
 def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711, bst031, debug=False):
     """
@@ -237,18 +239,44 @@ def build_spkode_to_atc_map(bst711):
             mapping[spk] = atc
     return mapping
 
-
-def atc_to_group3(atc_code):
+def atc_levels(atc_code):
     """
-    Geef eerste 3 tekens van ATC-code (bijv. C07AB02 → C07).
+    Geef ATC niveaus (3/4/5/7) als tuple (atc3, atc4, atc5, atc7).
     """
-    if not atc_code or len(atc_code) < 3:
-        return None
-    return atc_code[:3]
-
+    if not atc_code:
+        return None, None, None, None
+    atc_code = atc_code.strip().upper()
+    atc3 = atc_code[:3] if len(atc_code) >= 3 else None
+    atc4 = atc_code[:4] if len(atc_code) >= 4 else None
+    atc5 = atc_code[:5] if len(atc_code) >= 5 else None
+    atc7 = atc_code[:7] if len(atc_code) >= 7 else None
+    return atc3, atc4, atc5, atc7
 
 # -----------------------------
-# ATC_groepen.db lookup (3-tekens)
+# BST801T: ATC-code → NL-omschrijving (direct, geen DB)
+# -----------------------------
+def load_bst801_map(bst801_path):
+    """
+    Laadt BST801T naar dict: code → NL-omschrijving.
+    ATCODE (006-013) → line[5:13], ATOMS (014-093) → line[13:93].
+    Probeert UTF-8, valt terug op Latin-1.
+    """
+    mapping = {}
+    for enc in ('utf-8', 'latin-1'):
+        try:
+            with open(bst801_path, 'r', encoding=enc) as f:
+                for line in f:
+                    atc_code = line[5:13].strip()
+                    nl_desc  = line[13:93].strip()
+                    if atc_code:
+                        mapping[atc_code] = nl_desc
+            break
+        except UnicodeDecodeError:
+            continue
+    return mapping
+
+# -----------------------------
+# ATC_groepen.db lookup (ATC3 → +Jansen)
 # -----------------------------
 def lookup_atc3_info(atc3, atc_db_path="ATC_groepen.db"):
     """
@@ -269,7 +297,6 @@ def lookup_atc3_info(atc3, atc_db_path="ATC_groepen.db"):
         return row[0], row[1], row[2]
     return None, None, None
 
-
 # -----------------------------
 # Main / Run
 # -----------------------------
@@ -281,6 +308,7 @@ def main():
     bst070_path = os.path.join(dir_path, "BST070T")
     bst711_path = os.path.join(dir_path, "BST711T")
     bst031_path = os.path.join(dir_path, "BST031T")
+    bst801_path = os.path.join(dir_path, "BST801T")
     medimo_path = "Data/medimo_input.txt"
 
     # Kolommen (posities conform jouw scripts)
@@ -294,11 +322,11 @@ def main():
         ("SPKODE", 104, 112),
         ("ATC", 118, 126),  # <-- ATC-code direct uit BST711
     ]
-    bst031_cols = [  # velden en posities volgens jouw fixed-width stijl
-    ("HPKODE", 5, 13),   # 006-013 → 0-based [5:13)
-    ("PRKODE", 13, 21),  # 014-021 → [13:21)
-    ("MHKODE", 21, 29),  # 022-029 → [21:29)
-    ("HPNAMN", 29, 36),  # 030-036 → [29:36) (7 lang)
+    bst031_cols = [
+        ("HPKODE", 5, 13),
+        ("PRKODE", 13, 21),
+        ("MHKODE", 21, 29),
+        ("HPNAMN", 29, 36),
     ]
 
     # Inlezen G-Standaard
@@ -308,6 +336,9 @@ def main():
     bst070 = load_fixed_width_file(bst070_path, bst070_cols)
     bst711 = load_fixed_width_file(bst711_path, bst711_cols)
     bst031 = load_fixed_width_file(bst031_path, bst031_cols)
+
+    # BST801: code → NL-omschrijving (voor ATC4/5/7 en ook ATC3 fallback)
+    atc_desc_map = load_bst801_map(bst801_path)
 
     # SPKode → ATC mapping opbouwen
     spkode_to_atc = build_spkode_to_atc_map(bst711)
@@ -322,25 +353,34 @@ def main():
         gm_list = parse_medimo_block(patiënt)
         for gm in gm_list:
             nmnr, hpkode, spkode = match_to_spkode(
-            gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=True  # zet debug=True wanneer nodig
+                gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=False
             )
 
             atc_code = spkode_to_atc.get(spkode)
-            atc3 = atc_to_group3(atc_code)
+            atc3, atc4, atc5, atc7 = atc_levels(atc_code)
+
+            # Omschrijvingen:
+            # - ATC3: omschrijving + Jansen uit DB
             atc3_key, atc3_omschrijving, atc3_jansen = lookup_atc3_info(atc3)
+            # - ATC4/5/7: NL-omschrijving direct uit BST801
+            atc4_oms = atc_desc_map.get(atc4) if atc4 else None
+            atc5_oms = atc_desc_map.get(atc5) if atc5 else None
+            atc7_oms = atc_desc_map.get(atc7) if atc7 else None
 
             status = "✅" if spkode and atc3_key else "❌"
             print(f"  {status} {gm['clean']}")
             print(f"    → NMNR: {nmnr}, HPKODE: {hpkode}, SPKode: {spkode}")
-            print(f"    → ATC: {atc_code}  | ATC3: {atc3}")
-            print(f"    → ATC3 uit DB: {atc3_key} | Omschrijving: {atc3_omschrijving} | Jansen: {atc3_jansen}")
+            print(f"    → ATC: {atc_code}  | ATC3: {atc3} | ATC4: {atc4} | ATC5: {atc5} | ATC7: {atc7}")
+            print(f"    → ATC3 DB: {atc3_key} | Omschr: {atc3_omschrijving} | Jansen: {atc3_jansen}")
+            print(f"    → ATC4 omschr: {atc4_oms}")
+            print(f"    → ATC5 omschr: {atc5_oms}")
+            print(f"    → ATC7 omschr: {atc7_oms}")
             print(f"    → Gebruik: {gm['gebruik']} | Opmerking: {gm['opmerking']}\n")
-
 
 def run_parser():
     """
     Retourneert:
-      - lijst dicts per patiënt met geneesmiddelen + SPKode + ATC + ATC3 + ATC3-omschrijving
+      - lijst dicts per patiënt met geneesmiddelen + SPKode + ATC + ATC3(+Jansen) + ATC4/5/7 + omschrijvingen
       - afdelingsnaam (indien aanwezig)
     """
     dir_path = "G-Standaard"
@@ -350,6 +390,7 @@ def run_parser():
     bst070_path = os.path.join(dir_path, "BST070T")
     bst711_path = os.path.join(dir_path, "BST711T")
     bst031_path = os.path.join(dir_path, "BST031T")
+    bst801_path = os.path.join(dir_path, "BST801T")
     medimo_path = "Data/medimo_input.txt"
 
     bst020_cols = [("NMNR", 5, 12), ("NMNAAM", 85, 135)]
@@ -362,11 +403,11 @@ def run_parser():
         ("SPKODE", 104, 112),
         ("ATC", 118, 126),
     ]
-    bst031_cols = [  # velden en posities volgens jouw fixed-width stijl
-    ("HPKODE", 5, 13),   # 006-013 → 0-based [5:13)
-    ("PRKODE", 13, 21),  # 014-021 → [13:21)
-    ("MHKODE", 21, 29),  # 022-029 → [21:29)
-    ("HPNAMN", 29, 36),  # 030-036 → [29:36) (7 lang)
+    bst031_cols = [
+        ("HPKODE", 5, 13),
+        ("PRKODE", 13, 21),
+        ("MHKODE", 21, 29),
+        ("HPNAMN", 29, 36),
     ]
 
     bst020 = load_fixed_width_file(bst020_path, bst020_cols)
@@ -376,6 +417,8 @@ def run_parser():
     bst711 = load_fixed_width_file(bst711_path, bst711_cols)
     bst031 = load_fixed_width_file(bst031_path, bst031_cols)
 
+    # BST801 map (code→NL-omschrijving) één keer inlezen
+    atc_desc_map = load_bst801_map(bst801_path)
 
     spkode_to_atc = build_spkode_to_atc_map(bst711)
 
@@ -391,20 +434,37 @@ def run_parser():
         gm_list = parse_medimo_block(patiënt)
         for gm in gm_list:
             nmnr, hpkode, spkode = match_to_spkode(
-            gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=True  # zet debug=True wanneer nodig
+                gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=False
             )
             atc_code = spkode_to_atc.get(spkode)
-            atc3 = atc_to_group3(atc_code)
+            atc3, atc4, atc5, atc7 = atc_levels(atc_code)
+
+            # ATC3 (incl. Jansen) via DB
             atc3_key, atc3_omschrijving, atc3_jansen = lookup_atc3_info(atc3)
+
+            # ATC4/5/7 omschrijvingen direct uit BST801
+            atc4_oms = atc_desc_map.get(atc4) if atc4 else None
+            atc5_oms = atc_desc_map.get(atc5) if atc5 else None
+            atc7_oms = atc_desc_map.get(atc7) if atc7 else None
 
             gm["NMNR"] = nmnr
             gm["HPKode"] = hpkode
             gm["SPKode"] = spkode
             gm["ATC"] = atc_code
+
             gm["ATC3"] = atc3
             gm["ATC3_key"] = atc3_key
             gm["ATC3_omschrijving"] = atc3_omschrijving
             gm["ATC3_jansen"] = atc3_jansen
+
+            gm["ATC4"] = atc4
+            gm["ATC4_omschrijving"] = atc4_oms
+
+            gm["ATC5"] = atc5
+            gm["ATC5_omschrijving"] = atc5_oms
+
+            gm["ATC7"] = atc7
+            gm["ATC7_omschrijving"] = atc7_oms
 
         resultaat.append({
             "patiënt": patiënt.split("\n")[0].strip(),
@@ -412,7 +472,6 @@ def run_parser():
         })
 
     return resultaat, afdeling
-
 
 if __name__ == "__main__":
     main()

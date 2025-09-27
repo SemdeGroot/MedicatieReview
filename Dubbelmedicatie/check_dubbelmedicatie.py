@@ -1,62 +1,52 @@
-import sqlite3
+# Dubbelmedicatie/check_dubbelmedicatie.py
 from collections import defaultdict
 
-def check_dubbelmedicatie(medicatielijst, db_path='geneesmiddelen.db'):
+def check_dubbelmedicatie(geneesmiddelen):
     """
-    Controleert op dubbelmedicatie in een lijst van geneesmiddelen.
-    Dubbelmedicatie = 2 of meer middelen in dezelfde geneesmiddelgroep.
-    
-    Returns:
-        List van dicts met 'groep' en 'middelen'
+    Detecteer dubbelmedicatie o.b.v. ATC3-groepen.
+    Input:
+        geneesmiddelen: list[dict] met o.a. velden:
+            - "clean": str
+            - "ATC3": str | None     (of "ATC3_key" als fallback)
+            - "ATC3_omschrijving": str | None
+    Output:
+        list[dict] met items zoals:
+            {
+              "groep": "C07 - Beta-blokkerende middelen",  # ATC3 + omschrijving (samengevoegd)
+              "middelen": ["metoprolol", "atenolol"]
+            }
+        Alleen groepen met ≥ 2 middelen worden geretourneerd.
     """
-    # Maak verbinding met database
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
+    if not geneesmiddelen:
+        return []
 
-    # Map: groep → lijst van middelen
-    groep_dict = defaultdict(list)
+    # verzamel per ATC3-code
+    per_atc3 = defaultdict(lambda: {"desc": None, "names": []})
 
-    for middel in medicatielijst:
-        c.execute("SELECT groep FROM geneesmiddelen WHERE geneesmiddel = ?", (middel.lower(),))
-        result = c.fetchone()
-        if result:
-            groep = result[0]
-            groep_dict[groep].append(middel)
-        else:
-            print(f"Waarschuwing: '{middel}' niet gevonden in database.")
+    for gm in geneesmiddelen:
+        atc3 = gm.get("ATC3") or gm.get("ATC3_key")
+        if not atc3:
+            continue
 
-    conn.close()
+        naam = gm.get("clean") or "Onbekend middel"
+        desc = gm.get("ATC3_omschrijving")  # kan None zijn
 
-    # Filter groepen met dubbelmedicatie (≥2 middelen)
-    dubbelmedicatie = []
-    for groep, middelen in groep_dict.items():
-        if len(middelen) >= 2:
-            dubbelmedicatie.append({
-                'groep': groep,
-                'middelen': middelen
+        # bewaar eerste niet-lege omschrijving die we tegenkomen
+        if desc and not per_atc3[atc3]["desc"]:
+            per_atc3[atc3]["desc"] = desc
+
+        per_atc3[atc3]["names"].append(naam)
+
+    resultaten = []
+    for atc3, data in per_atc3.items():
+        unieke_namen = sorted(set(data["names"]), key=lambda x: x.lower())
+        if len(unieke_namen) >= 2:
+            omschrijving = data["desc"]
+            groep_label = f"{atc3} - {omschrijving}" if (atc3 and omschrijving) else (atc3 or omschrijving or "Onbekend")
+            resultaten.append({
+                "groep": groep_label,   # ← samengevoegd zoals in je grouping
+                "middelen": unieke_namen
             })
 
-    return dubbelmedicatie
-
-
-if __name__ == "__main__":
-    # Testlijst
-    medicatielijst = [
-        "verapamil",
-        "diltiazem",
-        "metoprolol",
-        "bisoprolol",
-        "haloperidol",
-        "olanzapine",
-        "clozapine"
-    ]
-
-    resultaat = check_dubbelmedicatie(medicatielijst)
-
-    if resultaat:
-        print("Dubbelmedicatie gevonden:\n")
-        for item in resultaat:
-            print(f"- Groep: {item['groep']}")
-            print(f"  Middelen: {', '.join(item['middelen'])}\n")
-    else:
-        print("Geen dubbelmedicatie gevonden.")
+    resultaten.sort(key=lambda x: x["groep"] or "")
+    return resultaten

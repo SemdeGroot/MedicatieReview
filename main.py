@@ -10,7 +10,7 @@ from docx.oxml import OxmlElement, parse_xml
 from Parsers import parse_medimo
 
 # ===== Externe analyses (laten staan maar tijdelijk uit) =====
-# from START_STOP.check_start_stop import check_stopp_criteria
+from START_STOP.check_start_stop import check_stopp_criteria
 # from Anticholinerge_Score.check_acb import bereken_acb_score
 from Dubbelmedicatie.check_dubbelmedicatie import check_dubbelmedicatie
 
@@ -242,9 +242,9 @@ def main():
             medicatielijst.append(herkenbare_naam)
             middelen_clean.append(gm)
 
-        # Externe analyses (tijdelijk uitgeschakeld)
-        # leeftijd = 75  # Of dynamisch uitlezen indien beschikbaar
-        # stopp = check_stopp_criteria(medicatielijst, leeftijd)
+        # Externe analyses (tijdelijk enkele uitgeschakeld)
+        leeftijd = 75  # Of dynamisch uitlezen indien beschikbaar
+        stopp = check_stopp_criteria(middelen_clean, leeftijd)
         # acb_score, interpretatie, middelen_met_bijdrage = bereken_acb_score(medicatielijst)
         # acb = (acb_score, interpretatie, middelen_met_bijdrage)
         dubbel = check_dubbelmedicatie(middelen_clean)
@@ -252,7 +252,7 @@ def main():
         patiënten_data.append({
             "naam": naam,
             "geneesmiddelen": middelen_clean,
-            "stopp": [],       # tijdelijk leeg
+            "stopp": stopp,  
             "acb": (0, "n.v.t.", []),  # tijdelijk leeg
             "dubbelmedicatie": dubbel 
         })

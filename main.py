@@ -106,7 +106,7 @@ def genereer_word_document(patiënten_data, afdeling):
             doc.add_paragraph("Geen STOPP-criteria getriggerd.")
 
         # ====== Dubbelmedicatie (tijdelijk uit) ======
-        heading = doc.add_heading("Mogelijke dubbelmedicatie:", level=3)
+        heading = doc.add_heading("Mogelijke (pseudo)dubbelmedicatie:", level=3)
         heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
         collapse_heading(heading, True)
 
@@ -199,10 +199,9 @@ def genereer_word_document(patiënten_data, afdeling):
             for gm in middelen:
                 row_cells = table.add_row().cells
                 row_cells[0].text = gm.get("clean", "-")
-                # Toon ATC3 + omschrijving samen als 'groep'
-                atc3 = gm.get("ATC3") or gm.get("ATC3_key")
-                atc3_omsch = gm.get("ATC3_omschrijving")
-                groep_str = (f"{atc3} - {atc3_omsch}" if atc3 and atc3_omsch else (atc3 or atc3_omsch or "-"))
+                # Toon ATC5 + omschrijving samen als 'groep'
+                atc5_omsch = gm.get("ATC5_omschrijving")
+                groep_str = (f"{atc5_omsch}" if atc5_omsch else "-")
                 row_cells[1].text = groep_str
                 row_cells[2].text = gm.get("gebruik", "-")
                 row_cells[3].text = gm.get("opmerking", "")
@@ -262,4 +261,5 @@ def main():
 
 
 if __name__ == "__main__":
+    print("Bezig met analyseren...")
     main()

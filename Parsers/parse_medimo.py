@@ -14,6 +14,8 @@ import os
 import re
 import sqlite3
 import unicodedata
+import json
+from collections import Counter
 
 # -----------------------------
 # Fixed-width inlezers
@@ -230,13 +232,58 @@ def match_to_spkode(gm_clean, bst020, bst052, bst004, bst070, bst711, bst031, de
 def build_spkode_to_atc_map(bst711):
     """
     Bouw dict: SPKode -> ATC_code (volledige string uit kolommen 118:126).
+
+    Werkwijze:
+    1) Verzamel ALLE ATC-codes per SPKode uit BST711.
+    2) Kies de meest voorkomende ATC-code per SPKode (zonder remap).
+    3) Remap daarna ALLEEN die gekozen code als die exact voorkomt in ATC_preferent.json.
+
+    JSON (lijst van items) in Parsers/ATC_preferent.json:
+    [
+      {
+        "geneesmiddel": "triamcinolon",         # optioneel
+        "ATC_preferent": "D07AB09",
+        "ATC_mogelijk": ["S02BA", "R01AD11"]    # exact te remappen codes (alle lengtes toegestaan)
+      }
+    ]
     """
-    mapping = {}
+    # --- 1) Lees preferentie-json en bouw exact-remap dict ---
+    remap_exact = {}
+    pref_path = os.path.join(os.getcwd(), "Parsers", "ATC_preferent.json")
+    if os.path.exists(pref_path):
+        try:
+            with open(pref_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if isinstance(data, list):
+                for item in data:
+                    prefer = (item.get("ATC_preferent") or "").strip().upper()
+                    mogelijk_list = item.get("ATC_mogelijk") or []
+                    if prefer and isinstance(mogelijk_list, list):
+                        for m in mogelijk_list:
+                            k = (m or "").strip().upper()
+                            if k:
+                                remap_exact[k] = prefer
+        except Exception as e:
+            print(f"Fout bij inlezen ATC_preferent.json: {e}")
+
+    # --- 2) Verzamel alle ATC-codes per SPKode ---
+    spkode_to_all_atcs = {}
     for row in bst711:
-        spk = row["SPKODE"]
-        atc = row["ATC"]
-        if spk and atc:
-            mapping[spk] = atc
+        spk = (row.get("SPKODE") or "").strip()
+        atc = (row.get("ATC") or "").strip().upper()
+        if not spk or not atc:
+            continue
+        spkode_to_all_atcs.setdefault(spk, []).append(atc)
+
+    # --- 3) Kies meest voorkomende ATC en remap exact indien nodig ---
+    mapping = {}
+    for spk, atc_list in spkode_to_all_atcs.items():
+        # meest voorkomende ATC (Counter behoudt bij gelijke frequentie volgorde van voorkomen)
+        gekozen_atc = Counter(atc_list).most_common(1)[0][0]
+        # pas daarna exact remap toe (alleen als gekozen_atc exact in remap_exact zit)
+        atc_final = remap_exact.get(gekozen_atc, gekozen_atc)
+        mapping[spk] = atc_final
+
     return mapping
 
 def atc_levels(atc_code):

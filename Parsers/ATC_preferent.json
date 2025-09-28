@@ -1,0 +1,7 @@
+[
+  {
+    "geneesmiddel": "triamcinolon",
+    "ATC_preferent": "D07AB09",
+    "ATC_mogelijk": ["A01AC01", "C05AA12", "D07XB02", "H02AB08", "R01AD11", "R03BA06", "S01BA05", "A11HA08", "S02BA"]
+  }
+]

@@ -3,7 +3,7 @@ venv/
 .venv/
 
 # Pycache bestanden
-__pycache__/
+*__pycache__/*
 *.py[cod]
 
 # Tijdelijke bestanden van Word en Excel (geopende bestanden)

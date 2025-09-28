@@ -429,7 +429,52 @@ def run_parser():
     Retourneert:
       - lijst dicts per patiënt met geneesmiddelen + SPKode + ATC + ATC3(+Jansen) + ATC4/5/7 + omschrijvingen
       - afdelingsnaam (indien aanwezig)
+
+    Schrijft tijdens het parsen live voortgang naar:
+      Output/afdelings_progress_<AFDELING>.json
     """
+
+    # --- helper voor veilige, atomaire writes ---
+    def write_progress(path, afdeling, done, total, status="running"):
+        import json, os, time
+        from datetime import datetime
+
+        pct = 0 if total == 0 else int(done * 100 / total)
+        payload = {
+            "afdeling": afdeling,
+            "status": status,  # "running" | "done" | "aborted"
+            "n_medicijnen_input": total,
+            "n_medicijnen_geanalyseerd": done,
+            "pct_geanalyseerd": pct,
+            "timestamp": datetime.now().isoformat(timespec="seconds"),
+        }
+
+        # zorg dat map bestaat
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+
+        # schrijf eerst naar uniek tmp-bestand
+        tmp = f"{path}.{os.getpid()}.tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False)
+
+        # probeer atomisch te vervangen met retries (Windows kan locken)
+        retries = 20
+        delay = 0.05  # 50 ms
+        for _ in range(retries):
+            try:
+                os.replace(tmp, path)
+                return
+            except PermissionError:
+                time.sleep(delay)
+
+        # fallback: laatste poging—verplaats naar .bak zodat je iig geen tmp’s ophoopt
+        try:
+            os.replace(tmp, path + ".bak")
+        except Exception:
+            # als dit ook faalt, laat de tmp liggen voor debug
+            pass
+
+    # --- paden / kolommen ---
     dir_path = "G-Standaard"
     bst020_path = os.path.join(dir_path, "BST020T")
     bst004_path = os.path.join(dir_path, "BST004T")
@@ -457,6 +502,7 @@ def run_parser():
         ("HPNAMN", 29, 36),
     ]
 
+    # --- inlezen tabellen ---
     bst020 = load_fixed_width_file(bst020_path, bst020_cols)
     bst004 = load_fixed_width_file(bst004_path, bst004_cols)
     bst052 = load_fixed_width_file(bst052_path, bst052_cols)
@@ -464,59 +510,85 @@ def run_parser():
     bst711 = load_fixed_width_file(bst711_path, bst711_cols)
     bst031 = load_fixed_width_file(bst031_path, bst031_cols)
 
-    # BST801 map (code→NL-omschrijving) één keer inlezen
     atc_desc_map = load_bst801_map(bst801_path)
-
     spkode_to_atc = build_spkode_to_atc_map(bst711)
 
+    # --- afdeling uit medimo-file halen ---
     with open(medimo_path, "r", encoding="utf-8") as f:
         content = f.read()
     afdeling_match = re.search(r"Een overzicht van alle actieve medicatie in afdeling (.+?)\.", content)
     afdeling = afdeling_match.group(1).strip() if afdeling_match else "Onbekend"
 
-    patiënten = extract_patient_blocks(medimo_path)
+    # --- patientblokken en *totaal aantal middelen* (denominator) ---
+    patient_blocks = extract_patient_blocks(medimo_path)
+    # parse alvast alle gm_lists om total snel te weten, en hergebruik ze
+    parsed = []
+    total_input = 0
+    for block in patient_blocks:
+        gm_list = parse_medimo_block(block)
+        parsed.append((block, gm_list))
+        total_input += len(gm_list)
+
+    # --- progress setup ---
+    os.makedirs("Output", exist_ok=True)
+    progress_path = os.path.join("Output", f"afdelings_progress_{afdeling}.json")
+    done = 0
+    write_progress(progress_path, afdeling, done, total_input, status="running")
+
     resultaat = []
 
-    for patiënt in patiënten:
-        gm_list = parse_medimo_block(patiënt)
-        for gm in gm_list:
-            nmnr, hpkode, spkode = match_to_spkode(
-                gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=False
-            )
-            atc_code = spkode_to_atc.get(spkode)
-            atc3, atc4, atc5, atc7 = atc_levels(atc_code)
+    try:
+        for block, gm_list in parsed:
+            # naamregel
+            patient_name = block.split("\n")[0].strip()
 
-            # ATC3 (incl. Jansen) via DB
-            atc3_key, atc3_omschrijving, atc3_jansen = lookup_atc3_info(atc3)
+            # verrijk elk gm en update progress NA ELK ITEM
+            for gm in gm_list:
+                nmnr, hpkode, spkode = match_to_spkode(
+                    gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=False
+                )
+                atc_code = spkode_to_atc.get(spkode)
+                atc3, atc4, atc5, atc7 = atc_levels(atc_code)
 
-            # ATC4/5/7 omschrijvingen direct uit BST801
-            atc4_oms = atc_desc_map.get(atc4) if atc4 else None
-            atc5_oms = atc_desc_map.get(atc5) if atc5 else None
-            atc7_oms = atc_desc_map.get(atc7) if atc7 else None
+                atc3_key, atc3_omschrijving, atc3_jansen = lookup_atc3_info(atc3)
+                atc4_oms = atc_desc_map.get(atc4) if atc4 else None
+                atc5_oms = atc_desc_map.get(atc5) if atc5 else None
+                atc7_oms = atc_desc_map.get(atc7) if atc7 else None
 
-            gm["NMNR"] = nmnr
-            gm["HPKode"] = hpkode
-            gm["SPKode"] = spkode
-            gm["ATC"] = atc_code
+                gm["NMNR"] = nmnr
+                gm["HPKode"] = hpkode
+                gm["SPKode"] = spkode
+                gm["ATC"] = atc_code
 
-            gm["ATC3"] = atc3
-            gm["ATC3_key"] = atc3_key
-            gm["ATC3_omschrijving"] = atc3_omschrijving
-            gm["ATC3_jansen"] = atc3_jansen
+                gm["ATC3"] = atc3
+                gm["ATC3_key"] = atc3_key
+                gm["ATC3_omschrijving"] = atc3_omschrijving
+                gm["ATC3_jansen"] = atc3_jansen
 
-            gm["ATC4"] = atc4
-            gm["ATC4_omschrijving"] = atc4_oms
+                gm["ATC4"] = atc4
+                gm["ATC4_omschrijving"] = atc4_oms
 
-            gm["ATC5"] = atc5
-            gm["ATC5_omschrijving"] = atc5_oms
+                gm["ATC5"] = atc5
+                gm["ATC5_omschrijving"] = atc5_oms
 
-            gm["ATC7"] = atc7
-            gm["ATC7_omschrijving"] = atc7_oms
+                gm["ATC7"] = atc7
+                gm["ATC7_omschrijving"] = atc7_oms
 
-        resultaat.append({
-            "patiënt": patiënt.split("\n")[0].strip(),
-            "geneesmiddelen": gm_list
-        })
+                # --- LIVE progress update ---
+                done += 1
+                write_progress(progress_path, afdeling, done, total_input, status="running")
+
+            resultaat.append({
+                "patiënt": patient_name,
+                "geneesmiddelen": gm_list
+            })
+
+        # klaar
+        write_progress(progress_path, afdeling, done, total_input, status="done")
+
+    except KeyboardInterrupt:
+        write_progress(progress_path, afdeling, done, total_input, status="aborted")
+        raise
 
     return resultaat, afdeling
 

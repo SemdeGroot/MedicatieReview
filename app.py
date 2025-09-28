@@ -206,7 +206,7 @@ HTML_PAGE = r"""<!doctype html>
 
     .status {
       padding: 1rem 1.25rem; border-radius: var(--radius-lg);
-      font-size: 0.9rem; font-weight: 500; border: 1px solid; display: none; position: relative;
+      font-size: 0.9rem; font-weight: 500; border: 1px solid; display: none; position: relative; overflow:hidden;
     }
     .status::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; }
     .status.ok { display:block; background: var(--success-bg); border-color: var(--success); color: var(--success); }

@@ -106,7 +106,7 @@ def genereer_word_document(patiënten_data, afdeling):
             doc.add_paragraph("Geen STOPP-criteria getriggerd.")
 
         # ====== Dubbelmedicatie (tijdelijk uit) ======
-        heading = doc.add_heading("Mogelijke (pseudo)dubbelmedicatie:", level=3)
+        heading = doc.add_heading("Mogelijke dubbelmedicatie:", level=3)
         heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
         collapse_heading(heading, True)
 

@@ -16,6 +16,7 @@ import sqlite3
 import unicodedata
 import json
 from collections import Counter
+import glob, threading, time
 
 # -----------------------------
 # Fixed-width inlezers
@@ -532,6 +533,25 @@ def run_parser():
     # --- progress setup ---
     os.makedirs("Output", exist_ok=True)
     progress_path = os.path.join("Output", f"afdelings_progress_{afdeling}.json")
+
+    # ➕ CANCEL-flag pad + helper
+    cancel_flag = os.path.join("Output", "cancel.flag")
+    def _is_cancelled():
+        try:
+            return os.path.exists(cancel_flag)
+        except Exception:
+            return False
+
+    # Verwijder eventueel oude progressbestanden voor deze afdeling (incl. .tmp/.bak)
+    for p in glob.glob(os.path.join("Output", f"afdelings_progress_{afdeling}.json*")):
+        try:
+            os.remove(p)
+        except PermissionError:
+            # Windows kan kort locken; negeer, we gaan sowieso overschrijven
+            pass
+        except Exception:
+            pass
+
     done = 0
     write_progress(progress_path, afdeling, done, total_input, status="running")
 
@@ -539,11 +559,15 @@ def run_parser():
 
     try:
         for block, gm_list in parsed:
+            if _is_cancelled():
+                raise KeyboardInterrupt("Parsing cancelled by user")
             # naamregel
             patient_name = block.split("\n")[0].strip()
 
             # verrijk elk gm en update progress NA ELK ITEM
             for gm in gm_list:
+                if _is_cancelled():
+                    raise KeyboardInterrupt("Parsing cancelled by user")
                 nmnr, hpkode, spkode = match_to_spkode(
                     gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=False
                 )
@@ -586,9 +610,48 @@ def run_parser():
         # klaar
         write_progress(progress_path, afdeling, done, total_input, status="done")
 
+        # Verwijder het progress JSON 10s later (geeft frontend tijd om 'done' te lezen)
+        def _cleanup_progress(path=progress_path):
+            # kleine retry-loop voor Windows locks
+            for _ in range(10):
+                try:
+                    if os.path.exists(path):
+                        os.remove(path)
+                    # ruim eventuele rest-tmp's op
+                    for p in glob.glob(path + "*"):
+                        try: os.remove(p)
+                        except: pass
+                    break
+                except PermissionError:
+                    time.sleep(0.2)
+                except Exception:
+                    break
+
+        t = threading.Timer(5.0, _cleanup_progress)
+        t.daemon = True
+        t.start()
+
     except KeyboardInterrupt:
+        # Schrijf laatste status: aborted
         write_progress(progress_path, afdeling, done, total_input, status="aborted")
-        raise
+
+        # ➕ Opruimen: cancel.flag en progressbestand verwijderen
+        try:
+            if os.path.exists(cancel_flag):
+                os.remove(cancel_flag)
+            if os.path.exists(progress_path):
+                os.remove(progress_path)
+            # ook tijdelijke tmp- of .bak-bestanden opruimen
+            for p in glob.glob(progress_path + "*"):
+                try:
+                    os.remove(p)
+                except:
+                    pass
+        except Exception as cleanup_err:
+            print(f"Cleanup fout: {cleanup_err}")
+
+        # Stop de parser netjes zonder error omhoog te gooien
+        return [], afdeling
 
     return resultaat, afdeling
 

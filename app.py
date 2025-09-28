@@ -8,7 +8,6 @@ import shutil
 import traceback
 import threading
 from typing import Optional
-
 from flask import Flask, request, send_file, jsonify, render_template_string
 
 # -------------------------------------------------
@@ -18,6 +17,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "Output")
 DATA_DIR = os.path.join(PROJECT_ROOT, "Data")
 ORIGINAL_MEDIMO = os.path.join(DATA_DIR, "medimo_input.txt")
+CANCEL_FLAG = os.path.join(OUTPUT_DIR, "cancel.flag")
 
 # Importeer jouw bestaande main.py (moet in dezelfde root liggen)
 import importlib
@@ -308,13 +308,14 @@ Etc..."></textarea>
     const progressMeta = document.getElementById('progressMeta');
 
     let progressTimer = null;
+    let runAbortCtrl = null;
 
     function setStatus(msg, type='info'){
       statusBox.textContent = msg;
       statusBox.className = 'status ' + type;
       statusBox.style.display = 'block';
 
-      if (type === 'info' && msg.toLowerCase().includes('verwerken')) {
+      if (type === 'info' && msg.toLowerCase().startsWith('verwerken')) {
         statusBox.classList.add('loading');
       } else {
         statusBox.classList.remove('loading');
@@ -353,11 +354,10 @@ Etc..."></textarea>
         const d = await r.json();
 
         const pct = d.pct_geanalyseerd ?? 0;
-        progressTitle.textContent = `Voortgang — Afdeling ${d.afdeling || '-'}`;
+        progressTitle.textContent = `Voortgang - Afdeling ${d.afdeling || '-'}`;
         progressPct.textContent = `${pct}%`;
         progressFill.style.width = `${pct}%`;
-        progressMeta.textContent = `${d.n_medicijnen_geanalyseerd}/${d.n_medicijnen_input} middelen • ` +
-          new Date(d.timestamp).toLocaleTimeString();
+        progressMeta.textContent = `${d.n_medicijnen_geanalyseerd}/${d.n_medicijnen_input} Geneesmiddelen `;
 
         if (d.status === 'done' || pct >= 100) {
           stopProgressPolling();
@@ -367,12 +367,30 @@ Etc..."></textarea>
       }
     }
 
-    clearBtn.addEventListener('click', ()=>{
+    clearBtn.addEventListener('click', async ()=>{
+      // UI direct resetten
       medimo.value = '';
-      setStatus('Leeg gemaakt. Plak nieuwe input om te verwerken.', 'info');
       resetDownload();
       progressWrap.style.display = 'none';
+      stopProgressPolling();
+      setStatus('Leeg gemaakt. Plak nieuwe input om te verwerken.', 'info');
       medimo.focus();
+
+      // ➕ Abort het lopende fetch-request naar /api/run (client-side)
+      try {
+        if (runAbortCtrl) {
+          runAbortCtrl.abort();
+        }
+      } catch (_) {}
+
+      // ➕ Vraag de server om parsing te stoppen
+      try {
+        await fetch('/api/cancel', { method: 'POST' });
+      } catch (_) {}
+
+      // Knoppen herstellen
+      runBtn.disabled = false;
+      runBtn.textContent = 'Verwerken';
     });
 
     runBtn.addEventListener('click', async ()=>{
@@ -389,14 +407,18 @@ Etc..."></textarea>
       setStatus('Verwerken van medicatie gegevens...', 'info');
 
       try{
-        // Start meteen met live polling (parser gaat zo progress wegschrijven)
+        // Start meteen met live polling
         startProgressPolling();
+
+        // maak een AbortController voor deze run
+        runAbortCtrl = new AbortController();
 
         // Start de run (promise), laat intussen polling doorlopen
         const runPromise = fetch('/api/run', {
           method:'POST',
           headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ medimo_text: text })
+          body: JSON.stringify({ medimo_text: text }),
+          signal: runAbortCtrl.signal   // belangrijk
         });
 
         const resp = await runPromise;  // wachten op klaar
@@ -487,6 +509,11 @@ def run_pipeline():
         # 2) Met lock: backup + atomisch vervangen
         with WRITE_LOCK:
             os.makedirs(DATA_DIR, exist_ok=True)
+            try:
+                if os.path.exists(CANCEL_FLAG):
+                    os.remove(CANCEL_FLAG)
+            except Exception:
+                pass
             if os.path.exists(ORIGINAL_MEDIMO):
                 with tempfile.NamedTemporaryFile(delete=False) as bak:
                     backup_path = bak.name
@@ -564,6 +591,16 @@ def api_progress():
     resp.headers["Cache-Control"] = "no-store, max-age=0"
     return resp
 
+@app.post("/api/cancel")
+def api_cancel():
+    """Zet een cancel-flag zodat de parser kan stoppen."""
+    try:
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        with open(CANCEL_FLAG, "w", encoding="utf-8") as f:
+            f.write("cancel")
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "detail": str(e)}), 500
 
 # -------------------------------------------------
 # Entrypoint

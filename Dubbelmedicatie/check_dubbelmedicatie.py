@@ -43,7 +43,7 @@ def check_dubbelmedicatie(geneesmiddelen):
         namen = _uniq_sorted(data["names"])
         if len(namen) >= 2:
             desc = (data["desc"] or "").strip()
-            label = f"[ATC5] {atc5}" + (f" - {desc}" if desc else "")
+            label = f"{atc5}" + (f" - {desc}" if desc else "")
             resultaten.append({
                 "groep": label,
                 "middelen": namen

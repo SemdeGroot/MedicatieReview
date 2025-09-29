@@ -6,12 +6,12 @@ from docx.shared import RGBColor, Cm
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement, parse_xml
 
-# ===== Parser: gebruikt je nieuwe SPKode→ATC→ATC3 logica =====
+# ===== Medimo Parser =====
 from Parsers import parse_medimo
 
-# ===== Externe analyses (laten staan maar tijdelijk uit) =====
+# ===== Externe analyses  =====
 from START_STOP.check_start_stop import check_stopp_criteria
-# from Anticholinerge_Score.check_acb import bereken_acb_score
+from Anticholinerge_Score.check_acb import bereken_acb_score
 from Dubbelmedicatie.check_dubbelmedicatie import check_dubbelmedicatie
 
 
@@ -105,7 +105,7 @@ def genereer_word_document(patiënten_data, afdeling):
         else:
             doc.add_paragraph("Geen STOPP-criteria getriggerd.")
 
-        # ====== Dubbelmedicatie (tijdelijk uit) ======
+        # ====== Dubbelmedicatie ======
         heading = doc.add_heading("Mogelijke dubbelmedicatie:", level=3)
         heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
         collapse_heading(heading, True)
@@ -114,7 +114,7 @@ def genereer_word_document(patiënten_data, afdeling):
             table = doc.add_table(rows=1, cols=2)
             table.style = 'Table Grid'
             hdr_cells = table.rows[0].cells
-            headers = ["Groep", "Geneesmiddelen"]
+            headers = ["Geneesmiddelgroep (ATC)", "Geneesmiddelen"]
             for i, text in enumerate(headers):
                 run = hdr_cells[i].paragraphs[0].add_run(text)
                 run.bold = True
@@ -133,7 +133,7 @@ def genereer_word_document(patiënten_data, afdeling):
         else:
             doc.add_paragraph("Geen dubbelmedicatie gevonden.")
 
-        # ====== ACB-score (tijdelijk uit) ======
+        # ====== ACB-score  ======
         heading = doc.add_heading("Anticholinerge belastingscore (ACB-score):", level=3)
         heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
         collapse_heading(heading, True)
@@ -220,8 +220,6 @@ def genereer_word_document(patiënten_data, afdeling):
     os.makedirs("Output", exist_ok=True)
     doc_path = f"Output/MedicatieReview_{afdeling}.docx"
     doc.save(doc_path)
-    print(f"Word-document opgeslagen als: {doc_path}")
-
 
 def main():
     # Nieuwe parser: retourneert (resultaat, afdeling)
@@ -245,15 +243,15 @@ def main():
         # Externe analyses (tijdelijk enkele uitgeschakeld)
         leeftijd = 75  # Of dynamisch uitlezen indien beschikbaar
         stopp = check_stopp_criteria(middelen_clean, leeftijd)
-        # acb_score, interpretatie, middelen_met_bijdrage = bereken_acb_score(medicatielijst)
-        # acb = (acb_score, interpretatie, middelen_met_bijdrage)
+        acb_score, interpretatie, middelen_met_bijdrage = bereken_acb_score(middelen_clean)
+        acb = (acb_score, interpretatie, middelen_met_bijdrage)
         dubbel = check_dubbelmedicatie(middelen_clean)
 
         patiënten_data.append({
             "naam": naam,
             "geneesmiddelen": middelen_clean,
             "stopp": stopp,  
-            "acb": (0, "n.v.t.", []),  # tijdelijk leeg
+            "acb": acb,  # tijdelijk leeg
             "dubbelmedicatie": dubbel 
         })
 
@@ -263,3 +261,4 @@ def main():
 if __name__ == "__main__":
     print("Bezig met analyseren...")
     main()
+    print(f"Klaar! Word-document in Output/")

@@ -279,7 +279,7 @@ Etc..."></textarea>
             <!-- Live voortgang (staat los van download-div) -->
             <div id="progressWrap" style="display:none; margin-top:1rem;">
               <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                <strong id="progressTitle">Voortgang analyse</strong>
+                <strong id="progressTitle"></strong>
                 <span id="progressPct">0%</span>
               </div>
               <div style="width:100%; height:10px; background:#2a2a3a; border-radius:8px; overflow:hidden;">
@@ -310,6 +310,7 @@ Etc..."></textarea>
 
     let progressTimer = null;
     let runAbortCtrl = null;
+    let titleGraceUntil = 0;
 
     function setStatus(msg, type='info'){
       statusBox.textContent = msg;
@@ -332,11 +333,14 @@ Etc..."></textarea>
     function startProgressPolling() {
       stopProgressPolling();
       progressWrap.style.display = 'block';
+      progressTitle.textContent = '';            // <-- leeg, geen flash
       progressPct.textContent = '0%';
       progressFill.style.width = '0%';
       progressMeta.textContent = 'Bezig...';
 
-      // één keer direct, daarna interval
+      // titel-grace: wacht even op afdeling voor we fallback tonen
+      titleGraceUntil = Date.now() + 1500;
+
       pollProgressOnce();
       progressTimer = setInterval(pollProgressOnce, 500);
     }
@@ -355,7 +359,15 @@ Etc..."></textarea>
         const d = await r.json();
 
         const pct = d.pct_geanalyseerd ?? 0;
-        progressTitle.textContent = `Voortgang - Afdeling ${d.afdeling || '-'}`;
+
+        // Titel-logica: voorkom flash van "Voortgang analyse"
+        if (d.afdeling && d.afdeling !== 'Onbekend') {
+          progressTitle.textContent = `Voortgang — Afdeling ${d.afdeling}`;
+        } else if (!progressTitle.textContent && Date.now() > titleGraceUntil) {
+          // Pas na de grace-periode een fallback tonen
+          progressTitle.textContent = 'Voortgang analyse';
+        }
+
         progressPct.textContent = `${pct}%`;
         progressFill.style.width = `${pct}%`;
         progressMeta.textContent = `${d.n_medicijnen_geanalyseerd}/${d.n_medicijnen_input} Geneesmiddelen `;

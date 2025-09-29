@@ -531,11 +531,11 @@ def run_parser():
         total_input += len(gm_list)
 
     # --- progress setup ---
-    os.makedirs("Output", exist_ok=True)
-    progress_path = os.path.join("Output", f"afdelings_progress_{afdeling}.json")
+    os.makedirs("Data/Temp", exist_ok=True)
+    progress_path = os.path.join("Data/Temp", f"afdelings_progress_{afdeling}.json")
 
     # ➕ CANCEL-flag pad + helper
-    cancel_flag = os.path.join("Output", "cancel.flag")
+    cancel_flag = os.path.join("Data/Temp", "cancel.flag")
     def _is_cancelled():
         try:
             return os.path.exists(cancel_flag)
@@ -543,7 +543,7 @@ def run_parser():
             return False
 
     # Verwijder eventueel oude progressbestanden voor deze afdeling (incl. .tmp/.bak)
-    for p in glob.glob(os.path.join("Output", f"afdelings_progress_{afdeling}.json*")):
+    for p in glob.glob(os.path.join("Data/Temp", f"afdelings_progress_{afdeling}.json*")):
         try:
             os.remove(p)
         except PermissionError:
@@ -627,7 +627,7 @@ def run_parser():
                 except Exception:
                     break
 
-        t = threading.Timer(5.0, _cleanup_progress)
+        t = threading.Timer(2.0, _cleanup_progress)
         t.daemon = True
         t.start()
 

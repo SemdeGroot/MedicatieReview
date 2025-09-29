@@ -17,7 +17,8 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "Output")
 DATA_DIR = os.path.join(PROJECT_ROOT, "Data")
 ORIGINAL_MEDIMO = os.path.join(DATA_DIR, "medimo_input.txt")
-CANCEL_FLAG = os.path.join(OUTPUT_DIR, "cancel.flag")
+TEMP_DIR = os.path.join(DATA_DIR, "Temp")
+CANCEL_FLAG = os.path.join(TEMP_DIR, "cancel.flag")
 
 # Importeer jouw bestaande main.py (moet in dezelfde root liggen)
 import importlib
@@ -376,14 +377,14 @@ Etc..."></textarea>
       setStatus('Leeg gemaakt. Plak nieuwe input om te verwerken.', 'info');
       medimo.focus();
 
-      // ➕ Abort het lopende fetch-request naar /api/run (client-side)
+      // Abort het lopende fetch-request naar /api/run (client-side)
       try {
         if (runAbortCtrl) {
           runAbortCtrl.abort();
         }
       } catch (_) {}
 
-      // ➕ Vraag de server om parsing te stoppen
+      // Vraag de server om parsing te stoppen
       try {
         await fetch('/api/cancel', { method: 'POST' });
       } catch (_) {}
@@ -577,11 +578,11 @@ def api_progress():
     """
     afd = request.args.get("afdeling")
     if afd:
-        path = os.path.join(OUTPUT_DIR, f"afdelings_progress_{afd}.json")
+        path = os.path.join(TEMP_DIR, f"afdelings_progress_{afd}.json")
         if not os.path.exists(path):
             return jsonify({"detail": f"Geen progress voor afdeling '{afd}'."}), 404
     else:
-        files = glob.glob(os.path.join(OUTPUT_DIR, "afdelings_progress_*.json"))
+        files = glob.glob(os.path.join(TEMP_DIR, "afdelings_progress_*.json"))
         if not files:
             return jsonify({"detail": "Nog geen progress-bestand gevonden."}), 404
         path = max(files, key=os.path.getmtime)
@@ -595,7 +596,7 @@ def api_progress():
 def api_cancel():
     """Zet een cancel-flag zodat de parser kan stoppen."""
     try:
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        os.makedirs(TEMP_DIR, exist_ok=True)
         with open(CANCEL_FLAG, "w", encoding="utf-8") as f:
             f.write("cancel")
         return jsonify({"ok": True})

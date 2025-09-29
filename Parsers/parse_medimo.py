@@ -610,26 +610,24 @@ def run_parser():
         # klaar
         write_progress(progress_path, afdeling, done, total_input, status="done")
 
-        # Verwijder het progress JSON 10s later (geeft frontend tijd om 'done' te lezen)
-        def _cleanup_progress(path=progress_path):
-            # kleine retry-loop voor Windows locks
-            for _ in range(10):
-                try:
-                    if os.path.exists(path):
-                        os.remove(path)
-                    # ruim eventuele rest-tmp's op
-                    for p in glob.glob(path + "*"):
-                        try: os.remove(p)
-                        except: pass
-                    break
-                except PermissionError:
-                    time.sleep(0.2)
-                except Exception:
-                    break
+        # Geef eventuele lezers (frontend / tqdm) héél even de tijd om 'done' te zien
+        time.sleep(1.0)
 
-        t = threading.Timer(2.0, _cleanup_progress)
-        t.daemon = True
-        t.start()
+        # Synchronous cleanup van progressbestand en eventuele tmp/bak varianten
+        for _ in range(20):  # retries; Windows kan de file héél kort locken
+            try:
+                if os.path.exists(progress_path):
+                    os.remove(progress_path)
+                for p in glob.glob(progress_path + "*"):  # vang .tmp/.bak e.d.
+                    try:
+                        os.remove(p)
+                    except FileNotFoundError:
+                        pass
+                break
+            except PermissionError:
+                time.sleep(0.1)
+            except Exception:
+                break
 
     except KeyboardInterrupt:
         # Schrijf laatste status: aborted

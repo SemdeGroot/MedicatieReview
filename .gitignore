@@ -17,3 +17,6 @@ __pycache__/
 
 # API Temps
 *.flag
+
+# Temporary files
+Data/Temp/*

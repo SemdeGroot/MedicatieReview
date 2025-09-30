@@ -171,6 +171,10 @@ def genereer_word_document(patiënten_data, afdeling):
             run.bold = True
             para.add_run("n.v.t.")
 
+        # ====== Vallen?
+        heading = doc.add_heading("Vallen?", level=3)
+        heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)
+
         # ====== Medicatieoverzicht per groep (ATC/Jansen) ======
         heading = doc.add_heading("Medicatieoverzicht:", level=3)
         heading.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x80)

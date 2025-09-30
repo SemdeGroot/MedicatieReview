@@ -481,6 +481,9 @@ Etc..."></textarea>
       }
     });
   </script>
+  <footer style="margin-top:2rem; padding:1rem; text-align:center; font-size:0.9rem; color:var(--text-muted); border-top:1px solid var(--border-primary);">
+  <p>© 2025 Sem de Groot – Voor vragen of verbeteringen: +31 637395978 of <a href="mailto:semdegroot2003@gmail.com" style="color:var(--text-accent);">semdegroot2003@gmail.com</a></p>
+  </footer>
 </body>
 </html>
 """
@@ -501,9 +504,11 @@ def run_pipeline():
     - Maakt tijdelijke kopie met user-input
     - Vervangt Data/medimo_input.txt atomisch (met lock)
     - Draait main.main()
-    - Stuurt nieuwste .docx terug
+    - Stuurt .docx terug vanuit geheugen (en verwijdert het bestand meteen)
     - Herstelt altijd het originele bestand (of verwijdert als er geen origineel was)
     """
+    from werkzeug.exceptions import ClientDisconnected
+
     backup_path = None
     temp_new = None
     t0 = time.time()
@@ -522,11 +527,6 @@ def run_pipeline():
         # 2) Met lock: backup + atomisch vervangen
         with WRITE_LOCK:
             os.makedirs(DATA_DIR, exist_ok=True)
-            try:
-                if os.path.exists(CANCEL_FLAG):
-                    os.remove(CANCEL_FLAG)
-            except Exception:
-                pass
             if os.path.exists(ORIGINAL_MEDIMO):
                 with tempfile.NamedTemporaryFile(delete=False) as bak:
                     backup_path = bak.name
@@ -534,7 +534,7 @@ def run_pipeline():
             os.replace(temp_new, ORIGINAL_MEDIMO)
             temp_new = None  # eigendom overgedragen
 
-        # 3) Draai jouw pipeline (synchroon)
+        # 3) Draai jouw pipeline
         main_mod.main()
 
         # 4) Vind nieuwste docx sinds starttijd
@@ -547,39 +547,66 @@ def run_pipeline():
         if not latest:
             return jsonify({"detail": "Geen .docx-output gevonden in Output/."}), 500
 
+        # 5) Lees bestand volledig in geheugen en verwijder op schijf
+        try:
+            with open(latest, "rb") as f:
+                doc_bytes = f.read()
+        except FileNotFoundError:
+            # Bestaat al niet meer (race)? Fout teruggeven.
+            return jsonify({"detail": "Output-bestand kon niet worden gelezen."}), 500
+
+        # Verwijder met mini-retry om Windows locks te omzeilen
+        for _ in range(10):
+            try:
+                os.remove(latest)
+                break
+            except PermissionError:
+                time.sleep(0.1)
+            except FileNotFoundError:
+                break
+
+        # 6) Stuur uit geheugen
+        bio = io.BytesIO(doc_bytes)
+        bio.seek(0)
         resp = send_file(
-            latest,
+            bio,
             mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             as_attachment=True,
-            download_name=os.path.basename(latest)
+            download_name=os.path.basename(latest),
+            max_age=0
         )
         resp.headers["Cache-Control"] = "no-store, max-age=0"
         return resp
 
+    except ClientDisconnected:
+        # Client heeft afgebroken (AbortController) → geen errorlog, alleen opruimen
+        return ("", 204)
+
     except Exception as e:
         traceback.print_exc()
+        # Geef nette fout i.p.v. “Failed to fetch”
         return jsonify({"detail": f"Fout tijdens verwerken: {e}"}), 500
 
     finally:
-        # 5) Herstel altijd het originele bestand
+        # 7) Herstel altijd het originele bestand
         try:
             with WRITE_LOCK:
                 if backup_path and os.path.exists(backup_path):
-                    os.replace(backup_path, ORIGINAL_MEDIMO)  # restore origineel
+                    os.replace(backup_path, ORIGINAL_MEDIMO)
                     backup_path = None
                 else:
-                    # Er was geen origineel: verwijder tijdelijke vervanger
-                    if os.path.exists(ORIGINAL_MEDIMO):
+                    if os.path.exists(ORIGINAL_MEDIMO) and not os.path.samefile(ORIGINAL_MEDIMO, ORIGINAL_MEDIMO):
+                        # normaal gesproken redundant; defensief gelaten
                         os.remove(ORIGINAL_MEDIMO)
         except Exception:
             traceback.print_exc()
-        # Opruimen als temp_new niet gebruikt/overgezet is
+
+        # Opruimen als temp_new niet gebruikt/overgedragen is
         if temp_new and os.path.exists(temp_new):
             try:
                 os.remove(temp_new)
             except Exception:
                 traceback.print_exc()
-
 
 @app.get("/api/progress")
 def api_progress():

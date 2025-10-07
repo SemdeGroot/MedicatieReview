@@ -17,6 +17,7 @@ import unicodedata
 import json
 from collections import Counter
 import glob, threading, time
+from datetime import datetime
 
 # -----------------------------
 # Fixed-width inlezers
@@ -425,21 +426,24 @@ def main():
             print(f"    → ATC7 omschr: {atc7_oms}")
             print(f"    → Gebruik: {gm['gebruik']} | Opmerking: {gm['opmerking']}\n")
 
-def run_parser():
+def run_parser(
+    input_path: str,
+    progress_path: str,
+    cancel_flag_path: str,
+):
     """
+    Parseert Medimo input en verrijkt middelen met SPKode/ATC etc.
+
     Retourneert:
-      - lijst dicts per patiënt met geneesmiddelen + SPKode + ATC + ATC3(+Jansen) + ATC4/5/7 + omschrijvingen
-      - afdelingsnaam (indien aanwezig)
+      - resultaat: list[ { "patiënt": str, "geneesmiddelen": list[dict] } ]
+      - afdeling: str
 
-    Schrijft tijdens het parsen live voortgang naar:
-      Output/afdelings_progress_<AFDELING>.json
+    Schrijft live voortgang naar `progress_path` (in *dezelfde run_id map*),
+    en verwijdert `progress_path` bij 'done' of 'aborted'. Cancel checkt
+    het per-run `cancel_flag_path`.
     """
 
-    # --- helper voor veilige, atomaire writes ---
-    def write_progress(path, afdeling, done, total, status="running"):
-        import json, os, time
-        from datetime import datetime
-
+    def write_progress(done: int, total: int, afdeling: str, status: str = "running"):
         pct = 0 if total == 0 else int(done * 100 / total)
         payload = {
             "afdeling": afdeling,
@@ -449,33 +453,25 @@ def run_parser():
             "pct_geanalyseerd": pct,
             "timestamp": datetime.now().isoformat(timespec="seconds"),
         }
-
-        # zorg dat map bestaat
-        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-
-        # schrijf eerst naar uniek tmp-bestand
-        tmp = f"{path}.{os.getpid()}.tmp"
+        os.makedirs(os.path.dirname(progress_path) or ".", exist_ok=True)
+        tmp = f"{progress_path}.{os.getpid()}.tmp"
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(payload, f, ensure_ascii=False)
-
-        # probeer atomisch te vervangen met retries (Windows kan locken)
-        retries = 20
-        delay = 0.05  # 50 ms
-        for _ in range(retries):
+        # atomische replace met zachte retry (Windows locks)
+        for _ in range(10):
             try:
-                os.replace(tmp, path)
-                return
+                os.replace(tmp, progress_path)
+                break
             except PermissionError:
-                time.sleep(delay)
+                time.sleep(0.05)
 
-        # fallback: laatste poging—verplaats naar .bak zodat je iig geen tmp’s ophoopt
+    def _is_cancelled() -> bool:
         try:
-            os.replace(tmp, path + ".bak")
+            return os.path.exists(cancel_flag_path)
         except Exception:
-            # als dit ook faalt, laat de tmp liggen voor debug
-            pass
+            return False
 
-    # --- paden / kolommen ---
+    # ---- inlezen tabellen / mapping (zoals je al deed) ----
     dir_path = "G-Standaard"
     bst020_path = os.path.join(dir_path, "BST020T")
     bst004_path = os.path.join(dir_path, "BST004T")
@@ -484,7 +480,6 @@ def run_parser():
     bst711_path = os.path.join(dir_path, "BST711T")
     bst031_path = os.path.join(dir_path, "BST031T")
     bst801_path = os.path.join(dir_path, "BST801T")
-    medimo_path = "Data/medimo_input.txt"
 
     bst020_cols = [("NMNR", 5, 12), ("NMNAAM", 85, 135)]
     bst004_cols = [("HPKODE", 13, 21), ("ATNMNR", 21, 28)]
@@ -503,7 +498,6 @@ def run_parser():
         ("HPNAMN", 29, 36),
     ]
 
-    # --- inlezen tabellen ---
     bst020 = load_fixed_width_file(bst020_path, bst020_cols)
     bst004 = load_fixed_width_file(bst004_path, bst004_cols)
     bst052 = load_fixed_width_file(bst052_path, bst052_cols)
@@ -514,15 +508,16 @@ def run_parser():
     atc_desc_map = load_bst801_map(bst801_path)
     spkode_to_atc = build_spkode_to_atc_map(bst711)
 
-    # --- afdeling uit medimo-file halen ---
-    with open(medimo_path, "r", encoding="utf-8") as f:
+    # --- lees input uit het meegegeven pad ---
+    with open(input_path, "r", encoding="utf-8") as f:
         content = f.read()
-    afdeling_match = re.search(r"Een overzicht van alle actieve medicatie in afdeling (.+?)\.", content)
-    afdeling = afdeling_match.group(1).strip() if afdeling_match else "Onbekend"
 
-    # --- patientblokken en *totaal aantal middelen* (denominator) ---
-    patient_blocks = extract_patient_blocks(medimo_path)
-    # parse alvast alle gm_lists om total snel te weten, en hergebruik ze
+    # Afdeling uit tekst
+    m = re.search(r"Een overzicht van alle actieve medicatie in afdeling (.+?)\.", content)
+    afdeling = m.group(1).strip() if m else "Onbekend"
+
+    # Blokken + totalen
+    patient_blocks = extract_patient_blocks(input_path)
     parsed = []
     total_input = 0
     for block in patient_blocks:
@@ -530,44 +525,22 @@ def run_parser():
         parsed.append((block, gm_list))
         total_input += len(gm_list)
 
-    # --- progress setup ---
-    os.makedirs("Data/Temp", exist_ok=True)
-    progress_path = os.path.join("Data/Temp", f"afdelings_progress_{afdeling}.json")
-
-    # ➕ CANCEL-flag pad + helper
-    cancel_flag = os.path.join("Data/Temp", "cancel.flag")
-    def _is_cancelled():
-        try:
-            return os.path.exists(cancel_flag)
-        except Exception:
-            return False
-
-    # Verwijder eventueel oude progressbestanden voor deze afdeling (incl. .tmp/.bak)
-    for p in glob.glob(os.path.join("Data/Temp", f"afdelings_progress_{afdeling}.json*")):
-        try:
-            os.remove(p)
-        except PermissionError:
-            # Windows kan kort locken; negeer, we gaan sowieso overschrijven
-            pass
-        except Exception:
-            pass
-
+    # Start progress
     done = 0
-    write_progress(progress_path, afdeling, done, total_input, status="running")
-
+    write_progress(done, total_input, afdeling, "running")
     resultaat = []
 
     try:
         for block, gm_list in parsed:
             if _is_cancelled():
-                raise KeyboardInterrupt("Parsing cancelled by user")
-            # naamregel
+                raise KeyboardInterrupt("Cancelled")
+
             patient_name = block.split("\n")[0].strip()
 
-            # verrijk elk gm en update progress NA ELK ITEM
             for gm in gm_list:
                 if _is_cancelled():
-                    raise KeyboardInterrupt("Parsing cancelled by user")
+                    raise KeyboardInterrupt("Cancelled")
+
                 nmnr, hpkode, spkode = match_to_spkode(
                     gm["clean"], bst020, bst052, bst004, bst070, bst711, bst031, debug=False
                 )
@@ -598,58 +571,32 @@ def run_parser():
                 gm["ATC7"] = atc7
                 gm["ATC7_omschrijving"] = atc7_oms
 
-                # --- LIVE progress update ---
                 done += 1
-                write_progress(progress_path, afdeling, done, total_input, status="running")
+                write_progress(done, total_input, afdeling, "running")
 
             resultaat.append({
                 "patiënt": patient_name,
                 "geneesmiddelen": gm_list
             })
 
-        # klaar
-        write_progress(progress_path, afdeling, done, total_input, status="done")
-
-        # Geef eventuele lezers (frontend / tqdm) héél even de tijd om 'done' te zien
-        time.sleep(1.0)
-
-        # Synchronous cleanup van progressbestand en eventuele tmp/bak varianten
-        for _ in range(20):  # retries; Windows kan de file héél kort locken
-            try:
-                if os.path.exists(progress_path):
-                    os.remove(progress_path)
-                for p in glob.glob(progress_path + "*"):  # vang .tmp/.bak e.d.
-                    try:
-                        os.remove(p)
-                    except FileNotFoundError:
-                        pass
-                break
-            except PermissionError:
-                time.sleep(0.1)
-            except Exception:
-                break
+        write_progress(done, total_input, afdeling, "done")
+        # heel even laten staan zodat de UI 'done' ziet
+        time.sleep(0.8)
 
     except KeyboardInterrupt:
-        # Schrijf laatste status: aborted
-        write_progress(progress_path, afdeling, done, total_input, status="aborted")
+        write_progress(done, total_input, afdeling, "aborted")
 
-        # ➕ Opruimen: cancel.flag en progressbestand verwijderen
-        try:
-            if os.path.exists(cancel_flag):
-                os.remove(cancel_flag)
-            if os.path.exists(progress_path):
-                os.remove(progress_path)
-            # ook tijdelijke tmp- of .bak-bestanden opruimen
-            for p in glob.glob(progress_path + "*"):
-                try:
-                    os.remove(p)
-                except:
-                    pass
-        except Exception as cleanup_err:
-            print(f"Cleanup fout: {cleanup_err}")
-
-        # Stop de parser netjes zonder error omhoog te gooien
-        return [], afdeling
+    # Cleanup: progress + eventuele tmp/bak weg (per-run map blijft verder intact)
+    try:
+        if os.path.exists(progress_path):
+            os.remove(progress_path)
+        for p in glob.glob(progress_path + "*"):
+            try:
+                os.remove(p)
+            except:
+                pass
+    except Exception:
+        pass
 
     return resultaat, afdeling
 

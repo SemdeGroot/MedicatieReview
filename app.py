@@ -1,56 +1,78 @@
-# app.py
 import os
 import io
-import glob
 import time
-import tempfile
+import uuid
+import json
 import shutil
 import traceback
-import threading
-from typing import Optional
-from flask import Flask, request, send_file, jsonify, render_template_string
+from typing import Dict
+
+from flask import Flask, request, send_file, jsonify, render_template_string, session
 
 # -------------------------------------------------
 # Config
 # -------------------------------------------------
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR = os.path.join(PROJECT_ROOT, "Output")
-DATA_DIR = os.path.join(PROJECT_ROOT, "Data")
-ORIGINAL_MEDIMO = os.path.join(DATA_DIR, "medimo_input.txt")
-TEMP_DIR = os.path.join(DATA_DIR, "Temp")
-CANCEL_FLAG = os.path.join(TEMP_DIR, "cancel.flag")
-RUNNING_FLAG = os.path.join(TEMP_DIR, "running.flag")
+DATA_DIR     = os.path.join(PROJECT_ROOT, "Data")
+RUNS_ROOT    = os.path.join(DATA_DIR, "Temp")      # per-run submappen: Data/Temp/<run_id>/
+RESULT_NAME  = "result.docx"                       # feitelijke bestandsnaam is met afdeling; we detecteren dynamisch
+SECRET_KEY   = os.environ.get("FLASK_SECRET", "change-me-in-production")
 
-# Importeer jouw bestaande main.py (moet in dezelfde root liggen)
+# Import main (die paden accepteert)
 import importlib
-main_mod = importlib.import_module("main")  # jouw main.py met main()
+main_mod = importlib.import_module("main")
 
-# Eén globale lock om race-conditions te voorkomen als meerdere users tegelijk posten
-WRITE_LOCK = threading.Lock()
-
-# Flask - serveer /static/* uit ./Data zodat het logo zichtbaar is
+# Flask
 app = Flask(__name__, static_folder="Data", static_url_path="/static")
+app.secret_key = SECRET_KEY
 
 
 # -------------------------------------------------
 # Helpers
 # -------------------------------------------------
-def _latest_docx_after(path: str, t0: float) -> Optional[str]:
-    """Geef het nieuwste .docx-pad terug dat is aangepast ná tijdstip t0."""
-    if not os.path.isdir(path):
-        return None
-    candidates = []
-    for p in glob.glob(os.path.join(path, "*.docx")):
-        try:
-            if os.path.getmtime(p) >= t0:
-                candidates.append(p)
-        except FileNotFoundError:
-            pass
-    if not candidates:
-        return None
-    candidates.sort(key=os.path.getmtime, reverse=True)
-    return candidates[0]
+def _ensure_dirs():
+    os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(RUNS_ROOT, exist_ok=True)
 
+def _run_paths(run_id: str) -> Dict[str, str]:
+    base = os.path.join(RUNS_ROOT, run_id)
+    return {
+        "run_dir": base,
+        "input_path": os.path.join(base, "input.txt"),
+        "progress_path": os.path.join(base, "progress.json"),
+        "cancel_path": os.path.join(base, "cancel.flag"),
+    }
+
+def _safe_rmtree(path: str):
+    if not os.path.isdir(path):
+        return
+    for _ in range(5):
+        try:
+            shutil.rmtree(path)
+            return
+        except Exception:
+            time.sleep(0.1)
+    shutil.rmtree(path, ignore_errors=True)
+
+def _find_latest_progress_under_runs_root() -> str | None:
+    """Zoek de meest recente .../Temp/<run_id>/progress.json (handig als sessie-run_id ontbreekt)."""
+    try:
+        if not os.path.isdir(RUNS_ROOT):
+            return None
+        candidates = []
+        for d in os.listdir(RUNS_ROOT):
+            run_dir = os.path.join(RUNS_ROOT, d)
+            if not os.path.isdir(run_dir):
+                continue
+            p = os.path.join(run_dir, "progress.json")
+            if os.path.exists(p):
+                candidates.append(p)
+        if not candidates:
+            return None
+        candidates.sort(key=os.path.getmtime, reverse=True)
+        return candidates[0]
+    except Exception:
+        return None
 
 # -------------------------------------------------
 # Frontend (moderne dark UI)
@@ -66,50 +88,37 @@ HTML_PAGE = r"""<!doctype html>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      /* Moderne donkere kleurenpalet */
       --bg-primary: #0f0f17;
       --bg-secondary: #1a1a26;
       --bg-tertiary: #252532;
       --bg-accent: #2d2d3f;
-
-      /* Blauwe accenten */
       --blue-primary: #1d4ed8;
       --blue-secondary: #1e3a8a;
       --blue-tertiary: #0f172a;
       --blue-soft: #1e293b;
       --blue-glow: rgba(29, 78, 216, 0.15);
-
-      /* Tekst kleuren */
       --text-primary: #f8fafc;
       --text-secondary: #cbd5e1;
       --text-muted: #94a3b8;
       --text-accent: #e0e7ff;
-
-      /* Status kleuren */
       --success: #10b981;
       --success-bg: rgba(16, 185, 129, 0.1);
       --error: #ef4444;
       --error-bg: rgba(239, 68, 68, 0.1);
       --info: #1d4ed8;
       --info-bg: rgba(29, 78, 216, 0.1);
-
-      /* Borders en shadows */
       --border-primary: #374151;
       --border-accent: #4f46e5;
       --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
       --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
       --shadow-glow: 0 0 30px rgba(29, 78, 216, 0.15);
-
-      /* Geometrie */
       --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 16px;
       --radius-xl: 20px;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
@@ -118,7 +127,6 @@ HTML_PAGE = r"""<!doctype html>
       min-height: 100vh;
       overflow-x: hidden;
     }
-
     body::before {
       content: '';
       position: fixed; inset: 0;
@@ -129,7 +137,6 @@ HTML_PAGE = r"""<!doctype html>
       animation: float 20s ease-in-out infinite;
     }
     @keyframes float { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-10px) rotate(1deg)} }
-
     header {
       background: rgba(26, 26, 38, 0.95);
       backdrop-filter: blur(12px);
@@ -138,9 +145,7 @@ HTML_PAGE = r"""<!doctype html>
       position: sticky; top: 0; z-index: 100;
       box-shadow: var(--shadow-md);
     }
-    .header-content {
-      max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1rem;
-    }
+    .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; }
     header img {
       height: 60px; width: auto; border-radius: var(--radius-md);
       background: rgba(255,255,255,0.98); padding: 8px 12px;
@@ -155,26 +160,19 @@ HTML_PAGE = r"""<!doctype html>
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       letter-spacing: -0.025em;
     }
-
     main { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
-
-    .card {
-      background: var(--bg-tertiary); border: 1px solid var(--border-primary);
-      border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); overflow: hidden; position: relative;
-    }
+    .card { background: var(--bg-tertiary); border: 1px solid var(--border-primary);
+      border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); overflow: hidden; position: relative; }
     .card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px;
       background: linear-gradient(90deg, var(--blue-primary), var(--blue-secondary)); }
     .card .head { background: linear-gradient(135deg, var(--bg-accent) 0%, var(--bg-tertiary) 100%);
       padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-primary); }
     .card .head h2 { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); }
     .content { padding: 2rem; }
-
     .row { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
     @media (min-width: 900px) { .row { grid-template-columns: 2fr 1fr; } }
-
     label { display: block; font-weight: 500; color: var(--text-accent);
       margin-bottom: 0.75rem; font-size: 0.95rem; }
-
     textarea {
       width: 100%; min-height: 300px; resize: vertical; background: var(--blue-tertiary);
       color: var(--text-primary); border: 2px solid transparent; border-radius: var(--radius-lg);
@@ -187,7 +185,6 @@ HTML_PAGE = r"""<!doctype html>
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 0 0 3px rgba(29,78,216,0.18);
       transform: translateY(-1px);
     }
-
     .btns { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
     button {
       appearance: none; border: none; border-radius: var(--radius-md);
@@ -205,7 +202,6 @@ HTML_PAGE = r"""<!doctype html>
       box-shadow: var(--shadow-sm);
     }
     .btn-secondary { background: var(--bg-accent); color: var(--text-primary); border: 1px solid var(--border-primary); }
-
     .status {
       padding: 1rem 1.25rem; border-radius: var(--radius-lg);
       font-size: 0.9rem; font-weight: 500; border: 1px solid; display: none; position: relative; overflow:hidden;
@@ -219,7 +215,6 @@ HTML_PAGE = r"""<!doctype html>
     .status.info::before { background: var(--info); }
     .loading { animation: pulse 1.5s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
-
     .download {
       margin-top: 1.5rem; padding: 1.25rem;
       background: linear-gradient(135deg, var(--success-bg) 0%, rgba(16,185,129,0.05) 100%);
@@ -277,7 +272,7 @@ Etc..."></textarea>
               <a id="downloadLink" href="#" download>Download Word Document (.docx)</a>
             </div>
 
-            <!-- Live voortgang (staat los van download-div) -->
+            <!-- Live voortgang -->
             <div id="progressWrap" style="display:none; margin-top:1rem;">
               <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
                 <strong id="progressTitle"></strong>
@@ -334,14 +329,11 @@ Etc..."></textarea>
     function startProgressPolling() {
       stopProgressPolling();
       progressWrap.style.display = 'block';
-      progressTitle.textContent = '';            // <-- leeg, geen flash
+      progressTitle.textContent = '';
       progressPct.textContent = '0%';
       progressFill.style.width = '0%';
       progressMeta.textContent = 'Bezig...';
-
-      // titel-grace: wacht even op afdeling voor we fallback tonen
       titleGraceUntil = Date.now() + 1500;
-
       pollProgressOnce();
       progressTimer = setInterval(pollProgressOnce, 500);
     }
@@ -359,30 +351,29 @@ Etc..."></textarea>
         if (!r.ok) return;
         const d = await r.json();
 
-        const pct = d.pct_geanalyseerd ?? 0;
+        const pct = d.pct_geanalyseerd ?? d.pct ?? 0;
 
-        // Titel-logica: voorkom flash van "Voortgang analyse"
         if (d.afdeling && d.afdeling !== 'Onbekend') {
           progressTitle.textContent = `Voortgang — Afdeling ${d.afdeling}`;
         } else if (!progressTitle.textContent && Date.now() > titleGraceUntil) {
-          // Pas na de grace-periode een fallback tonen
           progressTitle.textContent = 'Voortgang analyse';
         }
 
         progressPct.textContent = `${pct}%`;
         progressFill.style.width = `${pct}%`;
-        progressMeta.textContent = `${d.n_medicijnen_geanalyseerd}/${d.n_medicijnen_input} Geneesmiddelen `;
+        const nA = (d.n_medicijnen_geanalyseerd ?? 0);
+        const nT = (d.n_medicijnen_input ?? 0);
+        progressMeta.textContent = nT ? `${nA}/${nT} Geneesmiddelen` : (d.status || 'Bezig...');
 
-        if (d.status === 'done' || pct >= 100) {
+        if ((d.status && (d.status === 'done' || d.status === 'error')) || pct >= 100) {
           stopProgressPolling();
         }
       } catch (e) {
-        // Zwijg bij tijdelijke read/JSON race
+        // tijdelijke race conditions: geen noise in UI
       }
     }
 
     clearBtn.addEventListener('click', async ()=>{
-      // UI direct resetten
       medimo.value = '';
       resetDownload();
       progressWrap.style.display = 'none';
@@ -390,19 +381,14 @@ Etc..."></textarea>
       setStatus('Leeg gemaakt. Plak nieuwe input om te verwerken.', 'info');
       medimo.focus();
 
-      // Abort het lopende fetch-request naar /api/run (client-side)
       try {
-        if (runAbortCtrl) {
-          runAbortCtrl.abort();
-        }
+        if (runAbortCtrl) runAbortCtrl.abort();
       } catch (_) {}
 
-      // Vraag de server om parsing te stoppen
       try {
         await fetch('/api/cancel', { method: 'POST' });
       } catch (_) {}
 
-      // Knoppen herstellen
       runBtn.disabled = false;
       runBtn.textContent = 'Verwerken';
     });
@@ -421,23 +407,16 @@ Etc..."></textarea>
       setStatus('Verwerken van medicatie gegevens...', 'info');
 
       try{
-        // Start meteen met live polling
         startProgressPolling();
-
-        // maak een AbortController voor deze run
         runAbortCtrl = new AbortController();
 
-        // Start de run (promise), laat intussen polling doorlopen
-        const runPromise = fetch('/api/run', {
+        const resp = await fetch('/api/run', {
           method:'POST',
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ medimo_text: text }),
-          signal: runAbortCtrl.signal   // belangrijk
+          signal: runAbortCtrl.signal
         });
 
-        const resp = await runPromise;  // wachten op klaar
-
-        // extra: stop polling (zou al gestopt zijn als status 'done' is gezet)
         stopProgressPolling();
 
         if(!resp.ok){
@@ -466,10 +445,8 @@ Etc..."></textarea>
       }
     });
 
-    // Auto-focus textarea on load
     medimo.focus();
 
-    // Shortcuts
     document.addEventListener('keydown', (e) => {
       if (e.ctrlKey || e.metaKey) {
         if (e.key === 'Enter') {
@@ -489,185 +466,131 @@ Etc..."></textarea>
 </html>
 """
 
-
 # -------------------------------------------------
 # Routes
 # -------------------------------------------------
 @app.get("/")
 def index():
-    # Frontend uit string; logo via /static/logo_apotheek_rgb.jpg
     return render_template_string(HTML_PAGE)
 
 
 @app.post("/api/run")
-def run_pipeline():
+def api_run():
     """
-    - Maakt tijdelijke kopie met user-input
-    - Vervangt Data/medimo_input.txt atomisch (met lock)
-    - Draait main.main()
-    - Stuurt .docx terug vanuit geheugen (en verwijdert het bestand meteen)
-    - Herstelt altijd het originele bestand (of verwijdert als er geen origineel was)
+    - Per-run map aanmaken
+    - input.txt schrijven
+    - main.main(...) draaien met per-run paden
+    - .docx uit geheugen teruggeven
+    - hele run-map verwijderen (geen dataretentie)
     """
-    from werkzeug.exceptions import ClientDisconnected
-
-    backup_path = None
-    temp_new = None
-    t0 = time.time()
-
     try:
         j = request.get_json(force=True, silent=False) or {}
-        medimo_text = j.get("medimo_text", "")
-        if not medimo_text.strip():
+        medimo_text = (j.get("medimo_text") or "").strip()
+        if not medimo_text:
             return jsonify({"detail": "Geen medimo_text aangeleverd."}), 400
 
-        # 1) Tijdelijke file met inhoud
-        with tempfile.NamedTemporaryFile("w", delete=False, suffix=".txt", encoding="utf-8") as tmp:
-            tmp.write(medimo_text)
-            temp_new = tmp.name
+        _ensure_dirs()
+        run_id = str(uuid.uuid4())
+        p = _run_paths(run_id)
+        os.makedirs(p["run_dir"], exist_ok=True)
 
-        # 2) Met lock: backup + atomisch vervangen
-        with WRITE_LOCK:
-            os.makedirs(DATA_DIR, exist_ok=True)
-            if os.path.exists(ORIGINAL_MEDIMO):
-                with tempfile.NamedTemporaryFile(delete=False) as bak:
-                    backup_path = bak.name
-                shutil.copy2(ORIGINAL_MEDIMO, backup_path)
-            os.replace(temp_new, ORIGINAL_MEDIMO)
-            temp_new = None  # eigendom overgedragen
-        # Flag logic    
-        try:
-            if os.path.exists(CANCEL_FLAG):
-                os.remove(CANCEL_FLAG)
-        except Exception:
-            traceback.print_exc()
+        # Sessie-run_id instellen VOORDAT de run start → progress-polling kan direct lezen
+        session["current_run_id"] = run_id
 
-        # 2b) Zet running-flag
-        try:
-            with open(RUNNING_FLAG, "w", encoding="utf-8") as f:
-                f.write(str(time.time()))
-        except Exception:
-            traceback.print_exc()
+        # input schrijven
+        with open(p["input_path"], "w", encoding="utf-8") as f:
+            f.write(medimo_text)
 
-        # 3) Draai jouw pipeline
-        main_mod.main()
+        # run (synchronisch)
+        main_mod.main(
+            input_path=p["input_path"],
+            output_dir=p["run_dir"],          # Word komt in deze map (met afdelingsnaam in bestandsnaam)
+            progress_path=p["progress_path"], # parse_medimo schrijft hierin
+            cancel_flag_path=p["cancel_path"]
+        )
 
-        # 4) Vind nieuwste docx sinds starttijd
-        time.sleep(0.2)  # kleine FS-pauze
-        latest = _latest_docx_after(OUTPUT_DIR, t0)
-        if not latest:
-            files = sorted(glob.glob(os.path.join(OUTPUT_DIR, "*.docx")), key=os.path.getmtime, reverse=True)
-            latest = files[0] if files else None
+        # zoek .docx in run-dir
+        docxs = [os.path.join(p["run_dir"], q) for q in os.listdir(p["run_dir"]) if q.lower().endswith(".docx")]
+        if not docxs:
+            _safe_rmtree(p["run_dir"])
+            session.pop("current_run_id", None)
+            return jsonify({"detail": "Geen .docx-output gevonden."}), 500
 
-        if not latest:
-            return jsonify({"detail": "Geen .docx-output gevonden in Output/."}), 500
+        result_path = max(docxs, key=os.path.getmtime)
+        filename = os.path.basename(result_path)
 
-        # 5) Lees bestand volledig in geheugen en verwijder op schijf
-        try:
-            with open(latest, "rb") as f:
-                doc_bytes = f.read()
-        except FileNotFoundError:
-            # Bestaat al niet meer (race)? Fout teruggeven.
-            return jsonify({"detail": "Output-bestand kon niet worden gelezen."}), 500
+        # uit geheugen sturen
+        with open(result_path, "rb") as f:
+            data = f.read()
 
-        # Verwijder met mini-retry om Windows locks te omzeilen
-        for _ in range(10):
-            try:
-                os.remove(latest)
-                break
-            except PermissionError:
-                time.sleep(0.1)
-            except FileNotFoundError:
-                break
+        # cleanup
+        _safe_rmtree(p["run_dir"])
+        session.pop("current_run_id", None)
 
-        # 6) Stuur uit geheugen
-        bio = io.BytesIO(doc_bytes)
-        bio.seek(0)
+        bio = io.BytesIO(data); bio.seek(0)
         resp = send_file(
             bio,
             mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             as_attachment=True,
-            download_name=os.path.basename(latest),
+            download_name=filename,
             max_age=0
         )
         resp.headers["Cache-Control"] = "no-store, max-age=0"
         return resp
 
-    except ClientDisconnected:
-        # Client heeft afgebroken (AbortController) → geen errorlog, alleen opruimen
-        return ("", 204)
-
     except Exception as e:
         traceback.print_exc()
-        # Geef nette fout i.p.v. “Failed to fetch”
+        # opruimen bij error
+        run_id = session.get("current_run_id")
+        if run_id:
+            _safe_rmtree(_run_paths(run_id)["run_dir"])
+            session.pop("current_run_id", None)
         return jsonify({"detail": f"Fout tijdens verwerken: {e}"}), 500
 
-    finally:
-        # 7) Herstel altijd het originele bestand
-        try:
-            with WRITE_LOCK:
-                if backup_path and os.path.exists(backup_path):
-                    os.replace(backup_path, ORIGINAL_MEDIMO)
-                    backup_path = None
-                else:
-                    if os.path.exists(ORIGINAL_MEDIMO) and not os.path.samefile(ORIGINAL_MEDIMO, ORIGINAL_MEDIMO):
-                        # normaal gesproken redundant; defensief gelaten
-                        os.remove(ORIGINAL_MEDIMO)
-        except Exception:
-            traceback.print_exc()
-
-        # Opruimen als temp_new niet gebruikt/overgedragen is
-        if temp_new and os.path.exists(temp_new):
-            try:
-                os.remove(temp_new)
-            except Exception:
-                traceback.print_exc()
-
-        try:
-            if os.path.exists(RUNNING_FLAG):
-                os.remove(RUNNING_FLAG)
-        except Exception:
-            traceback.print_exc()
-
-        # cancel.flag ook weghalen zodat niets 'sticky' blijft liggen
-        try:
-            if os.path.exists(CANCEL_FLAG):
-                os.remove(CANCEL_FLAG)
-        except Exception:
-            traceback.print_exc()
 
 @app.get("/api/progress")
 def api_progress():
     """
-    Geeft live voortgang terug als JSON.
-    - Optioneel: /api/progress?afdeling=Argusvlinder
-    - Zonder param: pak het meest recente afdelings_progress_*.json bestand.
+    Leest per-sessie progress.json in Data/Temp/<run_id>/progress.json.
+    Als de sessie-run_id ontbreekt (edge cases), val terug op de meest recente progress.json onder Temp/.
     """
-    afd = request.args.get("afdeling")
-    if afd:
-        path = os.path.join(TEMP_DIR, f"afdelings_progress_{afd}.json")
-        if not os.path.exists(path):
-            return jsonify({"detail": f"Geen progress voor afdeling '{afd}'."}), 404
-    else:
-        files = glob.glob(os.path.join(TEMP_DIR, "afdelings_progress_*.json"))
-        if not files:
-            return jsonify({"detail": "Nog geen progress-bestand gevonden."}), 404
-        path = max(files, key=os.path.getmtime)
+    # 1) eerst de sessie-run
+    run_id = session.get("current_run_id")
+    if run_id:
+        p = _run_paths(run_id)
+        progress_path = p["progress_path"]
+        if os.path.exists(progress_path):
+            resp = send_file(progress_path, mimetype="application/json")
+            resp.headers["Cache-Control"] = "no-store, max-age=0"
+            return resp
 
-    resp = send_file(path, mimetype="application/json")
-    # Zorg dat de browser nooit cached tijdens polling
-    resp.headers["Cache-Control"] = "no-store, max-age=0"
-    return resp
+    # 2) fallback: nieuwste progress.json in welke run-map dan ook
+    latest = _find_latest_progress_under_runs_root()
+    if latest and os.path.exists(latest):
+        resp = send_file(latest, mimetype="application/json")
+        resp.headers["Cache-Control"] = "no-store, max-age=0"
+        return resp
+
+    return jsonify({"detail": "Nog geen progress-bestand gevonden."}), 404
+
 
 @app.post("/api/cancel")
 def api_cancel():
-    """Zet een cancel-flag zodat de parser kan stoppen."""
+    """
+    Zet cancel voor de run van deze sessie (niet globaal).
+    """
+    run_id = session.get("current_run_id")
+    if not run_id:
+        return jsonify({"ok": True, "running": False})
+    p = _run_paths(run_id)
     try:
-        os.makedirs(TEMP_DIR, exist_ok=True)
-        with open(CANCEL_FLAG, "w", encoding="utf-8") as f:
+        os.makedirs(os.path.dirname(p["cancel_path"]), exist_ok=True)
+        with open(p["cancel_path"], "w", encoding="utf-8") as f:
             f.write("cancel")
-        return jsonify({"ok": True})
+        return jsonify({"ok": True, "running": True})
     except Exception as e:
         return jsonify({"ok": False, "detail": str(e)}), 500
+
 
 # -------------------------------------------------
 # Entrypoint

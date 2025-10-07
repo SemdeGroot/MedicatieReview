@@ -19,6 +19,7 @@ DATA_DIR = os.path.join(PROJECT_ROOT, "Data")
 ORIGINAL_MEDIMO = os.path.join(DATA_DIR, "medimo_input.txt")
 TEMP_DIR = os.path.join(DATA_DIR, "Temp")
 CANCEL_FLAG = os.path.join(TEMP_DIR, "cancel.flag")
+RUNNING_FLAG = os.path.join(TEMP_DIR, "running.flag")
 
 # Importeer jouw bestaande main.py (moet in dezelfde root liggen)
 import importlib
@@ -533,6 +534,19 @@ def run_pipeline():
                 shutil.copy2(ORIGINAL_MEDIMO, backup_path)
             os.replace(temp_new, ORIGINAL_MEDIMO)
             temp_new = None  # eigendom overgedragen
+        # Flag logic    
+        try:
+            if os.path.exists(CANCEL_FLAG):
+                os.remove(CANCEL_FLAG)
+        except Exception:
+            traceback.print_exc()
+
+        # 2b) Zet running-flag
+        try:
+            with open(RUNNING_FLAG, "w", encoding="utf-8") as f:
+                f.write(str(time.time()))
+        except Exception:
+            traceback.print_exc()
 
         # 3) Draai jouw pipeline
         main_mod.main()
@@ -607,6 +621,19 @@ def run_pipeline():
                 os.remove(temp_new)
             except Exception:
                 traceback.print_exc()
+
+        try:
+            if os.path.exists(RUNNING_FLAG):
+                os.remove(RUNNING_FLAG)
+        except Exception:
+            traceback.print_exc()
+
+        # cancel.flag ook weghalen zodat niets 'sticky' blijft liggen
+        try:
+            if os.path.exists(CANCEL_FLAG):
+                os.remove(CANCEL_FLAG)
+        except Exception:
+            traceback.print_exc()
 
 @app.get("/api/progress")
 def api_progress():

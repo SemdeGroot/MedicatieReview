@@ -141,7 +141,7 @@ HTML_PAGE = r"""<!doctype html>
       max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1rem;
     }
     header img {
-      height: 50px; width: auto; border-radius: var(--radius-md);
+      height: 60px; width: auto; border-radius: var(--radius-md);
       background: rgba(255,255,255,0.98); padding: 8px 12px;
       filter: contrast(1.05) saturate(0.95);
       box-shadow: var(--shadow-sm), 0 0 10px rgba(0,0,0,0.1);

@@ -5,9 +5,9 @@ import uuid
 import json
 import shutil
 import traceback
-from typing import Dict
+from typing import Dict, Optional
 
-from flask import Flask, request, send_file, jsonify, render_template_string, session
+from flask import Flask, request, send_file, jsonify, render_template_string
 
 # -------------------------------------------------
 # Config
@@ -15,7 +15,6 @@ from flask import Flask, request, send_file, jsonify, render_template_string, se
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR     = os.path.join(PROJECT_ROOT, "Data")
 RUNS_ROOT    = os.path.join(DATA_DIR, "Temp")      # per-run submappen: Data/Temp/<run_id>/
-RESULT_NAME  = "result.docx"                       # feitelijke bestandsnaam is met afdeling; we detecteren dynamisch
 SECRET_KEY   = os.environ.get("FLASK_SECRET", "change-me-in-production")
 
 # Import main (die paden accepteert)
@@ -54,25 +53,16 @@ def _safe_rmtree(path: str):
             time.sleep(0.1)
     shutil.rmtree(path, ignore_errors=True)
 
-def _find_latest_progress_under_runs_root() -> str | None:
-    """Zoek de meest recente .../Temp/<run_id>/progress.json (handig als sessie-run_id ontbreekt)."""
-    try:
-        if not os.path.isdir(RUNS_ROOT):
-            return None
-        candidates = []
-        for d in os.listdir(RUNS_ROOT):
-            run_dir = os.path.join(RUNS_ROOT, d)
-            if not os.path.isdir(run_dir):
-                continue
-            p = os.path.join(run_dir, "progress.json")
-            if os.path.exists(p):
-                candidates.append(p)
-        if not candidates:
-            return None
-        candidates.sort(key=os.path.getmtime, reverse=True)
-        return candidates[0]
-    except Exception:
-        return None
+def _require_run_id() -> Optional[str]:
+    rid = request.args.get("run_id")
+    if not rid:
+        # ook body accepteren
+        try:
+            j = request.get_json(silent=True) or {}
+            rid = j.get("run_id")
+        except Exception:
+            rid = None
+    return rid
 
 # -------------------------------------------------
 # Frontend (moderne dark UI)
@@ -291,174 +281,196 @@ Etc..."></textarea>
   </main>
 
   <script>
-    const runBtn = document.getElementById('runBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const medimo = document.getElementById('medimo');
-    const statusBox = document.getElementById('status');
-    const dlWrap = document.getElementById('download');
-    const dlLink = document.getElementById('downloadLink');
+  const runBtn = document.getElementById('runBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const medimo = document.getElementById('medimo');
+  const statusBox = document.getElementById('status');
+  const dlWrap = document.getElementById('download');
+  const dlLink = document.getElementById('downloadLink');
 
-    const progressWrap = document.getElementById('progressWrap');
-    const progressTitle = document.getElementById('progressTitle');
-    const progressPct = document.getElementById('progressPct');
-    const progressFill = document.getElementById('progressFill');
-    const progressMeta = document.getElementById('progressMeta');
+  const progressWrap = document.getElementById('progressWrap');
+  const progressTitle = document.getElementById('progressTitle');
+  const progressPct = document.getElementById('progressPct');
+  const progressFill = document.getElementById('progressFill');
+  const progressMeta = document.getElementById('progressMeta');
 
-    let progressTimer = null;
-    let runAbortCtrl = null;
-    let titleGraceUntil = 0;
+  let progressTimer = null;
+  let runAbortCtrl = null;
+  let titleGraceUntil = 0;
+  let currentRunId = null;
 
-    function setStatus(msg, type='info'){
-      statusBox.textContent = msg;
-      statusBox.className = 'status ' + type;
-      statusBox.style.display = 'block';
-
-      if (type === 'info' && msg.toLowerCase().startsWith('verwerken')) {
-        statusBox.classList.add('loading');
-      } else {
-        statusBox.classList.remove('loading');
-      }
+  function setStatus(msg, type='info'){
+    statusBox.textContent = msg;
+    statusBox.className = 'status ' + type;
+    statusBox.style.display = 'block';
+    if (type === 'info' && msg.toLowerCase().startsWith('verwerken')) {
+      statusBox.classList.add('loading');
+    } else {
+      statusBox.classList.remove('loading');
     }
+  }
 
-    function resetDownload(){
-      dlWrap.style.display = 'none';
-      dlLink.removeAttribute('href');
-      dlLink.removeAttribute('download');
+  function resetDownload(){
+    dlWrap.style.display = 'none';
+    dlLink.removeAttribute('href');
+    dlLink.removeAttribute('download');
+  }
+
+  function startProgressPolling() {
+    if (!currentRunId) return;
+    stopProgressPolling();
+    progressWrap.style.display = 'block';
+    progressTitle.textContent = '';
+    progressPct.textContent = '0%';
+    progressFill.style.width = '0%';
+    progressMeta.textContent = 'Bezig...';
+    titleGraceUntil = Date.now() + 1500;
+    pollProgressOnce();
+    progressTimer = setInterval(pollProgressOnce, 500);
+  }
+
+  function stopProgressPolling() {
+    if (progressTimer) {
+      clearInterval(progressTimer);
+      progressTimer = null;
     }
+  }
 
-    function startProgressPolling() {
-      stopProgressPolling();
-      progressWrap.style.display = 'block';
-      progressTitle.textContent = '';
-      progressPct.textContent = '0%';
-      progressFill.style.width = '0%';
-      progressMeta.textContent = 'Bezig...';
-      titleGraceUntil = Date.now() + 1500;
-      pollProgressOnce();
-      progressTimer = setInterval(pollProgressOnce, 500);
-    }
-
-    function stopProgressPolling() {
-      if (progressTimer) {
-        clearInterval(progressTimer);
-        progressTimer = null;
-      }
-    }
-
-    async function pollProgressOnce() {
-      try {
-        const r = await fetch('/api/progress', { cache: 'no-store' });
-        if (!r.ok) return;
-        const d = await r.json();
-
-        const pct = d.pct_geanalyseerd ?? d.pct ?? 0;
-
-        if (d.afdeling && d.afdeling !== 'Onbekend') {
-          progressTitle.textContent = `Voortgang — Afdeling ${d.afdeling}`;
-        } else if (!progressTitle.textContent && Date.now() > titleGraceUntil) {
-          progressTitle.textContent = 'Voortgang analyse';
-        }
-
-        progressPct.textContent = `${pct}%`;
-        progressFill.style.width = `${pct}%`;
-        const nA = (d.n_medicijnen_geanalyseerd ?? 0);
-        const nT = (d.n_medicijnen_input ?? 0);
-        progressMeta.textContent = nT ? `${nA}/${nT} Geneesmiddelen` : (d.status || 'Bezig...');
-
-        if ((d.status && (d.status === 'done' || d.status === 'error')) || pct >= 100) {
-          stopProgressPolling();
-        }
-      } catch (e) {
-        // tijdelijke race conditions: geen noise in UI
-      }
-    }
-
-    clearBtn.addEventListener('click', async ()=>{
-      medimo.value = '';
-      resetDownload();
-      progressWrap.style.display = 'none';
-      stopProgressPolling();
-      setStatus('Leeg gemaakt. Plak nieuwe input om te verwerken.', 'info');
-      medimo.focus();
-
-      try {
-        if (runAbortCtrl) runAbortCtrl.abort();
-      } catch (_) {}
-
-      try {
-        await fetch('/api/cancel', { method: 'POST' });
-      } catch (_) {}
-
-      runBtn.disabled = false;
-      runBtn.textContent = 'Verwerken';
-    });
-
-    runBtn.addEventListener('click', async ()=>{
-      resetDownload();
-      const text = medimo.value.trim();
-      if(!text){
-        setStatus('Voer eerst tekst in.', 'err');
-        medimo.focus();
+  async function pollProgressOnce() {
+    if (!currentRunId) return;
+    try {
+      const r = await fetch(`/api/progress?run_id=${encodeURIComponent(currentRunId)}`, { cache: 'no-store' });
+      if (!r.ok) {
+        // 404 betekent: nog niet gestart óf al afgerond & progress verwijderd → stil blijven
         return;
       }
+      const d = await r.json();
 
-      runBtn.disabled = true;
-      runBtn.textContent = 'Verwerken...';
-      setStatus('Verwerken van medicatie gegevens...', 'info');
+      const pct = d.pct_geanalyseerd ?? d.pct ?? 0;
 
-      try{
-        startProgressPolling();
-        runAbortCtrl = new AbortController();
-
-        const resp = await fetch('/api/run', {
-          method:'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ medimo_text: text }),
-          signal: runAbortCtrl.signal
-        });
-
-        stopProgressPolling();
-
-        if(!resp.ok){
-          const data = await resp.json().catch(()=> ({}));
-          const det = data?.detail || resp.statusText;
-          throw new Error(det);
-        }
-
-        const blob = await resp.blob();
-        const cd = resp.headers.get('Content-Disposition') || '';
-        const m = /filename="?(.*?)"?$/.exec(cd);
-        const filename = m ? m[1] : 'MedicatieReview.docx';
-
-        const url = URL.createObjectURL(blob);
-        dlLink.href = url;
-        dlLink.download = filename;
-        dlWrap.style.display = 'flex';
-        setStatus('Succesvol verwerkt! Download is beschikbaar.', 'ok');
-      } catch(err){
-        console.error(err);
-        setStatus('Fout: ' + err.message, 'err');
-        stopProgressPolling();
-      } finally {
-        runBtn.disabled = false;
-        runBtn.textContent = 'Verwerken';
+      if (d.afdeling && d.afdeling !== 'Onbekend') {
+        progressTitle.textContent = `Voortgang — Afdeling ${d.afdeling}`;
+      } else if (!progressTitle.textContent && Date.now() > titleGraceUntil) {
+        progressTitle.textContent = 'Voortgang analyse';
       }
-    });
 
+      progressPct.textContent = `${pct}%`;
+      progressFill.style.width = `${pct}%`;
+      const nA = (d.n_medicijnen_geanalyseerd ?? 0);
+      const nT = (d.n_medicijnen_input ?? 0);
+      progressMeta.textContent = nT ? `${nA}/${nT} Geneesmiddelen` : (d.status || 'Bezig...');
+
+      if (d.status === 'done' || d.status === 'aborted' || d.status === 'error' || pct >= 100) {
+        stopProgressPolling();
+      }
+    } catch (e) {
+      // tijdelijke race conditions: zwijgen
+    }
+  }
+
+  clearBtn.addEventListener('click', async ()=>{
+    medimo.value = '';
+    resetDownload();
+    progressWrap.style.display = 'none';
+    stopProgressPolling();
+    setStatus('Leeg gemaakt. Plak nieuwe input om te verwerken.', 'info');
     medimo.focus();
 
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          runBtn.click();
-        } else if (e.key.toLowerCase() === 'k') {
-          e.preventDefault();
-          clearBtn.click();
-        }
+    // Stop eventueel lopend request
+    try { if (runAbortCtrl) runAbortCtrl.abort(); } catch (_) {}
+
+    // Annuleren + opruimen van huidige run
+    try {
+      if (currentRunId) {
+        await fetch('/api/cancel', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ run_id: currentRunId })
+        });
+        await fetch('/api/clear', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ run_id: currentRunId })
+        });
       }
-    });
-  </script>
+    } catch (_) {}
+
+    currentRunId = null;
+    runBtn.disabled = false;
+    runBtn.textContent = 'Verwerken';
+  });
+
+  runBtn.addEventListener('click', async ()=>{
+    resetDownload();
+    const text = medimo.value.trim();
+    if(!text){
+      setStatus('Voer eerst tekst in.', 'err');
+      medimo.focus();
+      return;
+    }
+
+    // Nieuwe run_id per klik
+    currentRunId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now());
+
+    runBtn.disabled = true;
+    runBtn.textContent = 'Verwerken...';
+    setStatus('Verwerken van medicatie gegevens...', 'info');
+
+    try{
+      startProgressPolling();
+      runAbortCtrl = new AbortController();
+
+      const resp = await fetch('/api/run', {
+        method:'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ run_id: currentRunId, medimo_text: text }),
+        signal: runAbortCtrl.signal
+      });
+
+      stopProgressPolling();
+
+      if(!resp.ok){
+        const data = await resp.json().catch(()=> ({}));
+        const det = data?.detail || resp.statusText;
+        throw new Error(det);
+      }
+
+      const blob = await resp.blob();
+      const cd = resp.headers.get('Content-Disposition') || '';
+      const m = /filename="?(.*?)"?$/.exec(cd);
+      const filename = m ? m[1] : 'MedicatieReview.docx';
+
+      const url = URL.createObjectURL(blob);
+      dlLink.href = url;
+      dlLink.download = filename;
+      dlWrap.style.display = 'flex';
+      setStatus('Succesvol verwerkt! Download is beschikbaar.', 'ok');
+    } catch(err){
+      console.error(err);
+      setStatus('Fout: ' + err.message, 'err');
+      stopProgressPolling();
+    } finally {
+      runBtn.disabled = false;
+      runBtn.textContent = 'Verwerken';
+    }
+  });
+
+  // Auto-focus textarea on load
+  medimo.focus();
+
+  // Shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        runBtn.click();
+      } else if (e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        clearBtn.click();
+      }
+    }
+  });
+</script>
   <footer style="margin-top:2rem; padding:1rem; text-align:center; font-size:0.9rem; color:var(--text-muted); border-top:1px solid var(--border-primary);">
   <p>© 2025 Sem de Groot – Voor vragen of verbeteringen: +31 637395978 of <a href="mailto:semdegroot2003@gmail.com" style="color:var(--text-accent);">semdegroot2003@gmail.com</a></p>
   </footer>
@@ -469,33 +481,33 @@ Etc..."></textarea>
 # -------------------------------------------------
 # Routes
 # -------------------------------------------------
+
 @app.get("/")
 def index():
     return render_template_string(HTML_PAGE)
 
-
 @app.post("/api/run")
 def api_run():
     """
-    - Per-run map aanmaken
-    - input.txt schrijven
-    - main.main(...) draaien met per-run paden
-    - .docx uit geheugen teruggeven
-    - hele run-map verwijderen (geen dataretentie)
+    - Vereist run_id (meegegeven door de client) en medimo_text
+    - Maakt per-run map
+    - Schrijft input.txt
+    - Draait main.main(...) met per-run paden
+    - Stuurt .docx uit geheugen terug
+    - Verwijdert run-map (geen dataretentie)
     """
     try:
         j = request.get_json(force=True, silent=False) or {}
+        run_id = j.get("run_id")
         medimo_text = (j.get("medimo_text") or "").strip()
+        if not run_id:
+            return jsonify({"detail": "run_id ontbreekt"}), 400
         if not medimo_text:
             return jsonify({"detail": "Geen medimo_text aangeleverd."}), 400
 
         _ensure_dirs()
-        run_id = str(uuid.uuid4())
         p = _run_paths(run_id)
         os.makedirs(p["run_dir"], exist_ok=True)
-
-        # Sessie-run_id instellen VOORDAT de run start → progress-polling kan direct lezen
-        session["current_run_id"] = run_id
 
         # input schrijven
         with open(p["input_path"], "w", encoding="utf-8") as f:
@@ -513,7 +525,6 @@ def api_run():
         docxs = [os.path.join(p["run_dir"], q) for q in os.listdir(p["run_dir"]) if q.lower().endswith(".docx")]
         if not docxs:
             _safe_rmtree(p["run_dir"])
-            session.pop("current_run_id", None)
             return jsonify({"detail": "Geen .docx-output gevonden."}), 500
 
         result_path = max(docxs, key=os.path.getmtime)
@@ -523,9 +534,8 @@ def api_run():
         with open(result_path, "rb") as f:
             data = f.read()
 
-        # cleanup
+        # cleanup na succesvolle run
         _safe_rmtree(p["run_dir"])
-        session.pop("current_run_id", None)
 
         bio = io.BytesIO(data); bio.seek(0)
         resp = send_file(
@@ -541,53 +551,66 @@ def api_run():
     except Exception as e:
         traceback.print_exc()
         # opruimen bij error
-        run_id = session.get("current_run_id")
-        if run_id:
-            _safe_rmtree(_run_paths(run_id)["run_dir"])
-            session.pop("current_run_id", None)
+        rid = _require_run_id()
+        if rid:
+            _safe_rmtree(_run_paths(rid)["run_dir"])
         return jsonify({"detail": f"Fout tijdens verwerken: {e}"}), 500
 
 
 @app.get("/api/progress")
 def api_progress():
     """
-    Leest per-sessie progress.json in Data/Temp/<run_id>/progress.json.
-    Als de sessie-run_id ontbreekt (edge cases), val terug op de meest recente progress.json onder Temp/.
+    Leest expliciet Data/Temp/<run_id>/progress.json (run_id verplicht).
+    Geen fallback meer → multi-user safe.
     """
-    # 1) eerst de sessie-run
-    run_id = session.get("current_run_id")
-    if run_id:
-        p = _run_paths(run_id)
-        progress_path = p["progress_path"]
-        if os.path.exists(progress_path):
-            resp = send_file(progress_path, mimetype="application/json")
-            resp.headers["Cache-Control"] = "no-store, max-age=0"
-            return resp
-
-    # 2) fallback: nieuwste progress.json in welke run-map dan ook
-    latest = _find_latest_progress_under_runs_root()
-    if latest and os.path.exists(latest):
-        resp = send_file(latest, mimetype="application/json")
+    run_id = _require_run_id()
+    if not run_id:
+        return jsonify({"detail": "run_id ontbreekt"}), 400
+    p = _run_paths(run_id)
+    progress_path = p["progress_path"]
+    if os.path.exists(progress_path):
+        resp = send_file(progress_path, mimetype="application/json")
         resp.headers["Cache-Control"] = "no-store, max-age=0"
         return resp
-
-    return jsonify({"detail": "Nog geen progress-bestand gevonden."}), 404
+    return jsonify({"detail": "Nog geen progress of al afgerond."}), 404
 
 
 @app.post("/api/cancel")
 def api_cancel():
     """
-    Zet cancel voor de run van deze sessie (niet globaal).
+    Zet cancel voor de opgegeven run_id.
+    Als er geen progress.json (meer) is, ruimen we de map meteen op (idempotent schoonmaken).
     """
-    run_id = session.get("current_run_id")
+    run_id = _require_run_id()
     if not run_id:
         return jsonify({"ok": True, "running": False})
     p = _run_paths(run_id)
     try:
-        os.makedirs(os.path.dirname(p["cancel_path"]), exist_ok=True)
+        os.makedirs(p["run_dir"], exist_ok=True)
+        # Als er geen progress is, is er waarschijnlijk niets actief → schoonmaken en klaar
+        if not os.path.exists(p["progress_path"]):
+            _safe_rmtree(p["run_dir"])
+            return jsonify({"ok": True, "running": False, "cleaned": True})
+        # Anders: cancel-flag zetten en de parser laat de map later verdwijnen
         with open(p["cancel_path"], "w", encoding="utf-8") as f:
             f.write("cancel")
         return jsonify({"ok": True, "running": True})
+    except Exception as e:
+        return jsonify({"ok": False, "detail": str(e)}), 500
+
+
+@app.post("/api/clear")
+def api_clear():
+    """
+    Forceer directe opruiming van Data/Temp/<run_id>/.
+    Handig voor jouw 'Leegmaken' knop – idempotent.
+    """
+    run_id = _require_run_id()
+    if not run_id:
+        return jsonify({"ok": True, "cleared": False})
+    try:
+        _safe_rmtree(_run_paths(run_id)["run_dir"])
+        return jsonify({"ok": True, "cleared": True})
     except Exception as e:
         return jsonify({"ok": False, "detail": str(e)}), 500
 
@@ -596,5 +619,4 @@ def api_cancel():
 # Entrypoint
 # -------------------------------------------------
 if __name__ == "__main__":
-    # Start lokale server en open http://127.0.0.1:5000
     app.run(host="127.0.0.1", port=5000, debug=True)

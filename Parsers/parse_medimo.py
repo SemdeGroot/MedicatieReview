@@ -59,8 +59,8 @@ def parse_medimo_block(block):
     i = 1  # regel 0 = naamregel (Dhr./Mevr.)
     while i < len(lines):
         line = lines[i].strip()
-        if line.startswith(("C", "Z")):
-            regel = re.sub(r"^[CZ]\s+", "", line)
+        if line.startswith(("C", "Z", "T")):
+            regel = re.sub(r"^[CZT]\s+", "", line)
             delen = re.split(r'\s{2,}|\t+', regel)
             if len(delen) < 2:
                 i += 1
@@ -70,7 +70,7 @@ def parse_medimo_block(block):
             opmerking = ""
             if i + 1 < len(lines):
                 volgende = lines[i + 1].strip()
-                if volgende and not volgende.startswith(("C", "Z", "Dhr.", "Mevr.")):
+                if volgende and not volgende.startswith(("C", "Z", "T", "Dhr.", "Mevr.")):
                     opmerking = volgende
                     i += 1
             geneesmiddelen.append({

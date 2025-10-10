@@ -2,6 +2,8 @@ import os
 import json
 import time
 from typing import List, Dict, Tuple, Optional
+import locale
+from datetime import datetime
 
 # ===== Medimo Parser =====
 from Parsers import parse_medimo
@@ -14,6 +16,16 @@ from WordExport.genereer_docx import genereer_word_document
 
 def _sanitize(name: str) -> str:
     return "".join(c for c in name if c.isalnum() or c in (" ", "_", "-")).strip().replace(" ", "_") or "Onbekend"
+
+def _as_str(x, default=""):
+    """Zachte cast naar string (voorkomt typefouten)."""
+    if x is None:
+        return default
+    try:
+        s = str(x)
+    except Exception:
+        return default
+    return s
 
 def main(
     input_path: Optional[str] = None,
@@ -43,6 +55,13 @@ def main(
         cancel_flag_path=cancel_flag_path,   # in web-flow: .../Temp/<run_id>/cancel.flag
     )
 
+    # Stel Nederlandse locale in (werkt op de meeste systemen)
+    try:
+        locale.setlocale(locale.LC_TIME, 'nl_NL.UTF-8')
+    except locale.Error:
+        # fallback als locale niet beschikbaar is (Windows of sommige servers)
+        pass
+
     # Analyses per patiënt
     patiënten_data: List[Dict] = []
     for patiënt in data:
@@ -67,7 +86,7 @@ def main(
 
     # Bestandsnaam met afdeling (zoals je oude gedrag)
     safe_afdeling = _sanitize(afdeling or "Onbekend")
-    output_path = os.path.join(output_dir, f"MedicatieReview_{safe_afdeling}.docx")
+    output_path = os.path.join(output_dir, f"MedicatieReview_{_as_str(afdeling)}_{datetime.today().strftime('%b%Y')}.docx")
 
     # Laat je exporter nu óók output_path accepteren
     try:

@@ -5,6 +5,7 @@ from docx import Document
 from docx.shared import RGBColor, Cm, Pt
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement, parse_xml
+import locale
 
 # ======================
 # Opmaak-helpers (alleen layout, geen logica)
@@ -94,6 +95,13 @@ def genereer_word_document(patiënten_data, afdeling, output_path: str | None = 
     """
     doc = Document()
 
+        # Stel Nederlandse locale in (werkt op de meeste systemen)
+    try:
+        locale.setlocale(locale.LC_TIME, 'nl_NL.UTF-8')
+    except locale.Error:
+        # fallback als locale niet beschikbaar is (Windows of sommige servers)
+        pass
+
     # Globale stijl: spacing 0; (laat font-size Normal verder met default)
     try:
         normal = doc.styles['Normal']
@@ -105,6 +113,20 @@ def genereer_word_document(patiënten_data, afdeling, output_path: str | None = 
         pf.line_spacing = 1.0
     except Exception:
         pass  # als stijl niet beschikbaar, gaan we door
+
+    
+    # Standaard documenttaal instellen op Nederlands
+    try:
+        from docx.oxml import OxmlElement
+        from docx.oxml.ns import qn
+        styles = doc.styles
+        for style in styles:
+            if style.type == 1:  # paragraph style
+                lang = OxmlElement('w:lang')
+                lang.set(qn('w:val'), 'nl-NL')  # Nederlands (Nederland)
+                style.element.rPr.append(lang)
+    except Exception as e:
+        print(f"Waarschuwing: kon taal niet instellen ({e})")
 
     # Marges en logo
     try:
@@ -344,11 +366,12 @@ def genereer_word_document(patiënten_data, afdeling, output_path: str | None = 
         if idx < len(patients_list) - 1:
             doc.add_page_break()
 
+
     # Outputpad kiezen
     if output_path:
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         doc.save(output_path)
     else:
         os.makedirs("Output", exist_ok=True)
-        doc_path = os.path.join("Output", f"MedicatieReview_{_as_str(afdeling)}.docx")
+        doc_path = os.path.join("Output", f"MedicatieReview_{_as_str(afdeling)}_{datetime.today().strftime('%b%Y')}.docx")
         doc.save(doc_path)

@@ -18,7 +18,7 @@
 
 10. Wordt een anti-aritmicum gebruikt zonder DOAC of VKA? Moet de antistolling worden aangepast?
 
-11. Is er ruimte om de dosering van het TCA te verlagen? Is de indicatie nog juist (bijv. pijnstilling)?
+11. Is er ruimte om de dosering van het TCA te verlagen? Is de indicatie nog juist (bijv. pijnstilling of gedrag)?
 
 12. Wordt een LABA gebruikt zonder ICS of zonder LAMA?
 
@@ -26,9 +26,9 @@
 
 14. Wordt een RAS-remmer gebruikt zonder SGLT2-remmer of betablokker? Bij hypertensie acceptabel, maar bij hartfalen goed ingesteld?
 
-15. Moet vitamine B12-suppletie worden voortgezet bij afwezigheid van PPI of metformine? Is voeding voldoende?
+15. Moet vitamine B12-suppletie worden voortgezet bij afwezigheid van PPI of metformine? Is voeding voldoende? Wat is de spiegel?
 
-16. Wordt acetylcysteïne nog terecht continu gebruikt (beperkte effectiviteit)?
+16. Wordt acetylcysteïne nog terecht gebruikt (beperkte effectiviteit)?
 
 17. Wat is de nierfunctie en het gewicht bij gebruik van een DOAC?
 
@@ -52,7 +52,7 @@
 
 27. Hoe gaat het met stemming en functioneren bij gebruik van rivastigmine? Is er ruimte om te minderen?
 
-28. Moeten solifenacine of tamsulosine worden voortgezet? (beperkt bewezen effect t.o.v. placebo)
+28. Moeten solifenacine of tamsulosine worden voortgezet? (beperkt bewezen effect t.o.v. placebo) (hele groep)
 
 29. Moet mebeverine (of vergelijkbaar middel) worden voortgezet?
 
@@ -83,3 +83,25 @@ Beweging formularium?
 gedragsbeinvloedende geneesmiddelen -> psychofarmaca. 
 
 Word macro die de review per patient ready maakt voor copy paste.
+
+ICS: heeft de patient astma of COPD?
+
+Eerste generatie antihistaminica: is er een toegevoegde waarde? ivm valrisico/reactievermogen
+
+Dermale corticosteroiden: werking nog steeds afdoende?
+
+Laxantia: hoe gaat het met de ontlasting?
+
+Opioiden zo nodig hoe vaak gegeven?
+
+amiodaron: opladen en afbouwen: is er afgebouwd? en wat is de nierfunctie?
+
+Digoxine: opladen en afbouwen: is er afgebouwd, wat is de dosering? en wat is de nierfunctie? (Digitalisglycosiden)
+
+Dermatologicals: hoe gaat het met de huid?
+
+Thiamine nog geindiceeerd? alcohol.
+
+Kaliumsparend diureticum: wat is de kalium?
+
+Bisfosfonaten: wat is de startdatum: na 5 jaar evalueren.

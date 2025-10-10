@@ -11,6 +11,13 @@ import locale
 # Opmaak-helpers (alleen layout, geen logica)
 # ======================
 
+try:
+    locale.setlocale(locale.LC_TIME, 'nl_NL.UTF-8')
+except locale.Error:
+    # fallback als locale niet beschikbaar is (Windows of sommige servers)
+    pass
+
+
 def _tighten_paragraph(paragraph):
     """Alinea-afstand overal 0; enkelvoudige regelafstand."""
     pf = paragraph.paragraph_format

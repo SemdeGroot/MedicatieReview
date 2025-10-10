@@ -14,6 +14,13 @@ from Anticholinerge_Score.check_acb import bereken_acb_score
 from Dubbelmedicatie.check_dubbelmedicatie import check_dubbelmedicatie
 from WordExport.genereer_docx import genereer_word_document
 
+    # Stel Nederlandse locale in (werkt op de meeste systemen)
+try:
+    locale.setlocale(locale.LC_TIME, 'nl_NL.UTF-8')
+except locale.Error:
+    # fallback als locale niet beschikbaar is (Windows of sommige servers)
+    pass
+
 def _sanitize(name: str) -> str:
     return "".join(c for c in name if c.isalnum() or c in (" ", "_", "-")).strip().replace(" ", "_") or "Onbekend"
 
@@ -54,13 +61,6 @@ def main(
         progress_path=progress_path,         # in web-flow: .../Temp/<run_id>/progress.json
         cancel_flag_path=cancel_flag_path,   # in web-flow: .../Temp/<run_id>/cancel.flag
     )
-
-    # Stel Nederlandse locale in (werkt op de meeste systemen)
-    try:
-        locale.setlocale(locale.LC_TIME, 'nl_NL.UTF-8')
-    except locale.Error:
-        # fallback als locale niet beschikbaar is (Windows of sommige servers)
-        pass
 
     # Analyses per patiënt
     patiënten_data: List[Dict] = []

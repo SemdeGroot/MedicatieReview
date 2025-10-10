@@ -62,8 +62,24 @@
 
 32. Kan SSRI-gebruik worden afgebouwd na circa negen maanden? Zijn er al twee stoppogingen ondernomen?
 
-Kan diclofenacgel worden gestopt gezien milieubelasting en beperkte meerwaarde?
+ -33. Kan diclofenacgel worden gestopt gezien milieubelasting en beperkte meerwaarde?
 
-Is de dosering van parkinsonmedicatie correct ingesteld (kortwerkend 4×/dag, langwerkend 1×/dag)?
+ -34.Is de dosering van parkinsonmedicatie correct ingesteld (kortwerkend 4×/dag, langwerkend 1×/dag)?
 
-Is ketoconazolshampoo nog nodig, of volstaat een gewone shampoo?
+ -35.Is ketoconazolshampoo nog nodig, of volstaat een gewone shampoo?
+
+ZO nodig opiaten nog wel gebruikt?
+
+Wa voor soort pijn is het?
+
+Is de calcium intake goed? als geen calcium/of wel calcium. of als wel: is de calcium intake niet ged genoeg
+
+alendroninezuur: is er ook calcium in gebruik. Alendroninezuur onder valpreventie?
+
+Placeholder bovenaan: contraindicaties/allergien?
+
+Beweging formularium?
+
+gedragsbeinvloedende geneesmiddelen -> psychofarmaca. 
+
+Word macro die de review per patient ready maakt voor copy paste.

@@ -13,6 +13,11 @@
     "geneesmiddel": "hydrocortison (acetaat)",
     "ATC_preferent": "D07AA02",
     "ATC_mogelijk": ["A01AC03",  "A07EA02", "C05AA01", "D07XA01", "H02AB09", "S01BA02", "S01CB03", "S02BA01"]
+  },
+    {
+    "geneesmiddel": "Lidocaine lokaal",
+    "ATC_preferent": "D04AB01",
+    "ATC_mogelijk": ["C01BB01", "C05AD01", "N01BB02", "R02AD02", "S01HA07", "S02DA01", "N01BB52 "]
   }
 
 ]

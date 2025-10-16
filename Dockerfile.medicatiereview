@@ -1,0 +1,25 @@
+# ------------ Base image: Python 3.10 ------------
+FROM python:3.10-slim
+
+# Zorg dat Python geen bytecode schrijft en direct logt
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Werkdirectory
+WORKDIR /app
+
+# Installeer Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Kopieer de volledige app
+COPY . .
+
+# Maak Data-map aan (voor je tijdelijke bestanden)
+RUN mkdir -p /app/Data
+
+# Expose de poort die Gunicorn gebruikt
+EXPOSE 8000
+
+# Start de app via Gunicorn
+CMD ["gunicorn", "-w", "2", "--threads", "4", "--timeout", "120", "-b", "0.0.0.0:8000", "app:app"]

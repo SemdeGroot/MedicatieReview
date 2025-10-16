@@ -1,9 +1,10 @@
 # ------------ Base image: Python 3.10 ------------
 FROM python:3.10-slim
 
-# Zorg dat Python geen bytecode schrijft en direct logt
+# Environment settings
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 # Werkdirectory
 WORKDIR /app

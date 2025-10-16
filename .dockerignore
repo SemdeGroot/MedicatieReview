@@ -9,3 +9,13 @@ Data/Temp/
 .git/
 .gitignore
 *.ipynb
+
+# Negeer alles in G-Standaard behalve een paar files die we gebruiken
+G-Standaard/*
+!G-Standaard/BST020T
+!G-Standaard/BST004T
+!G-Standaard/BST052T
+!G-Standaard/BST070T
+!G-Standaard/BST711T
+!G-Standaard/BST031T
+!G-Standaard/BST801T

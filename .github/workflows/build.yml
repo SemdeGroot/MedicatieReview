@@ -42,7 +42,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ env.REGISTRY }}/${{ secrets.GHCR_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-            ${{ env.REGISTRY }}/${{ secrets.GHCR_USER }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/$(echo "${{ secrets.GHCR_USER }}" | tr '[:upper:]' '[:lower:]')/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/$(echo "${{ secrets.GHCR_USER }}" | tr '[:upper:]' '[:lower:]')/${{ env.IMAGE_NAME }}:latest
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ secrets.GHCR_USER }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ secrets.GHCR_USER }}/${{ env.IMAGE_NAME }}:buildcache,mode=max

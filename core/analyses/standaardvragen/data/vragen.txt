@@ -1,0 +1,107 @@
+1. Is vitamine D-suppletie nog nodig?
+
+2. Is de pijn voldoende onder controle? (alle pijnmedicatie meenemen)
+
+3. Moet metoclopramide worden voortgezet?
+
+4. Moet domperidon worden voortgezet? (niet combineren met parkinsonmedicatie)
+
+5. Is de dosering van de protonpompremmer niet te hoog?
+
+6. Moeten kunsttranen worden voortgezet? Heeft de patiënt nog last van droge ogen?
+
+7. Zijn de T4- en TSH-waarden goed ingesteld bij het schildkliergeneesmiddel?
+
+8. Is het nog wenselijk dat de patiënt tramadol gebruikt (i.v.m. duizeligheid e.d.)?
+
+9. Wordt bij gebruik van corticosteroïden op de huid de juiste basiszalf en frequentie toegepast (niet dagelijks)? Moet de behandeling worden voortgezet?
+
+10. Wordt een anti-aritmicum gebruikt zonder DOAC of VKA? Moet de antistolling worden aangepast?
+
+11. Is er ruimte om de dosering van het TCA te verlagen? Is de indicatie nog juist (bijv. pijnstilling of gedrag)?
+
+12. Wordt een LABA gebruikt zonder ICS of zonder LAMA?
+
+13. Wordt een lisdiureticum gebruikt zonder RAS-remmer bij hartfalen? Kan een RAS-remmer worden toegevoegd?
+
+14. Wordt een RAS-remmer gebruikt zonder SGLT2-remmer of betablokker? Bij hypertensie acceptabel, maar bij hartfalen goed ingesteld?
+
+15. Moet vitamine B12-suppletie worden voortgezet bij afwezigheid van PPI of metformine? Is voeding voldoende? Wat is de spiegel?
+
+16. Wordt acetylcysteïne nog terecht gebruikt (beperkte effectiviteit)?
+
+17. Wat is de nierfunctie en het gewicht bij gebruik van een DOAC?
+
+18. Is er een einddatum afgesproken voor het gebruik van antipsychotica? (in principe tijdelijk)
+
+19. Is het zinvol een statine voort te zetten gezien de levensverwachting (> 2 jaar)?
+
+20. Is jicht onder controle en moet de jichtmedicatie worden voortgezet?
+
+21. Wat is de reden voor promethazine als monotherapie?
+
+22. Zijn psychofarmaca goed ingesteld, en is er ruimte om te minderen?
+
+23. Wordt ferrofumaraat maximaal twee keer per week gegeven? Wat is het Hb?
+
+24. Wat is de indicatie voor glucocorticoïden? Is botbescherming nodig?
+
+25. Wat zijn pols en bloeddruk bij gebruik van een bètablokker?
+
+26. Moet epilepsiemedicatie worden voortgezet of kan na een halfjaar insultvrij worden afgebouwd?
+
+27. Hoe gaat het met stemming en functioneren bij gebruik van rivastigmine? Is er ruimte om te minderen?
+
+28. Moeten solifenacine of tamsulosine worden voortgezet? (beperkt bewezen effect t.o.v. placebo) (hele groep)
+
+29. Moet mebeverine (of vergelijkbaar middel) worden voortgezet?
+
+30. Hoe zijn de bloedglucosewaarden en het HbA1c bij diabetesmedicatie?
+
+31. Kan latanoprost worden gestopt als druppelen ongemak veroorzaakt?
+
+32. Kan SSRI-gebruik worden afgebouwd na circa negen maanden? Zijn er al twee stoppogingen ondernomen?
+
+ -33. Kan diclofenacgel worden gestopt gezien milieubelasting en beperkte meerwaarde?
+
+ -34.Is de dosering van parkinsonmedicatie correct ingesteld (kortwerkend 4×/dag, langwerkend 1×/dag)?
+
+ -35.Is ketoconazolshampoo nog nodig, of volstaat een gewone shampoo?
+
+ZO nodig opiaten nog wel gebruikt?
+
+Wa voor soort pijn is het?
+
+Is de calcium intake goed? als geen calcium/of wel calcium. of als wel: is de calcium intake niet ged genoeg
+
+alendroninezuur: is er ook calcium in gebruik. Alendroninezuur onder valpreventie?
+
+Placeholder bovenaan: contraindicaties/allergien?
+
+Beweging formularium?
+
+gedragsbeinvloedende geneesmiddelen -> psychofarmaca. 
+
+Word macro die de review per patient ready maakt voor copy paste.
+
+ICS: heeft de patient astma of COPD?
+
+Eerste generatie antihistaminica: is er een toegevoegde waarde? ivm valrisico/reactievermogen
+
+Dermale corticosteroiden: werking nog steeds afdoende?
+
+Laxantia: hoe gaat het met de ontlasting?
+
+Opioiden zo nodig hoe vaak gegeven?
+
+amiodaron: opladen en afbouwen: is er afgebouwd? en wat is de nierfunctie?
+
+Digoxine: opladen en afbouwen: is er afgebouwd, wat is de dosering? en wat is de nierfunctie? (Digitalisglycosiden)
+
+Dermatologicals: hoe gaat het met de huid?
+
+Thiamine nog geindiceeerd? alcohol.
+
+Kaliumsparend diureticum: wat is de kalium?
+
+Bisfosfonaten: wat is de startdatum: na 5 jaar evalueren.

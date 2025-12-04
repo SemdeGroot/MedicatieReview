@@ -1,29 +1,52 @@
-from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+# app/main.py
 import json
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 
-# Importeer de generator functie
-from core.parsers.parse_medimo_afdeling import process_medimo_text_stream
+from app.models import ReviewRequest
+from core.services import run_review_service
 
-app = FastAPI()
+app = FastAPI(title="Medimo Review API", version="2.0.0")
 
-class MedimoInput(BaseModel):
-    text: str
+# CORS instellen (belangrijk voor je frontend)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Zet dit in productie op je specifieke domein
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.post("/api/analyze/stream")
-def analyze_stream(payload: MedimoInput):
+@app.get("/")
+def read_root():
+    return {"status": "ok", "service": "Medimo Review API"}
+
+@app.post("/api/review")
+async def review_endpoint(request: ReviewRequest):
     """
-    Geeft een stream terug van JSON objecten.
-    Client leest regel voor regel.
+    Start een review proces.
+    Input: JSON met {text, source, scope}
+    Output: NDJSON stream (status -> progress -> result)
     """
     
-    def event_generator():
-        # Roep de generator aan in de parser
-        iterator = process_medimo_text_stream(payload.text)
+    def iter_json():
+        # We roepen de service aan
+        iterator = run_review_service(request.text, request.source, request.scope)
         
         for item in iterator:
-            # Schrijf elke update als een JSON-regel + newline
+            # Check op errors in de stream
+            if item.get("type") == "error":
+                # In een stream kunnen we geen HTTP 400 meer gooien als we al begonnen zijn,
+                # dus sturen we een error object in de JSON.
+                yield json.dumps(item) + "\n"
+                break
+            
+            # Schrijf JSON regel + newline
             yield json.dumps(item) + "\n"
 
-    return StreamingResponse(event_generator(), media_type="application/x-ndjson")
+    return StreamingResponse(iter_json(), media_type="application/x-ndjson")
+
+# Handler voor AWS Lambda
+handler = Mangum(app)

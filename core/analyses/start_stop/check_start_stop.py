@@ -100,16 +100,19 @@ def check_stopp_criteria(medicatielijst: List[Dict[str, Any]], leeftijd: int = 7
 
     triggered_criteria = []
 
-    # ---- Criteria Loop ----
     for criterion in STOPP_CRITERIA_CACHE:
         
         # 1. Filter: Type check
         if criterion.get("type") != "STOP":
             continue
         
-        # 2. Filter: Leeftijdscheck
+        # 2. Filter: Leeftijdscheck (AANGEPAST)
         if criterion.get("requires_age", False):
-            # Veilig casten naar int, default 0
+            # Situatie A: We weten de leeftijd niet -> Regel overslaan (veiligheidshalve)
+            if leeftijd is None:
+                continue
+                
+            # Situatie B: We weten de leeftijd wel, check of patiënt oud genoeg is
             age_min = int(criterion.get("age_min", 0))
             if leeftijd < age_min:
                 continue

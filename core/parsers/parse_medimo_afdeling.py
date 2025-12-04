@@ -5,6 +5,8 @@ import unicodedata
 import json
 from collections import Counter
 from typing import Iterator, Dict, Any, List, Optional, Tuple
+from datetime import datetime
+from core.database import get_db_connection as get_db
 
 # ==============================================================================
 # CONFIGURATIE & GLOBAL CACHE
@@ -35,15 +37,6 @@ def load_global_data():
             print(f"⚠️ Fout laden ATC_preferent.json: {e}")
 
 load_global_data()
-
-# ==============================================================================
-# DATABASE HELPERS
-# ==============================================================================
-def get_db():
-    """Maakt connectie met de lookup.db. Read-only modus voor snelheid."""
-    conn = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
-    conn.row_factory = sqlite3.Row
-    return conn
 
 # ==============================================================================
 # TEXT & REGEX TOOLS
@@ -88,6 +81,29 @@ def parse_medimo_block(block: str) -> List[Dict]:
             })
         i += 1
     return geneesmiddelen
+
+def extract_patient_details(header_line: str) -> Tuple[str, Optional[int]]:
+    """
+    Haalt naam en leeftijd uit de header regel.
+    Output: ("Mevr. M Curie", 81) of ("Mevr. X", None)
+    """
+    match = re.search(r"\((\d{1,2}-\d{1,2}-\d{4})\)", header_line)
+    
+    naam = header_line
+    leeftijd = None  # <--- AANPASSING: Standaard None (niet 0)
+    
+    if match:
+        datum_str = match.group(1)
+        naam = header_line.replace(f"({datum_str})", "").strip()
+        
+        try:
+            dob = datetime.strptime(datum_str, "%d-%m-%Y")
+            today = datetime.today()
+            leeftijd = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+        except ValueError:
+            pass # Formaat fout? Dan blijft leeftijd None
+
+    return naam, leeftijd
 
 # ==============================================================================
 # CORE LOGICA (SQL VERVANGING)
@@ -279,10 +295,15 @@ def process_medimo_text_stream(text: str) -> Iterator[Dict[str, Any]]:
 
     # 3. Processing
     for idx, block in enumerate(blocks):
-        patient_name = block.split("\n")[0].strip()
+        # Pak de eerste regel (de header)
+        header_line = block.split("\n")[0].strip()
+        
+        # NIEUW: Gebruik de helper om naam én leeftijd te splitsen
+        patient_name, leeftijd = extract_patient_details(header_line)
+        
         gm_list = parse_medimo_block(block)
         
-        # Voortgang sturen (elke patiënt is een stapje)
+        # Voortgang sturen
         pct = int(((idx) / total_blocks) * 100)
         yield {
             "type": "progress", 
@@ -299,7 +320,6 @@ def process_medimo_text_stream(text: str) -> Iterator[Dict[str, Any]]:
             atc_code = get_atc_for_spkode(spkode, cursor)
             details = get_atc_details(atc_code, cursor)
 
-            # Samenvoegen
             med_entry = {**gm, **details}
             med_entry["NMNR"] = nmnr
             med_entry["HPKode"] = hpkode
@@ -308,6 +328,7 @@ def process_medimo_text_stream(text: str) -> Iterator[Dict[str, Any]]:
 
         results.append({
             "naam": patient_name,
+            "leeftijd": leeftijd,  # <--- NIEUW: Voeg leeftijd toe aan resultaat
             "geneesmiddelen": clean_meds
         })
     

@@ -50,3 +50,5 @@ async def review_endpoint(request: ReviewRequest):
 
 # Handler voor AWS Lambda
 handler = Mangum(app)
+
+# run met : uvicorn app.main:app --reload --port 8001

@@ -2,7 +2,6 @@ import json
 from typing import Iterator, Dict, Any, Callable
 
 # --- Parsers importeren ---
-# Zorg dat de bestandsnaam klopt met wat je hebt (medimo_parser.py of parse_medimo_afdeling.py)
 from core.parsers.parse_medimo_afdeling import process_medimo_text_stream
 
 # --- Analyses importeren ---
@@ -12,15 +11,11 @@ from core.analyses.dubbelmedicatie.check_dubbelmedicatie import check_dubbelmedi
 from core.analyses.standaardvragen.check_standaardvragen import check_standaardvragen
 
 # ==============================================================================
-# PARSER REGISTRY (De "Verkeersregelaar")
+# PARSER REGISTRY
 # ==============================================================================
-# Hier koppel je (bron, scope) aan een specifieke parser functie.
-# Als je later 'pharmacom' toevoegt, hoef je alleen deze dict en de import aan te passen.
-
 PARSER_MAPPING: Dict[tuple, Callable] = {
     ("medimo", "afdeling"): process_medimo_text_stream,
-    ("medimo", "patient"): process_medimo_text_stream, # Voor nu dezelfde, later misschien anders?
-    # ("pharmacom", "patient"): process_pharmacom_stream,  <-- Toekomstmuziek
+    ("medimo", "patient"): process_medimo_text_stream,
 }
 
 def get_parser(source: str, scope: str) -> Callable:
@@ -32,11 +27,7 @@ def get_parser(source: str, scope: str) -> Callable:
 
 def run_review_service(text: str, source: str, scope: str) -> Iterator[Dict[str, Any]]:
     """
-    Orchestreert het hele proces:
-    1. Kiest de juiste Parser
-    2. Streamt parsing progress
-    3. Voert Analyses uit (STOPP, ACB, Dubbel, Vragen)
-    4. Geeft resultaat
+    Orchestreert het hele proces: Parser -> Analyses -> Resultaat.
     """
     
     # 1. Kies de juiste parser
@@ -46,15 +37,15 @@ def run_review_service(text: str, source: str, scope: str) -> Iterator[Dict[str,
         yield {"type": "error", "msg": f"Combinatie bron='{source}' en scope='{scope}' wordt nog niet ondersteund."}
         return
 
-    # 2. Start de stream (Generator)
+    # 2. Start de stream
     parser_stream = parser_func(text)
 
     for item in parser_stream:
-        # A. Progress/Status updates direct doorsturen naar frontend
+        # A. Progress updates doorsturen
         if item["type"] in ["status", "progress", "meta", "error"]:
             yield item
         
-        # B. Resultaat van parser binnen? Start analyses!
+        # B. Resultaat verwerken
         elif item["type"] == "result":
             raw_patients = item["data"] 
             afdeling = item.get("afdeling", "Onbekend")
@@ -63,12 +54,12 @@ def run_review_service(text: str, source: str, scope: str) -> Iterator[Dict[str,
             
             yield {"type": "status", "msg": "Analyses uitvoeren..."}
             
-            # Loop over patiënten (dit gaat in geheugen razendsnel)
             for patient in raw_patients:
                 meds = patient.get("geneesmiddelen", [])
                 
-                # Leeftijd uit parser (kan None zijn)
+                # Data uit parser halen
                 leeftijd = patient.get("leeftijd")
+                geboortedatum = patient.get("geboortedatum")
                 
                 # --- Analyses draaien ---
                 stopp_res = check_stopp_criteria(meds, leeftijd)
@@ -79,7 +70,8 @@ def run_review_service(text: str, source: str, scope: str) -> Iterator[Dict[str,
                 # Samenvoegen
                 analyzed_patients.append({
                     "naam": patient["naam"],
-                    "leeftijd": leeftijd, # Handig voor frontend om te tonen
+                    "leeftijd": leeftijd,
+                    "geboortedatum": geboortedatum, 
                     "geneesmiddelen": meds,
                     "analyses": {
                         "stopp": stopp_res,

@@ -345,12 +345,13 @@ def process_medimo_text_stream(text: str) -> Iterator[Dict[str, Any]]:
             med_entry["SPKode"] = spkode
             clean_meds.append(med_entry)
 
-    results.append({
-                "naam": patient_name,
-                "geboortedatum": dob_iso, # Voor weergave / DB
-                "leeftijd": age,          # Voor analyse logica (STOPP etc.)
-                "geneesmiddelen": clean_meds
-            })
+        # <--- CORRECTIE: Dit blok moet BINNEN de for-loop vallen!
+        results.append({
+            "naam": patient_name,
+            "geboortedatum": dob_iso, # Voor weergave / DB
+            "leeftijd": age,          # Voor analyse logica (STOPP etc.)
+            "geneesmiddelen": clean_meds
+        })
 
     conn.close()
     

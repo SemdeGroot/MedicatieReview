@@ -1,45 +1,60 @@
-import pandas as pd
+import json
+import sqlite3
 import os
-import sys
 
-def process_atc_excel(conn, file_path):
+def process_atc_json(conn: sqlite3.Connection, core_data_dir: str):
     """
-    Leest atc_jansen.xlsx en schrijft naar SQLite tabel 'atc_jansen'.
+    Leest JSON bestanden voor Jansen groepen en mappings en schrijft naar DB.
     """
-    filename = os.path.basename(file_path)
-    print(f"\n🔵 [ATC Parser] Start verwerken: {filename}")
+    print(f"\n🔵 [ATC Parser] Verwerken JSONs uit {core_data_dir}")
     
-    if not os.path.exists(file_path):
-        print(f"❌ Bestand niet gevonden: {file_path}")
+    # Paden
+    groups_path = os.path.join(core_data_dir, "jansen_groups.json")
+    mapping_path = os.path.join(core_data_dir, "atc_to_jansen.json")
+    
+    if not os.path.exists(groups_path) or not os.path.exists(mapping_path):
+        print(f"❌ JSON bestanden niet gevonden in {core_data_dir}")
         return
 
+    c = conn.cursor()
+
     try:
-        # Excel inlezen (vereist openpyxl)
-        # dtype=str zorgt dat alles tekst blijft
-        df = pd.read_excel(file_path, dtype=str, engine="openpyxl")
+        # 1. Jansen Groups tabel (ID -> Naam)
+        with open(groups_path, "r", encoding="utf-8") as f:
+            groups_data = json.load(f)
+            
+        c.execute("DROP TABLE IF EXISTS jansen_groups")
+        c.execute("CREATE TABLE jansen_groups (id INTEGER PRIMARY KEY, name TEXT)")
         
-        # Kolomnamen opschonen (spaties weg, lowercase mag ook, maar houden we origineel voor nu)
-        df.columns = [c.strip() for c in df.columns]
-        
-        # Data opschonen (strip whitespace van alle cellen)
-        df = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
+        c.executemany(
+            "INSERT INTO jansen_groups (id, name) VALUES (:id, :name)", 
+            groups_data
+        )
+        print(f"✅ {len(groups_data)} groepen geladen in 'jansen_groups'.")
 
-        # Tabelnaam
-        table_name = "atc_jansen"
+        # 2. ATC Mapping tabel (ATC -> ID)
+        with open(mapping_path, "r", encoding="utf-8") as f:
+            mapping_data = json.load(f)
+            
+        c.execute("DROP TABLE IF EXISTS atc_jansen_mapping")
+        c.execute("""
+            CREATE TABLE atc_jansen_mapping (
+                atc TEXT PRIMARY KEY, 
+                atc_desc TEXT,
+                group_id INTEGER,
+                FOREIGN KEY(group_id) REFERENCES jansen_groups(id)
+            )
+        """)
         
-        # Schrijven naar DB
-        df.to_sql(table_name, conn, if_exists="replace", index=False)
-        print(f"✅ {len(df)} rijen weggeschreven naar tabel '{table_name}'.")
-
-        # INDEX: Jij zoekt op 'ATC_groep' in lookup_atc3_info
-        if "ATC_groep" in df.columns:
-            c = conn.cursor()
-            # De index naam mag uniek zijn
-            c.execute(f"CREATE INDEX IF NOT EXISTS idx_atc_jansen_groep ON {table_name}(ATC_groep)")
-            conn.commit()
-            print("✅ Index op 'ATC_groep' aangemaakt.")
-        else:
-            print(f"⚠️  Let op: Kolom 'ATC_groep' niet gevonden.")
+        c.executemany(
+            "INSERT INTO atc_jansen_mapping (atc, atc_desc, group_id) VALUES (:atc, :atc_desc, :group_id)",
+            mapping_data
+        )
+        print(f"✅ {len(mapping_data)} mappings geladen in 'atc_jansen_mapping'.")
+        
+        # Index
+        c.execute("CREATE INDEX IF NOT EXISTS idx_atc_mapping ON atc_jansen_mapping(atc)")
+        conn.commit()
 
     except Exception as e:
-        print(f"❌ Fout bij verwerken ATC Excel: {e}")
+        print(f"❌ Fout bij verwerken JSONs: {e}")

@@ -233,8 +233,14 @@ def match_medicijn_sql(gm_clean: str, cursor) -> Tuple[Any, Any, Any]:
 def get_atc_details(atc_code: str, cursor) -> Dict:
     """Haalt omschrijvingen en Jansen groepen op."""
     out = {
-        "ATC": atc_code, "ATC3": None, "ATC4": None, "ATC5": None, "ATC7": None,
-        "ATC3_omschrijving": None, "ATC3_jansen": None,
+        "ATC": atc_code, 
+        "ATC3": None, "ATC4": None, "ATC5": None, "ATC7": None,
+        "ATC3_omschrijving": None, 
+        
+        # Nieuw: Jansen ID en Naam
+        "ATC3_jansen_id": None,   
+        "ATC3_jansen_naam": None,
+        
         "ATC4_omschrijving": None, "ATC5_omschrijving": None, "ATC7_omschrijving": None
     }
     if not atc_code: return out
@@ -244,13 +250,22 @@ def get_atc_details(atc_code: str, cursor) -> Dict:
     out["ATC5"] = atc_code[:5] if len(atc_code) >= 5 else None
     out["ATC7"] = atc_code[:7] if len(atc_code) >= 7 else None
 
-    # ATC3 Jansen
+    # ATC3 Jansen Lookup (Met JOIN voor ID + Naam)
     if out["ATC3"]:
-        cursor.execute("SELECT ATC_omschrijving, Jansen_omschrijving FROM atc_jansen WHERE ATC_groep = ?", (out["ATC3"],))
+        # Let op de tabelnamen: 'atc_jansen_mapping' en 'jansen_groups'
+        query = """
+            SELECT m.atc_desc, m.group_id, g.name 
+            FROM atc_jansen_mapping m
+            LEFT JOIN jansen_groups g ON m.group_id = g.id
+            WHERE m.atc = ?
+        """
+        cursor.execute(query, (out["ATC3"],))
         row = cursor.fetchone()
+        
         if row:
-            out["ATC3_omschrijving"] = row['ATC_omschrijving']
-            out["ATC3_jansen"] = row['Jansen_omschrijving']
+            out["ATC3_omschrijving"] = row['atc_desc']
+            out["ATC3_jansen_id"] = row['group_id']    # Integer ID
+            out["ATC3_jansen_naam"] = row['name']      # String Naam
 
     # BST801 Teksten
     codes = [out["ATC4"], out["ATC5"], out["ATC7"]]

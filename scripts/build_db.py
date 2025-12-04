@@ -2,56 +2,44 @@ import sqlite3
 import os
 import sys
 
-# Paden bepalen
+# Paden
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-RAW_DATA_DIR = os.path.join(BASE_DIR, "..", "raw_data")
-DATA_DIR = os.path.join(BASE_DIR, "..", "data")
+ROOT_DIR = os.path.join(BASE_DIR, "..")
+DATA_DIR = os.path.join(ROOT_DIR, "data")
 DB_PATH = os.path.join(DATA_DIR, "lookup.db")
 
-# Specifieke paden volgens jouw vraag
-# 1. G-Standaard map
-GST_DIR = os.path.join(RAW_DATA_DIR, "g-standaard")
+# Input mappen
+GST_DIR = os.path.join(ROOT_DIR, "raw_data", "g-standaard")
+ATCJANSEN_DATA_DIR = os.path.join(ROOT_DIR, "raw_data", "atc_jansen") # Hier staan de JSONs
 
-# 2. ATC Jansen Excel bestand
-ATC_FILE = os.path.join(RAW_DATA_DIR, "atc_jansen", "atc_jansen.xlsx")
-
-# Importeer de parsers
+# Import parser
 try:
-    from parsers.atc_groepen_parser import process_atc_excel
+    from parsers.atc_groepen_parser import process_atc_json # Nieuwe naam!
     from parsers.gstandaard_parser import process_gstandaard
 except ImportError:
     sys.path.append(BASE_DIR)
-    from parsers.atc_groepen_parser import process_atc_excel
+    from parsers.atc_groepen_parser import process_atc_json
     from parsers.gstandaard_parser import process_gstandaard
 
 def main():
     print(f"🚀 --- Start Build Database ---")
-    print(f"📂 G-Standaard map: {GST_DIR}")
-    print(f"📂 ATC bestand:     {ATC_FILE}")
-    print(f"💾 Database doel:   {DB_PATH}")
     
     os.makedirs(DATA_DIR, exist_ok=True)
-    
-    # Oude DB verwijderen
     if os.path.exists(DB_PATH):
         try:
             os.remove(DB_PATH)
-            print("🗑️  Oude database verwijderd.")
-        except PermissionError:
-            print("❌ Kan oude database niet verwijderen (is hij nog open?).")
-            return
+        except: pass
 
-    # Verbinding maken
     conn = sqlite3.connect(DB_PATH)
     
-    # 1. ATC Jansen (Excel)
-    process_atc_excel(conn, ATC_FILE)
+    # 1. ATC Jansen (JSON -> SQL)
+    process_atc_json(conn, ATCJANSEN_DATA_DIR)
     
-    # 2. G-Standaard (Map met tekstbestanden)
+    # 2. G-Standaard
     process_gstandaard(conn, GST_DIR)
     
     conn.close()
-    print("\n🎉 Database volledig opgebouwd!")
+    print("\n🎉 Database gereed!")
 
 if __name__ == "__main__":
     main()

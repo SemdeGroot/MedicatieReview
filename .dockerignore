@@ -4,5 +4,5 @@ __pycache__/
 .git/
 .env
 test_dev/
-scripts/    <-- Dit script heb je niet nodig in productie, dus niet kopiëren
-raw_data/   <-- De ruwe Excels heb je ook niet nodig, alleen de lookup.db
+scripts/
+raw_data/

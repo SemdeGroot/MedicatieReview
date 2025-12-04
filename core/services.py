@@ -1,70 +1,85 @@
-# core/services.py
 import json
-from typing import Iterator, Dict, Any
+from typing import Iterator, Dict, Any, Callable
 
-# Imports van jouw modules
-from core.parsers.medimo_parser import process_medimo_text_stream
+# --- Parsers importeren ---
+# Zorg dat de bestandsnaam klopt met wat je hebt (medimo_parser.py of parse_medimo_afdeling.py)
+from core.parsers.parse_medimo_afdeling import process_medimo_text_stream
+
+# --- Analyses importeren ---
 from core.analyses.start_stop.check_start_stop import check_stopp_criteria
 from core.analyses.anticholinerge_score.check_acb import bereken_acb_score
 from core.analyses.dubbelmedicatie.check_dubbelmedicatie import check_dubbelmedicatie
 from core.analyses.standaardvragen.check_standaardvragen import check_standaardvragen
 
+# ==============================================================================
+# PARSER REGISTRY (De "Verkeersregelaar")
+# ==============================================================================
+# Hier koppel je (bron, scope) aan een specifieke parser functie.
+# Als je later 'pharmacom' toevoegt, hoef je alleen deze dict en de import aan te passen.
+
+PARSER_MAPPING: Dict[tuple, Callable] = {
+    ("medimo", "afdeling"): process_medimo_text_stream,
+    ("medimo", "patient"): process_medimo_text_stream, # Voor nu dezelfde, later misschien anders?
+    # ("pharmacom", "patient"): process_pharmacom_stream,  <-- Toekomstmuziek
+}
+
+def get_parser(source: str, scope: str) -> Callable:
+    return PARSER_MAPPING.get((source, scope))
+
+# ==============================================================================
+# MAIN SERVICE
+# ==============================================================================
+
 def run_review_service(text: str, source: str, scope: str) -> Iterator[Dict[str, Any]]:
     """
     Orchestreert het hele proces:
-    1. Parsing (streamed progress)
-    2. Analyses (STOPP, ACB, Dubbel, Vragen)
-    3. Final Result
+    1. Kiest de juiste Parser
+    2. Streamt parsing progress
+    3. Voert Analyses uit (STOPP, ACB, Dubbel, Vragen)
+    4. Geeft resultaat
     """
     
-    # 1. Validatie (voor nu simpel)
-    if source != "medimo":
-        yield {"type": "error", "msg": f"Bron '{source}' nog niet ondersteund."}
+    # 1. Kies de juiste parser
+    parser_func = get_parser(source, scope)
+    
+    if not parser_func:
+        yield {"type": "error", "msg": f"Combinatie bron='{source}' en scope='{scope}' wordt nog niet ondersteund."}
         return
 
-    # We gebruiken de stream generator van de parser
-    # Dit zorgt dat de frontend al procentjes ziet lopen terwijl Python bezig is
-    parser_stream = process_medimo_text_stream(text)
+    # 2. Start de stream (Generator)
+    parser_stream = parser_func(text)
 
     for item in parser_stream:
-        # A. Progress updates direct doorsturen
-        if item["type"] in ["status", "progress", "meta"]:
+        # A. Progress/Status updates direct doorsturen naar frontend
+        if item["type"] in ["status", "progress", "meta", "error"]:
             yield item
         
-        # B. Resultaat binnen? Nu gaan we analyseren!
+        # B. Resultaat van parser binnen? Start analyses!
         elif item["type"] == "result":
-            raw_patients = item["data"] # Lijst met patiënten en hun 'clean' medicatie
+            raw_patients = item["data"] 
             afdeling = item.get("afdeling", "Onbekend")
             
             analyzed_patients = []
             
-            # --- START ANALYSES ---
-            yield {"type": "status", "msg": "Analyses uitvoeren (STOPP, ACB, etc.)..."}
+            yield {"type": "status", "msg": "Analyses uitvoeren..."}
             
-            total_pat = len(raw_patients)
-            for i, patient in enumerate(raw_patients):
-                # Voortgang van analyse fase (optioneel, gaat vaak heel snel)
-                # yield {"type": "progress", "pct": 90 + int((i/total_pat)*10), "msg": "Analyseren..."}
-
+            # Loop over patiënten (dit gaat in geheugen razendsnel)
+            for patient in raw_patients:
                 meds = patient.get("geneesmiddelen", [])
                 
-                # Leeftijd uit gb datum gehaald
+                # Leeftijd uit parser (kan None zijn)
                 leeftijd = patient.get("leeftijd")
-                # 1. STOPP
+                
+                # --- Analyses draaien ---
                 stopp_res = check_stopp_criteria(meds, leeftijd)
-                
-                # 2. ACB
                 acb_score, acb_interp, acb_bijdrage = bereken_acb_score(meds)
-                
-                # 3. Dubbelmedicatie
                 dubbel_res = check_dubbelmedicatie(meds)
-                
-                # 4. Standaard Vragen
                 vragen_res = check_standaardvragen(meds, leeftijd)
 
-                # Alles samenvoegen
+                # Samenvoegen
                 analyzed_patients.append({
                     "naam": patient["naam"],
+                    "leeftijd": leeftijd, # Handig voor frontend om te tonen
                     "geneesmiddelen": meds,
                     "analyses": {
                         "stopp": stopp_res,

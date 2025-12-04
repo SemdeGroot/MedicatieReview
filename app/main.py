@@ -8,7 +8,7 @@ from mangum import Mangum
 from app.models import ReviewRequest
 from core.services import run_review_service
 
-app = FastAPI(title="Medimo Review API", version="2.0.0")
+app = FastAPI(title="Medicatiereview API", version="2.0.0")
 
 # CORS instellen (belangrijk voor je frontend)
 app.add_middleware(

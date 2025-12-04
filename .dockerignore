@@ -1,21 +1,8 @@
+# .dockerignore
+venv/
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.log
-.env
-.venv/
-Data/Temp/
 .git/
-.gitignore
-*.ipynb
-
-# Negeer alles in G-Standaard behalve een paar files die we gebruiken
-G-Standaard/*
-!G-Standaard/BST020T
-!G-Standaard/BST004T
-!G-Standaard/BST052T
-!G-Standaard/BST070T
-!G-Standaard/BST711T
-!G-Standaard/BST031T
-!G-Standaard/BST801T
+.env
+test_dev/
+scripts/    <-- Dit script heb je niet nodig in productie, dus niet kopiëren
+raw_data/   <-- De ruwe Excels heb je ook niet nodig, alleen de lookup.db

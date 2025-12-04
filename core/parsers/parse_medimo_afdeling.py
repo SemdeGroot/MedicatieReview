@@ -82,28 +82,32 @@ def parse_medimo_block(block: str) -> List[Dict]:
         i += 1
     return geneesmiddelen
 
-def extract_patient_details(header_line: str) -> Tuple[str, Optional[int]]:
+def extract_patient_details(header_line: str) -> Tuple[str, Optional[str], Optional[int]]:
     """
-    Haalt naam en leeftijd uit de header regel.
-    Output: ("Mevr. M Curie", 81) of ("Mevr. X", None)
+    Haalt naam, geboortedatum (string) en leeftijd (int) uit de header.
+    Format: "Mevr. X (01-01-1950)"
+    Returns: (Naam, "1950-01-01", 74)
     """
     match = re.search(r"\((\d{1,2}-\d{1,2}-\d{4})\)", header_line)
     
     naam = header_line
-    leeftijd = None  # <--- AANPASSING: Standaard None (niet 0)
+    dob_iso = None
+    leeftijd = None
     
     if match:
         datum_str = match.group(1)
         naam = header_line.replace(f"({datum_str})", "").strip()
-        
         try:
-            dob = datetime.strptime(datum_str, "%d-%m-%Y")
-            today = datetime.today()
+            dob = datetime.strptime(datum_str, "%d-%m-%Y").date()
+            dob_iso = dob.isoformat()
+            
+            # Bereken leeftijd voor analyses
+            today = datetime.today().date()
             leeftijd = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
         except ValueError:
-            pass # Formaat fout? Dan blijft leeftijd None
+            pass
 
-    return naam, leeftijd
+    return naam, dob_iso, leeftijd
 
 # ==============================================================================
 # CORE LOGICA (SQL VERVANGING)
@@ -314,7 +318,7 @@ def process_medimo_text_stream(text: str) -> Iterator[Dict[str, Any]]:
         header_line = block.split("\n")[0].strip()
         
         # NIEUW: Gebruik de helper om naam én leeftijd te splitsen
-        patient_name, leeftijd = extract_patient_details(header_line)
+        patient_name, dob_iso, age = extract_patient_details(header_line)
         
         gm_list = parse_medimo_block(block)
         
@@ -341,12 +345,13 @@ def process_medimo_text_stream(text: str) -> Iterator[Dict[str, Any]]:
             med_entry["SPKode"] = spkode
             clean_meds.append(med_entry)
 
-        results.append({
-            "naam": patient_name,
-            "leeftijd": leeftijd,  # <--- NIEUW: Voeg leeftijd toe aan resultaat
-            "geneesmiddelen": clean_meds
-        })
-    
+    results.append({
+                "naam": patient_name,
+                "geboortedatum": dob_iso, # Voor weergave / DB
+                "leeftijd": age,          # Voor analyse logica (STOPP etc.)
+                "geneesmiddelen": clean_meds
+            })
+
     conn.close()
     
     # 4. Final Result

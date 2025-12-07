@@ -215,10 +215,10 @@
          {
             "id": "VRAAG 1",
             "type": "NERVOUS SYSTEM",
-            "subtype": "",
-            "description": "",
+            "subtype": "ANALGESICS",
+            "description": "Is de pijn onder controle?",
             "argument": "",
-            "group_codes": [],
+            "group_codes": ["N02"],
             "substances": [],
             "combination_x": [],
             "combination_y": [],

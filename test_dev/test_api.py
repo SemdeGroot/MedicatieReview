@@ -107,6 +107,8 @@ def verwerk_resultaat(data):
             print(f"   ❓ Standaardvragen ({len(vragen)}):")
             for v in vragen:
                 print(f"       - {v['vraag']}")
+        else:
+            print("   ✅ Standaardvragen: Geen bijzonderheden")
 
 if __name__ == "__main__":
     test_with_real_file()

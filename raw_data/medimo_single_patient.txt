@@ -1,0 +1,30 @@
+Medicatie T-ABC	Dosering	Ingang per	Stopt per
+C Acetylsalicylzuur 80mg disp	1 - 0 - 0 - 0 stuks	01-12-2022	
+C Colecalciferol 2800ie table	2 - 0 - 0 - 0 stuks, 1x per week Mag worden gemalen. = Vitamine D	06-10-2024	
+C Enalapril 20mg tablet	1 - 0 - 0 - 0 stuks	28-07-2024	
+C Hylo-dual 0,5/20mg/ml oogdr	x - 0 - 0 - 0 druppels 3 dd 1 druppel in beide ogen op voorschrift van opticien	03-01-2025	
+C Omeprazol 20mg capsule msr	1 - 0 - 0 - 0 stuks	01-12-2022	
+C Rosuvastatine 5mg tablet	1 - 0 - 0 - 0 stuks	01-12-2022	
+C Zinkolie ej swaab	0 - 0 - 0 - 1 stuks In beide liezen, mag z.n. ook in de ochtend extra op de liezen gesmeerd worden.	16-06-2023	
+Z Hylo-dual 0,5/20mg/ml oogdr	Zo nodig 0 - 0 - 0 - 0 druppels zo nodig bij droge ogen 2-3 maal daags extra	03-01-2025	
+Z Lorazepam 1mg tabletARBO	Zo nodig 0 - 0 - 0 - 0 stuks zo nodig 0,5 mg , max 2 maal daags	12-11-2025	
+‎
+Episodes
+- F01 Pijn oog
+- F03.01 Tranende ogen
+- P06.01 Slaapapnoesyndroom
+- R97 Hooikoorts/allergische rinitis
+- Y85 Benigne prostaathypertrofie
+- K92.01 Claudicatio intermittens
+- K86 Essentiële hypertensie zonder orgaanbeschadiging
+- K76.01 Coronairsclerose
+- A91.06 Subklinische hypothyreoïdie
+- P70 Seniele dementie/Alzheimer
+‎
+Contra-indicaties
+- Onbekend of er contra-indicaties zijn
+‎
+Allergieën / Intoleranties
+- Onbekend of er allergieën/intoleranties zijn
+‎
+‏

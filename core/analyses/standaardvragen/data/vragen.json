@@ -27,6 +27,8 @@
             "subtype": "DRUGS FOR PEPTIC ULCER AND GASTRO-OESOPHAGEAL REFLUX DISEASE (GORD)",
             "description": "Maagzuurremmer voortzetten?",
             "argument": "De gebruikte geneesmiddelen vragen niet om een maagzuurremmer",
+            "icpc_codes" : [],
+            "NOT_icpc_codes" : [],
             "group_codes": ["A02B"],
             "substances": [],
             "combination_x": [],

@@ -45,7 +45,6 @@ jobs:
           push: true
           tags: |
             ${{ env.ECR_URI }}:${{ github.sha }}
-            ${{ env.ECR_URI }}:latest
           cache-from: |
             type=gha,scope=medicatiereview-lambda
           cache-to: |

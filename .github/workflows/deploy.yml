@@ -52,6 +52,8 @@ jobs:
             type=gha,mode=max,scope=medicatiereview-lambda
           build-args: |
             BUILDKIT_INLINE_CACHE=1
+          provenance: false
+          sbom: false
 
       - name: Deploy image to Lambda
         run: |

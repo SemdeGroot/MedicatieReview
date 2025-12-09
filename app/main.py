@@ -1,4 +1,6 @@
 # app/main.py
+from dotenv import load_dotenv
+load_dotenv()
 import json
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse

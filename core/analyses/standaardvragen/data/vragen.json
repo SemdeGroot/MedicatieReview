@@ -1,10 +1,10 @@
 {
   "definition": {
     "id": "",
+    "title": "",
     "category_atc_code": "",
     "subcategory_atc_code": "",
-    "description": "",
-    "argument": ""
+    "description": ""
   },
   "activation": {
     "primary_triggers": []

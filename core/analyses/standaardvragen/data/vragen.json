@@ -1,24 +1,24 @@
 {
-    "version": "2.0",
-    "last_modified": "2025-12-08",
-    "criteria": [
-        {
-            "id": "VRAAG 1",
-            "title": "Maagzuurremmer evaluatie",
-            "category": "A - Spijsverteringskanaal en stofwisseling",
-            "subcategory": "A02 - Middelen bij maagzuur",
-            "description": "Is de maagzuurremmer nog geïndiceerd?",
-            "argument": "Er is geen co-medicatie die maagbescherming vereist.",
-            "logic_rules": {
-                "triggers": ["A02BC"],
-                "required_co_medication": [],     
-                "excluded_co_medication": ["M01A", "B01AC"], 
-                "requires_at_least_one_of": []
-            },
-            "filters": {
-                "age_min": 70,
-                "egfr_max": null
-            }
-        }
-    ]
+  "definition": {
+    "id": "",
+    "category_atc_code": "",
+    "subcategory_atc_code": "",
+    "description": "",
+    "argument": ""
+  },
+  "activation": {
+    "primary_triggers": []
+  },
+  "logic_rules": [
+    {
+      "type": "ATC",
+      "boolean_operator": "AND",
+      "trigger_codes": []
+    },
+    {
+      "type": "ATC",
+      "boolean_operator": "AND_NOT",
+      "trigger_codes": []
+    }
+  ]
 }

@@ -1,17 +1,20 @@
-# Gebruik de AWS Lambda Python image
+# syntax=docker/dockerfile:1.7
+
+# AWS Lambda Python base image
 FROM public.ecr.aws/lambda/python:3.11
 
-# Installeer dependencies
-COPY requirements.txt ${LAMBDA_TASK_ROOT}
-RUN pip install --no-cache-dir -r requirements.txt
+# Standaard werkdirectory voor Lambda containers
+WORKDIR /var/task
 
-# Kopieer de applicatie code
-COPY app/ ${LAMBDA_TASK_ROOT}/app/
-COPY core/ ${LAMBDA_TASK_ROOT}/core/
+# 1) requirements eerst, voor layer caching
+COPY requirements.txt .
 
-# Kopieer de data (database en json files)
-# Let op: Zorg dat je 'scripts/build_db.py' hebt gedraaid zodat lookup.db bestaat!
-COPY data/ ${LAMBDA_TASK_ROOT}/data/
+# 2) pip install met BuildKit cache (zoals bij je EC2 image)
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --no-cache-dir -r requirements.txt
 
-# Start commando voor Mangum
-CMD [ "app.main.handler" ]
+# 3) daarna de rest van je code (hele repo)
+COPY . .
+
+# Lambda entrypoint: handler = Mangum(app) in app/main.py
+CMD ["app.main.handler"]

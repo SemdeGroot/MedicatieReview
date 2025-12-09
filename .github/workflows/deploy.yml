@@ -1,0 +1,62 @@
+name: build-and-deploy-medicatiereview-lambda
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy-lambda:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: eu-central-1
+      LAMBDA_FUNCTION_NAME: medicatiereview
+      ECR_URI: 495236579960.dkr.ecr.eu-central-1.amazonaws.com/medicatiereview
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS creds (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::495236579960:role/Github-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push Lambda image (ARM64) with cache
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/arm64
+          push: true
+          tags: |
+            ${{ env.ECR_URI }}:${{ github.sha }}
+            ${{ env.ECR_URI }}:latest
+          cache-from: |
+            type=gha,scope=medicatiereview-lambda
+          cache-to: |
+            type=gha,mode=max,scope=medicatiereview-lambda
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+
+      - name: Deploy image to Lambda
+        run: |
+          IMAGE_URI="${ECR_URI}:${GITHUB_SHA}"
+          echo "Updating Lambda function code to image: $IMAGE_URI"
+          aws lambda update-function-code \
+            --function-name "${LAMBDA_FUNCTION_NAME}" \
+            --image-uri "${IMAGE_URI}"

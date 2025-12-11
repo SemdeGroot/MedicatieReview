@@ -1,86 +1,422 @@
 [
-  {"atc": "A01", "atc_desc": "MONDPREPARATEN", "group_id": 1},
-  {"atc": "A02", "atc_desc": "MIDDELEN BIJ ZUURGERELATEERDE AFWIJKINGEN", "group_id": 2},
-  {"atc": "A03", "atc_desc": "MIDDELEN BIJ FUNCTIONELE MAAGDARMSTOORNISSEN", "group_id": 2},
-  {"atc": "A04", "atc_desc": "ANTI-EMETICA", "group_id": 2},
-  {"atc": "A05", "atc_desc": "GAL- EN LEVERTHERAPEUTICA", "group_id": 3},
-  {"atc": "A06", "atc_desc": "MIDDELEN BIJ OBSTIPATIE", "group_id": 2},
-  {"atc": "A07", "atc_desc": "ANTIDIARRHOICA, ANTI-INFLAMM./ANTIMICROBIELE DARMMIDDELEN", "group_id": 2},
-  {"atc": "A08", "atc_desc": "VERMAGERINGSMIDDELEN, EXCLUSIEF DIEETPRODUCTEN", "group_id": 2},
-  {"atc": "A10", "atc_desc": "DIABETESMIDDELEN", "group_id": 4},
-  {"atc": "A11", "atc_desc": "VITAMINEN", "group_id": 5},
-  {"atc": "A12", "atc_desc": "MINERAALSUPPLEMENTEN", "group_id": 5},
-  {"atc": "A14", "atc_desc": "ANABOLICA VOOR SYSTEMISCH GEBRUIK", "group_id": 6},
-  {"atc": "A16", "atc_desc": "OVERIGE MAAGDARMKANAAL- EN METABOLISMEPRODUCTEN", "group_id": 2},
-  {"atc": "B01", "atc_desc": "ANTITHROMBOTICA", "group_id": 7},
-  {"atc": "B02", "atc_desc": "ANTIHAEMORRHAGICA", "group_id": 8},
-  {"atc": "B03", "atc_desc": "MIDDELEN BIJ ANEMIE", "group_id": 9},
-  {"atc": "B05", "atc_desc": "BLOEDVERVANGINGSMIDDELEN EN PERFUSIEVLOEISTOFFEN", "group_id": 10},
-  {"atc": "B06", "atc_desc": "OVERIGE HEMATOLOGISCHE MIDDELEN", "group_id": 10},
-  {"atc": "C01", "atc_desc": "CARDIACA", "group_id": 7},
-  {"atc": "C02", "atc_desc": "ANTIHYPERTENSIVA", "group_id": 7},
-  {"atc": "C03", "atc_desc": "DIURETICA", "group_id": 7},
-  {"atc": "C04", "atc_desc": "PERIFERE VASODILATANTIA", "group_id": 7},
-  {"atc": "C05", "atc_desc": "VASOPROTECTIVA", "group_id": 7},
-  {"atc": "C07", "atc_desc": "BETA-BLOKKERS", "group_id": 7},
-  {"atc": "C08", "atc_desc": "CALCIUMANTAGONISTEN", "group_id": 7},
-  {"atc": "C09", "atc_desc": "MIDDELEN AANGRIJPEND OP HET RENINE-ANGIOTENSINESYSTEEM", "group_id": 7},
-  {"atc": "C10", "atc_desc": "ANTILIPAEMICA", "group_id": 7},
-  {"atc": "D01", "atc_desc": "ANTIMYCOTICA VOOR DERMATOLOGISCH GEBRUIK", "group_id": 11},
-  {"atc": "D02", "atc_desc": "EMOLLIENTIA EN PROTECTIVA", "group_id": 11},
-  {"atc": "D03", "atc_desc": "WOND- EN ULCUSMIDDELEN", "group_id": 11},
-  {"atc": "D04", "atc_desc": "ANTIPRURITICA, INCL.ANTIHISTAMINICA, ANAESTHETICA ETC.", "group_id": 11},
-  {"atc": "D05", "atc_desc": "PSORIASISMIDDELEN", "group_id": 11},
-  {"atc": "D06", "atc_desc": "ANTIMICROBIELE MIDDELEN VOOR DERMATOLOGISCH GEBRUIK", "group_id": 11},
-  {"atc": "D07", "atc_desc": "DERMATOLOGISCHE CORTICOSTEROIDEN", "group_id": 11},
-  {"atc": "D08", "atc_desc": "DESINFECTANTIA", "group_id": 11},
-  {"atc": "D10", "atc_desc": "ACNEPREPARATEN", "group_id": 11},
-  {"atc": "D11", "atc_desc": "OVERIGE DERMATOLOGISCHE PREPARATEN", "group_id": 11},
-  {"atc": "G01", "atc_desc": "GYNAECOLOGISCHE ANTIMICROBIELE MIDDELEN", "group_id": 12},
-  {"atc": "G02", "atc_desc": "OVERIGE GYNAECOLOGISCHE MIDDELEN", "group_id": 12},
-  {"atc": "G03", "atc_desc": "GESLACHTSHORMONEN EN MODULATOREN VAN HET GENITALE STELSEL", "group_id": 12},
-  {"atc": "G04", "atc_desc": "UROLOGICA", "group_id": 12},
-  {"atc": "H01", "atc_desc": "HYPOFYSE- EN HYPOTHALAMUSHORMONEN EN VERWANTE VERBINDINGEN", "group_id": 13},
-  {"atc": "H02", "atc_desc": "CORTICOSTEROIDEN VOOR SYSTEMISCH GEBRUIK", "group_id": 14},
-  {"atc": "H03", "atc_desc": "SCHILDKLIERMIDDELEN", "group_id": 15},
-  {"atc": "H04", "atc_desc": "PANCREASHORMONEN", "group_id": 16},
-  {"atc": "H05", "atc_desc": "CALCIUMREGULERENDE MIDDELEN", "group_id": 17},
-  {"atc": "J01", "atc_desc": "ANTIBACTERIELE MIDDELEN VOOR SYSTEMISCH GEBRUIK", "group_id": 18},
-  {"atc": "J02", "atc_desc": "ANTIMYCOTICA VOOR SYSTEMISCH GEBRUIK", "group_id": 19},
-  {"atc": "J04", "atc_desc": "ANTIMYCOBACTERIELE MIDDELEN", "group_id": 20},
-  {"atc": "J05", "atc_desc": "ANTIVIRALE MIDDELEN VOOR SYSTEMISCH GEBRUIK", "group_id": 21},
-  {"atc": "J06", "atc_desc": "SERA EN IMMUNOGLOBULINEN", "group_id": 22},
-  {"atc": "J07", "atc_desc": "VACCINS", "group_id": 23},
-  {"atc": "L01", "atc_desc": "ONCOLYTICA", "group_id": 24},
-  {"atc": "L02", "atc_desc": "HORMONEN", "group_id": 25},
-  {"atc": "L03", "atc_desc": "IMMUNOSTIMULANTIA", "group_id": 26},
-  {"atc": "L04", "atc_desc": "IMMUNOSUPPRESSIVA", "group_id": 27},
-  {"atc": "M01", "atc_desc": "ANTI-INFLAMMATOIRE EN ANTIREUMATISCHE MIDDELEN", "group_id": 28},
-  {"atc": "M02", "atc_desc": "LOKALE ANTIRHEUMATICA", "group_id": 28},
-  {"atc": "M03", "atc_desc": "SPIERRELAXANTIA", "group_id": 29},
-  {"atc": "M04", "atc_desc": "JICHTMIDDELEN", "group_id": 30},
-  {"atc": "M05", "atc_desc": "MIDDELEN BIJ BOTZIEKTEN", "group_id": 5},
-  {"atc": "M09", "atc_desc": "OVERIGE MIDDELEN BIJ ZIEKTEN VAN HET SKELETSPIERSTELSEL", "group_id": 31},
-  {"atc": "N01", "atc_desc": "ANAESTHETICA", "group_id": 28},
-  {"atc": "N02", "atc_desc": "ANALGETICA", "group_id": 28},
-  {"atc": "N03", "atc_desc": "ANTI-EPILEPTICA", "group_id": 32},
-  {"atc": "N04", "atc_desc": "PARKINSONMIDDELEN", "group_id": 33},
-  {"atc": "N05", "atc_desc": "PSYCHOLEPTICA", "group_id": 32},
-  {"atc": "N06", "atc_desc": "PSYCHOANALEPTICA", "group_id": 32},
-  {"atc": "N07", "atc_desc": "OVERIGE MIDDELEN WERKZAAM OP HET ZENUWSTELSEL", "group_id": 10},
-  {"atc": "P01", "atc_desc": "ANTIPROTOZOICA", "group_id": 34},
-  {"atc": "P02", "atc_desc": "ANTHELMINTHICA", "group_id": 35},
-  {"atc": "P03", "atc_desc": "SCABIES- PEDICULOSE- INSECTICIDEN INSECTENWERENDE MIDDELEN", "group_id": 11},
-  {"atc": "R01", "atc_desc": "MIDDELEN VOOR NASAAL GEBRUIK", "group_id": 36},
-  {"atc": "R02", "atc_desc": "OROFARYNGEALE MIDDELEN", "group_id": 10},
-  {"atc": "R03", "atc_desc": "MIDDELEN BIJ ASTMA/COPD", "group_id": 37},
-  {"atc": "R05", "atc_desc": "HOEST- EN VERKOUDHEIDSMIDDELEN", "group_id": 38},
-  {"atc": "R06", "atc_desc": "ANTIHISTAMINICA VOOR SYSTEMISCH GEBRUIK", "group_id": 39},
-  {"atc": "R07", "atc_desc": "OVERIGE MIDDELEN VOOR HET ADEMHALINGSSTELSEL", "group_id": 36},
-  {"atc": "S01", "atc_desc": "MIDDELEN VOOR OOGHEELKUNDIG GEBRUIK", "group_id": 40},
-  {"atc": "S02", "atc_desc": "MIDDELEN VOOR OORHEELKUNDIG GEBRUIK", "group_id": 41},
-  {"atc": "S03", "atc_desc": "OOG- EN OORHEELKUNDIGE MIDDELEN", "group_id": 40},
-  {"atc": "V03", "atc_desc": "ALLE OVERIGE THERAPEUTISCHE MIDDELEN", "group_id": 10},
-  {"atc": "V04", "atc_desc": "DIAGNOSTICA", "group_id": 10},
-  {"atc": "V07", "atc_desc": "OVERIGE NIET-THERAPEUTISCHE MIDDELEN", "group_id": 10}
+  {
+    "atc": "A01",
+    "atc_desc": "MONDPREPARATEN",
+    "group_id": 33
+  },
+  {
+    "atc": "A02",
+    "atc_desc": "MIDDELEN BIJ ZUURGERELATEERDE AFWIJKINGEN",
+    "group_id": 24
+  },
+  {
+    "atc": "A03",
+    "atc_desc": "MIDDELEN BIJ FUNCTIONELE MAAGDARMSTOORNISSEN",
+    "group_id": 24
+  },
+  {
+    "atc": "A04",
+    "atc_desc": "ANTI-EMETICA",
+    "group_id": 24
+  },
+  {
+    "atc": "A05",
+    "atc_desc": "GAL- EN LEVERTHERAPEUTICA",
+    "group_id": 25
+  },
+  {
+    "atc": "A06",
+    "atc_desc": "MIDDELEN BIJ OBSTIPATIE",
+    "group_id": 24
+  },
+  {
+    "atc": "A07",
+    "atc_desc": "ANTIDIARRHOICA, ANTI-INFLAMM./ANTIMICROBIELE DARMMIDDELEN",
+    "group_id": 24
+  },
+  {
+    "atc": "A08",
+    "atc_desc": "VERMAGERINGSMIDDELEN, EXCLUSIEF DIEETPRODUCTEN",
+    "group_id": 24
+  },
+  {
+    "atc": "A10",
+    "atc_desc": "DIABETESMIDDELEN",
+    "group_id": 5
+  },
+  {
+    "atc": "A11",
+    "atc_desc": "VITAMINEN",
+    "group_id": 7
+  },
+  {
+    "atc": "A12",
+    "atc_desc": "MINERAALSUPPLEMENTEN",
+    "group_id": 7
+  },
+  {
+    "atc": "A14",
+    "atc_desc": "ANABOLICA VOOR SYSTEMISCH GEBRUIK",
+    "group_id": 41
+  },
+  {
+    "atc": "A16",
+    "atc_desc": "OVERIGE MAAGDARMKANAAL- EN METABOLISMEPRODUCTEN",
+    "group_id": 24
+  },
+  {
+    "atc": "B01",
+    "atc_desc": "ANTITHROMBOTICA",
+    "group_id": 3
+  },
+  {
+    "atc": "B02",
+    "atc_desc": "ANTIHAEMORRHAGICA",
+    "group_id": 3
+  },
+  {
+    "atc": "B03",
+    "atc_desc": "MIDDELEN BIJ ANEMIE",
+    "group_id": 12
+  },
+  {
+    "atc": "B05",
+    "atc_desc": "BLOEDVERVANGINGSMIDDELEN EN PERFUSIEVLOEISTOFFEN",
+    "group_id": 43
+  },
+  {
+    "atc": "B06",
+    "atc_desc": "OVERIGE HEMATOLOGISCHE MIDDELEN",
+    "group_id": 43
+  },
+  {
+    "atc": "C01",
+    "atc_desc": "CARDIACA",
+    "group_id": 3
+  },
+  {
+    "atc": "C02",
+    "atc_desc": "ANTIHYPERTENSIVA",
+    "group_id": 3
+  },
+  {
+    "atc": "C03",
+    "atc_desc": "DIURETICA",
+    "group_id": 3
+  },
+  {
+    "atc": "C04",
+    "atc_desc": "PERIFERE VASODILATANTIA",
+    "group_id": 3
+  },
+  {
+    "atc": "C05",
+    "atc_desc": "VASOPROTECTIVA",
+    "group_id": 3
+  },
+  {
+    "atc": "C07",
+    "atc_desc": "BETA-BLOKKERS",
+    "group_id": 3
+  },
+  {
+    "atc": "C08",
+    "atc_desc": "CALCIUMANTAGONISTEN",
+    "group_id": 3
+  },
+  {
+    "atc": "C09",
+    "atc_desc": "MIDDELEN AANGRIJPEND OP HET RENINE-ANGIOTENSINESYSTEEM",
+    "group_id": 3
+  },
+  {
+    "atc": "C10",
+    "atc_desc": "ANTILIPAEMICA",
+    "group_id": 3
+  },
+  {
+    "atc": "D01",
+    "atc_desc": "ANTIMYCOTICA VOOR DERMATOLOGISCH GEBRUIK",
+    "group_id": 28
+  },
+  {
+    "atc": "D02",
+    "atc_desc": "EMOLLIENTIA EN PROTECTIVA",
+    "group_id": 28
+  },
+  {
+    "atc": "D03",
+    "atc_desc": "WOND- EN ULCUSMIDDELEN",
+    "group_id": 28
+  },
+  {
+    "atc": "D04",
+    "atc_desc": "ANTIPRURITICA, INCL.ANTIHISTAMINICA, ANAESTHETICA ETC.",
+    "group_id": 28
+  },
+  {
+    "atc": "D05",
+    "atc_desc": "PSORIASISMIDDELEN",
+    "group_id": 28
+  },
+  {
+    "atc": "D06",
+    "atc_desc": "ANTIMICROBIELE MIDDELEN VOOR DERMATOLOGISCH GEBRUIK",
+    "group_id": 28
+  },
+  {
+    "atc": "D07",
+    "atc_desc": "DERMATOLOGISCHE CORTICOSTEROIDEN",
+    "group_id": 28
+  },
+  {
+    "atc": "D08",
+    "atc_desc": "DESINFECTANTIA",
+    "group_id": 28
+  },
+  {
+    "atc": "D10",
+    "atc_desc": "ACNEPREPARATEN",
+    "group_id": 28
+  },
+  {
+    "atc": "D11",
+    "atc_desc": "OVERIGE DERMATOLOGISCHE PREPARATEN",
+    "group_id": 28
+  },
+  {
+    "atc": "G01",
+    "atc_desc": "GYNAECOLOGISCHE ANTIMICROBIELE MIDDELEN",
+    "group_id": 29
+  },
+  {
+    "atc": "G02",
+    "atc_desc": "OVERIGE GYNAECOLOGISCHE MIDDELEN",
+    "group_id": 29
+  },
+  {
+    "atc": "G03",
+    "atc_desc": "GESLACHTSHORMONEN EN MODULATOREN VAN HET GENITALE STELSEL",
+    "group_id": 29
+  },
+  {
+    "atc": "G04",
+    "atc_desc": "UROLOGICA",
+    "group_id": 29
+  },
+  {
+    "atc": "H01",
+    "atc_desc": "HYPOFYSE- EN HYPOTHALAMUSHORMONEN EN VERWANTE VERBINDINGEN",
+    "group_id": 20
+  },
+  {
+    "atc": "H02",
+    "atc_desc": "CORTICOSTEROIDEN VOOR SYSTEMISCH GEBRUIK",
+    "group_id": 22
+  },
+  {
+    "atc": "H03",
+    "atc_desc": "SCHILDKLIERMIDDELEN",
+    "group_id": 21
+  },
+  {
+    "atc": "H04",
+    "atc_desc": "PANCREASHORMONEN",
+    "group_id": 27
+  },
+  {
+    "atc": "H05",
+    "atc_desc": "CALCIUMREGULERENDE MIDDELEN",
+    "group_id": 26
+  },
+  {
+    "atc": "J01",
+    "atc_desc": "ANTIBACTERIELE MIDDELEN VOOR SYSTEMISCH GEBRUIK",
+    "group_id": 16
+  },
+  {
+    "atc": "J02",
+    "atc_desc": "ANTIMYCOTICA VOOR SYSTEMISCH GEBRUIK",
+    "group_id": 17
+  },
+  {
+    "atc": "J04",
+    "atc_desc": "ANTIMYCOBACTERIELE MIDDELEN",
+    "group_id": 18
+  },
+  {
+    "atc": "J05",
+    "atc_desc": "ANTIVIRALE MIDDELEN VOOR SYSTEMISCH GEBRUIK",
+    "group_id": 19
+  },
+  {
+    "atc": "J06",
+    "atc_desc": "SERA EN IMMUNOGLOBULINEN",
+    "group_id": 36
+  },
+  {
+    "atc": "J07",
+    "atc_desc": "VACCINS",
+    "group_id": 35
+  },
+  {
+    "atc": "L01",
+    "atc_desc": "ONCOLYTICA",
+    "group_id": 37
+  },
+  {
+    "atc": "L02",
+    "atc_desc": "HORMONEN",
+    "group_id": 23
+  },
+  {
+    "atc": "L03",
+    "atc_desc": "IMMUNOSTIMULANTIA",
+    "group_id": 39
+  },
+  {
+    "atc": "L04",
+    "atc_desc": "IMMUNOSUPPRESSIVA",
+    "group_id": 40
+  },
+  {
+    "atc": "M01",
+    "atc_desc": "ANTI-INFLAMMATOIRE EN ANTIREUMATISCHE MIDDELEN",
+    "group_id": 8
+  },
+  {
+    "atc": "M02",
+    "atc_desc": "LOKALE ANTIRHEUMATICA",
+    "group_id": 8
+  },
+  {
+    "atc": "M03",
+    "atc_desc": "SPIERRELAXANTIA",
+    "group_id": 11
+  },
+  {
+    "atc": "M04",
+    "atc_desc": "JICHTMIDDELEN",
+    "group_id": 6
+  },
+  {
+    "atc": "M05",
+    "atc_desc": "MIDDELEN BIJ BOTZIEKTEN",
+    "group_id": 7
+  },
+  {
+    "atc": "M09",
+    "atc_desc": "OVERIGE MIDDELEN BIJ ZIEKTEN VAN HET SKELETSPIERSTELSEL",
+    "group_id": 30
+  },
+  {
+    "atc": "N01",
+    "atc_desc": "ANAESTHETICA",
+    "group_id": 8
+  },
+  {
+    "atc": "N02",
+    "atc_desc": "ANALGETICA",
+    "group_id": 8
+  },
+  {
+    "atc": "N03",
+    "atc_desc": "ANTI-EPILEPTICA",
+    "group_id": 9
+  },
+  {
+    "atc": "N04",
+    "atc_desc": "PARKINSONMIDDELEN",
+    "group_id": 10
+  },
+  {
+    "atc": "N05",
+    "atc_desc": "PSYCHOLEPTICA",
+    "group_id": 9
+  },
+  {
+    "atc": "N06",
+    "atc_desc": "PSYCHOANALEPTICA",
+    "group_id": 9
+  },
+  {
+    "atc": "N07",
+    "atc_desc": "OVERIGE MIDDELEN WERKZAAM OP HET ZENUWSTELSEL",
+    "group_id": 43
+  },
+  {
+    "atc": "P01",
+    "atc_desc": "ANTIPROTOZOICA",
+    "group_id": 34
+  },
+  {
+    "atc": "P02",
+    "atc_desc": "ANTHELMINTHICA",
+    "group_id": 42
+  },
+  {
+    "atc": "P03",
+    "atc_desc": "SCABIES- PEDICULOSE- INSECTICIDEN INSECTENWERENDE MIDDELEN",
+    "group_id": 28
+  },
+  {
+    "atc": "R01",
+    "atc_desc": "MIDDELEN VOOR NASAAL GEBRUIK",
+    "group_id": 32
+  },
+  {
+    "atc": "R02",
+    "atc_desc": "OROFARYNGEALE MIDDELEN",
+    "group_id": 43
+  },
+  {
+    "atc": "R03",
+    "atc_desc": "MIDDELEN BIJ ASTMA/COPD",
+    "group_id": 13
+  },
+  {
+    "atc": "R05",
+    "atc_desc": "HOEST- EN VERKOUDHEIDSMIDDELEN",
+    "group_id": 15
+  },
+  {
+    "atc": "R06",
+    "atc_desc": "ANTIHISTAMINICA VOOR SYSTEMISCH GEBRUIK",
+    "group_id": 14
+  },
+  {
+    "atc": "R07",
+    "atc_desc": "OVERIGE MIDDELEN VOOR HET ADEMHALINGSSTELSEL",
+    "group_id": 32
+  },
+  {
+    "atc": "S01",
+    "atc_desc": "MIDDELEN VOOR OOGHEELKUNDIG GEBRUIK",
+    "group_id": 31
+  },
+  {
+    "atc": "S02",
+    "atc_desc": "MIDDELEN VOOR OORHEELKUNDIG GEBRUIK",
+    "group_id": 34
+  },
+  {
+    "atc": "S03",
+    "atc_desc": "OOG- EN OORHEELKUNDIGE MIDDELEN",
+    "group_id": 31
+  },
+  {
+    "atc": "V03",
+    "atc_desc": "ALLE OVERIGE THERAPEUTISCHE MIDDELEN",
+    "group_id": 43
+  },
+  {
+    "atc": "V04",
+    "atc_desc": "DIAGNOSTICA",
+    "group_id": 43
+  },
+  {
+    "atc": "V07",
+    "atc_desc": "OVERIGE NIET-THERAPEUTISCHE MIDDELEN",
+    "group_id": 43
+  }
 ]

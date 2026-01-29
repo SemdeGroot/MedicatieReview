@@ -46,7 +46,7 @@ async def review_endpoint(
             raise HTTPException(status_code=401, detail="Unauthorized")
 
     def iter_json():
-        iterator = run_review_service(request.text, request.source, request.scope)
+        iterator = run_review_service(request.text, request.source, request.scope, geboortedatum=request.geboortedatum)
 
         for item in iterator:
             if item.get("type") == "error":

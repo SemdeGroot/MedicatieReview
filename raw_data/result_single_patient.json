@@ -1,0 +1,332 @@
+{
+  "type": "result",
+  "afdeling": "Individueel",
+  "data": [
+    {
+      "naam": "Onbekend",
+      "leeftijd": 83,
+      "geboortedatum": "1942-11-07",
+      "geneesmiddelen": [
+        {
+          "kind": "C",
+          "clean": "Acetylsalicylzuur 80mg disp",
+          "gebruik": "1 - 0 - 0 - 0 stuks, Continu",
+          "opmerking": "",
+          "ingang_per": "01-12-2022",
+          "stopt_per": null,
+          "ATC": "B01AC06",
+          "ATC3": "B01",
+          "ATC4": "B01A",
+          "ATC5": "B01AC",
+          "ATC7": "B01AC06",
+          "ATC3_omschrijving": "ANTITHROMBOTICA",
+          "ATC3_jansen_id": 3,
+          "ATC3_jansen_naam": "CVRM",
+          "ATC4_omschrijving": "ANTITHROMBOTICA",
+          "ATC5_omschrijving": "TROMBOCYTENAGGREGATIEREMMERS EXCL HEPARINE",
+          "ATC7_omschrijving": "ACETYLSALICYLZUUR",
+          "NMNR": "0032591",
+          "HPKode": null,
+          "SPKode": "00000671"
+        },
+        {
+          "kind": "C",
+          "clean": "Colecalciferol 2800ie table",
+          "gebruik": "2 - 0 - 0 - 0 stuks,, Continu",
+          "opmerking": "1x per week Mag worden gemalen. = Vitamine D",
+          "ingang_per": "06-10-2024",
+          "stopt_per": null,
+          "ATC": "A11CC05",
+          "ATC3": "A11",
+          "ATC4": "A11C",
+          "ATC5": "A11CC",
+          "ATC7": "A11CC05",
+          "ATC3_omschrijving": "VITAMINEN",
+          "ATC3_jansen_id": 7,
+          "ATC3_jansen_naam": "Valpreventie",
+          "ATC4_omschrijving": "VITAMINEN A EN D, INCLUSIEF COMBINATIES VAN DEZE TWEE",
+          "ATC5_omschrijving": "VITAMINE D EN ANALOGE VERBINDINGEN",
+          "ATC7_omschrijving": "COLECALCIFEROL",
+          "NMNR": "0032639",
+          "HPKode": null,
+          "SPKode": "00022365"
+        },
+        {
+          "kind": "C",
+          "clean": "Enalapril 20mg tablet",
+          "gebruik": "1 - 0 - 0 - 0 stuks, Continu",
+          "opmerking": "",
+          "ingang_per": "28-07-2024",
+          "stopt_per": null,
+          "ATC": "C09AA02",
+          "ATC3": "C09",
+          "ATC4": "C09A",
+          "ATC5": "C09AA",
+          "ATC7": "C09AA02",
+          "ATC3_omschrijving": "MIDDELEN AANGRIJPEND OP HET RENINE-ANGIOTENSINESYSTEEM",
+          "ATC3_jansen_id": 3,
+          "ATC3_jansen_naam": "CVRM",
+          "ATC4_omschrijving": "ACE-REMMERS",
+          "ATC5_omschrijving": "ACE-REMMERS",
+          "ATC7_omschrijving": "ENALAPRIL/ENALAPRILAAT",
+          "NMNR": "0062029",
+          "HPKode": null,
+          "SPKode": "00030945"
+        },
+        {
+          "kind": "C",
+          "clean": "Hylo-dual 0,5/20mg/ml oogdr",
+          "gebruik": "x - 0 - 0 - 0 druppels, Continu",
+          "opmerking": "3 dd 1 druppel in beide ogen op voorschrift van opticien",
+          "ingang_per": "03-01-2025",
+          "stopt_per": null,
+          "ATC": "S01KA01",
+          "ATC3": "S01",
+          "ATC4": "S01K",
+          "ATC5": "S01KA",
+          "ATC7": "S01KA01",
+          "ATC3_omschrijving": "MIDDELEN VOOR OOGHEELKUNDIG GEBRUIK",
+          "ATC3_jansen_id": 31,
+          "ATC3_jansen_naam": "Ogen",
+          "ATC4_omschrijving": "CHIRURGISCHE HULPMIDDELEN",
+          "ATC5_omschrijving": "VISKEUS-ELASTISCHE VERBINDINGEN",
+          "ATC7_omschrijving": "HYALURONZUUR",
+          "NMNR": "0258632",
+          "HPKode": "02410672",
+          "SPKode": "00036145"
+        },
+        {
+          "kind": "C",
+          "clean": "Omeprazol 20mg capsule msr",
+          "gebruik": "1 - 0 - 0 - 0 stuks, Continu",
+          "opmerking": "",
+          "ingang_per": "01-12-2022",
+          "stopt_per": null,
+          "ATC": "A02BC01",
+          "ATC3": "A02",
+          "ATC4": "A02B",
+          "ATC5": "A02BC",
+          "ATC7": "A02BC01",
+          "ATC3_omschrijving": "MIDDELEN BIJ ZUURGERELATEERDE AFWIJKINGEN",
+          "ATC3_jansen_id": 24,
+          "ATC3_jansen_naam": "Maag/darm",
+          "ATC4_omschrijving": "MIDDELEN BIJ ULCUS PEPTICUM EN GASTRO-OESOFAGEALE REFLUX",
+          "ATC5_omschrijving": "PROTONPOMPREMMERS",
+          "ATC7_omschrijving": "OMEPRAZOL",
+          "NMNR": "0062788",
+          "HPKode": null,
+          "SPKode": "00037893"
+        },
+        {
+          "kind": "C",
+          "clean": "Rosuvastatine 5mg tablet",
+          "gebruik": "1 - 0 - 0 - 0 stuks, Continu",
+          "opmerking": "",
+          "ingang_per": "01-12-2022",
+          "stopt_per": null,
+          "ATC": "C10AA07",
+          "ATC3": "C10",
+          "ATC4": "C10A",
+          "ATC5": "C10AA",
+          "ATC7": "C10AA07",
+          "ATC3_omschrijving": "ANTILIPAEMICA",
+          "ATC3_jansen_id": 3,
+          "ATC3_jansen_naam": "CVRM",
+          "ATC4_omschrijving": "ANTILIPAEMICA, ENKELVOUDIG",
+          "ATC5_omschrijving": "CHOLESTEROLSYNTHESEREMMERS",
+          "ATC7_omschrijving": "ROSUVASTATINE",
+          "NMNR": "0146678",
+          "HPKode": null,
+          "SPKode": "00052914"
+        },
+        {
+          "kind": "C",
+          "clean": "Zinkolie ej swaab",
+          "gebruik": "0 - 0 - 0 - 1 stuks, Continu",
+          "opmerking": "In beide liezen, mag z.n. ook in de ochtend extra op de liezen gesmeerd worden.",
+          "ingang_per": "16-06-2023",
+          "stopt_per": null,
+          "ATC": "D02AB",
+          "ATC3": "D02",
+          "ATC4": "D02A",
+          "ATC5": "D02AB",
+          "ATC7": null,
+          "ATC3_omschrijving": "EMOLLIENTIA EN PROTECTIVA",
+          "ATC3_jansen_id": 28,
+          "ATC3_jansen_naam": "Huid",
+          "ATC4_omschrijving": "EMOLLIENTIA EN PROTECTIVA",
+          "ATC5_omschrijving": "ZINKPRODUCTEN",
+          "ATC7_omschrijving": null,
+          "NMNR": "0431990",
+          "HPKode": "00242586",
+          "SPKode": "00011444"
+        },
+        {
+          "kind": "Z",
+          "clean": "Hylo-dual 0,5/20mg/ml oogdr",
+          "gebruik": "0 - 0 - 0 - 0 druppels, Zo nodig",
+          "opmerking": "zo nodig bij droge ogen 2-3 maal daags extra",
+          "ingang_per": "03-01-2025",
+          "stopt_per": null,
+          "ATC": "S01KA01",
+          "ATC3": "S01",
+          "ATC4": "S01K",
+          "ATC5": "S01KA",
+          "ATC7": "S01KA01",
+          "ATC3_omschrijving": "MIDDELEN VOOR OOGHEELKUNDIG GEBRUIK",
+          "ATC3_jansen_id": 31,
+          "ATC3_jansen_naam": "Ogen",
+          "ATC4_omschrijving": "CHIRURGISCHE HULPMIDDELEN",
+          "ATC5_omschrijving": "VISKEUS-ELASTISCHE VERBINDINGEN",
+          "ATC7_omschrijving": "HYALURONZUUR",
+          "NMNR": "0258632",
+          "HPKode": "02410672",
+          "SPKode": "00036145"
+        },
+        {
+          "kind": "Z",
+          "clean": "Lorazepam 1mg tablet",
+          "gebruik": "0 - 0 - 0 - 0 stuks, Zo nodig",
+          "opmerking": "zo nodig 0,5 mg , max 2 maal daags ‎",
+          "ingang_per": "12-11-2025",
+          "stopt_per": null,
+          "ATC": "N05BA06",
+          "ATC3": "N05",
+          "ATC4": "N05B",
+          "ATC5": "N05BA",
+          "ATC7": "N05BA06",
+          "ATC3_omschrijving": "PSYCHOLEPTICA",
+          "ATC3_jansen_id": 9,
+          "ATC3_jansen_naam": "Psychofarmaca",
+          "ATC4_omschrijving": "ANXIOLYTICA",
+          "ATC5_omschrijving": "BENZODIAZEPINEDERIVATEN",
+          "ATC7_omschrijving": "LORAZEPAM",
+          "NMNR": "0060040",
+          "HPKode": null,
+          "SPKode": "00008303"
+        }
+      ],
+      "analyses": {
+        "stopp": [
+          {
+            "id": "STOP B8",
+            "category": "CARDIOVASCULAIR",
+            "description": "ACE-remmer, angiotensine II-antagonist en/of aldosteronantagonist (spironolacton, eplerenon) bij patiënten met klinisch relevante hyperkaliëmie (> 5,5 mmol/l)",
+            "argument": "Verergering van hyperkaliëmie",
+            "triggering_medicines": "Enalapril 20mg tablet"
+          },
+          {
+            "id": "STOP B12",
+            "category": "CARDIOVASCULAIR",
+            "description": "Lipidenverlagende medicatie bij kwetsbaarheid zonder hart- en vaatziekten",
+            "argument": "Geen cardiovasculair voordeel",
+            "triggering_medicines": "Rosuvastatine 5mg tablet"
+          },
+          {
+            "id": "STOP B13",
+            "category": "CARDIOVASCULAIR",
+            "description": "Lipidenverlagende medicatie bij: - kwetsbaarheid met hart-vaatziekten en spierpijn of - gering geschatte levensverwachting (< 1 jaar)",
+            "argument": "Weinig tot geen cardiovasculair voordeel",
+            "triggering_medicines": "Rosuvastatine 5mg tablet"
+          },
+          {
+            "id": "STOP C1",
+            "category": "TROMBOCYTENAGGREGATIEREMMERS/ ANTISTOLLING",
+            "description": "Salicylaat als trombocytenaggregatieremmer: - acetylsalicylzuur > 80 mg/dag. - carbasalaatcalcium > 100 mg/dag met uitzondering van oplaaddosis",
+            "argument": "Verhoogd risico op bloeding. Niet bewezen effectief",
+            "triggering_medicines": "Acetylsalicylzuur 80mg disp"
+          },
+          {
+            "id": "STOP C2",
+            "category": "TROMBOCYTENAGGREGATIEREMMERS/ ANTISTOLLING",
+            "description": "Trombocytenaggregatieremmer (salicylaat, clopidogrel of andere P2Y12-remmer, dipyridamol), cumarine en/of direct werkend oraal anticoagulans (DOAC) bij verhoogd risico op bloedingen (bijvoorbeeld ongecontroleerde hypertensie), versterkte bloedingsneiging ofrecente relevante spontane bloeding",
+            "argument": "Verhoogd risico op bloeding",
+            "triggering_medicines": "Acetylsalicylzuur 80mg disp"
+          },
+          {
+            "id": "STOP D5",
+            "category": "CENTRAAL ZENUWSTELSEL EN PSYCHOFARMACA",
+            "description": "Benzodiazepine ≥ 4 weken. N.B. geleidelijk afbouwen bij gebruik > 4 weken vanwege risico op ontwenningssymptomen en dosisescalatie",
+            "argument": "Geen indicatie voor langere behandeling. Risico op verlengde sedatie, verwardheid, slechtere balans, vallen, verkeersongevallen",
+            "triggering_medicines": "Lorazepam 1mg tablet"
+          },
+          {
+            "id": "STOP F2",
+            "category": "GASTRO-INTESTINAAL",
+            "description": "Protonpompremmer in maximale therapeutische dosis > 8 weken bij peptische ulcera of oesofagitis, uitzonderd barrettoesofagus of syndroom van Zollinger-Ellison",
+            "argument": "",
+            "triggering_medicines": "Omeprazol 20mg capsule msr"
+          },
+          {
+            "id": "STOP K1",
+            "category": "VERHOOGD VALRISICO",
+            "description": "Benzodiazepineagonist (inclusief zolpidem en zopiclon) bij voorgeschiedenis van vallen of valneiging",
+            "argument": "Verhoogd risico op sedatie, ataxie, bewustzijnsvermindering en verslechtering balans",
+            "triggering_medicines": "Lorazepam 1mg tablet"
+          },
+          {
+            "id": "STOP K3",
+            "category": "VERHOOGD VALRISICO",
+            "description": "Vasodilatator (alfa-1-blokker, langwerkend nitraat, calciumantagonist, ACE-remmer, angiotensine II-antagonist) bij orthostatische hypotensie",
+            "argument": "Verhoogd risico op syncope en vallen",
+            "triggering_medicines": "Enalapril 20mg tablet"
+          }
+        ],
+        "acb": {
+          "score": 1,
+          "interpretatie": "Lichte anticholinerge belasting (score = 1).",
+          "details": [
+            {
+              "middel": "Lorazepam 1mg tablet",
+              "atc7": "N05BA06",
+              "score": 1
+            }
+          ]
+        },
+        "dubbelmedicatie": [],
+        "standaardvragen": [
+          {
+            "id": "1765273378663",
+            "categorie": "A",
+            "subcategorie": "A02",
+            "vraag": "Is de maagzuurremmer nog geindiceerd? de patient gebruikt geen NSAID >70 jaar.",
+            "toelichting": "Maagzuurremmer NSAID",
+            "betrokken_middelen": "Omeprazol 20mg capsule msr"
+          },
+          {
+            "id": "1765537742157",
+            "categorie": "A",
+            "subcategorie": "A02",
+            "vraag": "Is de dosering van de protonpompremmer passend of hoger dan nodig?",
+            "toelichting": "Dosering PPI",
+            "betrokken_middelen": "Omeprazol 20mg capsule msr"
+          },
+          {
+            "id": "1765539918920",
+            "categorie": "C",
+            "subcategorie": "C09",
+            "vraag": "Wordt een RAAS-remmer gebruikt zonder SGLT2-remmer of bètablokker bij hartfalen en is dit optimaal?",
+            "toelichting": "RAAS-remmer zonder SGLT2 of betablokker bij hartfalen",
+            "betrokken_middelen": "Enalapril 20mg tablet"
+          },
+          {
+            "id": "1765449311678",
+            "categorie": "C",
+            "subcategorie": "C10",
+            "vraag": "Is voortzetting van een statine zinvol gezien de levensverwachting (> 2 jaar)?",
+            "toelichting": "Statine levensverwachting",
+            "betrokken_middelen": "Rosuvastatine 5mg tablet"
+          },
+          {
+            "id": "1765540950224",
+            "categorie": "N",
+            "subcategorie": "N06",
+            "vraag": "Zijn de psychofarmaca goed ingesteld en is er ruimte voor afbouw?",
+            "toelichting": "Psychofarmaca afbouwen?",
+            "betrokken_middelen": "Lorazepam 1mg tablet"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,8 +1,10 @@
 import json
-from typing import Iterator, Dict, Any, Callable
+from typing import Iterator, Dict, Any, Callable, Optional, Tuple
+from datetime import date, datetime
 
 # --- Parsers importeren ---
 from core.parsers.parse_medimo_afdeling import process_medimo_text_stream
+from core.parsers.parse_medimo_patient import process_medimo_patient_text_stream
 
 # --- Analyses importeren ---
 from core.analyses.start_stop.check_start_stop import check_stopp_criteria
@@ -13,19 +15,35 @@ from core.analyses.standaardvragen.check_standaardvragen import check_standaardv
 # ==============================================================================
 # PARSER REGISTRY
 # ==============================================================================
-PARSER_MAPPING: Dict[tuple, Callable] = {
+PARSER_MAPPING: Dict[Tuple[str, str], Callable] = {
     ("medimo", "afdeling"): process_medimo_text_stream,
-    ("medimo", "patient"): process_medimo_text_stream,
+    ("medimo", "patient"): process_medimo_patient_text_stream,  # <-- fix
+    # later:
+    # ("pharmacom", "afdeling"): process_pharmacom_afdeling_text_stream,
+    # ("pharmacom", "patient"): process_pharmacom_patient_text_stream,
 }
 
-def get_parser(source: str, scope: str) -> Callable:
+def get_parser(source: str, scope: str) -> Optional[Callable]:
     return PARSER_MAPPING.get((source, scope))
+
+def _age_from_dob_iso(dob_iso: str) -> Optional[int]:
+    """
+    dob_iso: 'YYYY-MM-DD'
+    """
+    try:
+        dob = datetime.strptime(dob_iso, "%Y-%m-%d").date()
+    except Exception:
+        return None
+
+    today = date.today()
+    return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+
 
 # ==============================================================================
 # MAIN SERVICE
 # ==============================================================================
 
-def run_review_service(text: str, source: str, scope: str) -> Iterator[Dict[str, Any]]:
+def run_review_service(text: str, source: str, scope: str, geboortedatum: Optional[str] = None) -> Iterator[Dict[str, Any]]:
     """
     Orchestreert het hele proces: Parser -> Analyses -> Resultaat.
     """
@@ -56,22 +74,28 @@ def run_review_service(text: str, source: str, scope: str) -> Iterator[Dict[str,
             
             for patient in raw_patients:
                 meds = patient.get("geneesmiddelen", [])
-                
-                # Data uit parser halen
+
+                # 1) dob uit parser of uit request
+                dob_iso = patient.get("geboortedatum")
+                if scope == "patient" and geboortedatum:
+                    dob_iso = geboortedatum
+
+                # 2) leeftijd berekenen (parser kan None geven)
                 leeftijd = patient.get("leeftijd")
-                geboortedatum = patient.get("geboortedatum")
+                if leeftijd is None and dob_iso:
+                    leeftijd = _age_from_dob_iso(dob_iso)
                 
                 # --- Analyses draaien ---
-                stopp_res = check_stopp_criteria(meds, leeftijd)
+                stopp_res = check_stopp_criteria(meds, leeftijd) if leeftijd is not None else []
+                vragen_res = check_standaardvragen(meds, leeftijd) if leeftijd is not None else []
                 acb_score, acb_interp, acb_bijdrage = bereken_acb_score(meds)
                 dubbel_res = check_dubbelmedicatie(meds)
-                vragen_res = check_standaardvragen(meds, leeftijd)
 
                 # Samenvoegen
                 analyzed_patients.append({
-                    "naam": patient["naam"],
+                    "naam": patient.get("naam", "Onbekend"),
                     "leeftijd": leeftijd,
-                    "geboortedatum": geboortedatum, 
+                    "geboortedatum": dob_iso, 
                     "geneesmiddelen": meds,
                     "analyses": {
                         "stopp": stopp_res,

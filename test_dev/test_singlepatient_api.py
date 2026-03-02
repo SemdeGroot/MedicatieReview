@@ -4,7 +4,7 @@ import requests
 
 URL = "http://127.0.0.1:8001/api/review"
 
-API_KEY = "cBwK5xYDAU1DpzGShrNWI_bDtEEjGix-wC1tL9235t0"   # <-- vul hier jouw key in
+API_KEY = "xxx"   # <-- vul hier jouw key in
 
 payload = {
     "text": pathlib.Path("raw_data/medimo_single_patient.txt").read_text(encoding="utf-8"),

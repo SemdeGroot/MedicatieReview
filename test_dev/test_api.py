@@ -2,6 +2,8 @@ import requests
 import json
 import os
 import sys
+from dotenv import load_dotenv
+load_dotenv()
 
 # Configuratie
 API_URL = "http://127.0.0.1:8001/api/review"
@@ -25,11 +27,12 @@ def test_with_real_file():
         "scope": "afdeling" # Of 'patient' als je dat wilt testen
     }
 
+    API_KEY = os.getenv("MEDICATIEREVIEW_API_KEY", "")
+
     print(f"🚀 Versturen naar API: {API_URL} ...\n")
-    
-    # 3. Request sturen met stream=True
     try:
-        with requests.post(API_URL, json=payload, stream=True) as r:
+        headers = {"X-API-Key": API_KEY} if API_KEY else {}
+        with requests.post(API_URL, json=payload, headers=headers, stream=True) as r:
             if r.status_code != 200:
                 print(f"❌ API Error {r.status_code}:")
                 print(r.text)

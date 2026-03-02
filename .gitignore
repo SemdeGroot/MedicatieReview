@@ -22,3 +22,8 @@ __pycache__/
 
 # Temporary files
 Data/Temp/*
+
+.repomixignore
+repomix.config.json
+repomix.instructions.json
+repomix-output.xml

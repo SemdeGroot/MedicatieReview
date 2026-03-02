@@ -1,0 +1,446 @@
+{
+    "version": "STOP-NL V2",
+    "last_modified": "02-03-2026",
+    "criteria": [
+        {
+            "id": "A1",
+            "category": "A. Stoppen algemeen",
+            "description": "Elk geneesmiddel zonder een op bewijs gebaseerde klinische indicatie",
+            "argument": "",
+            "ATC_codes": [],
+            "ICPC_codes": []
+        },
+        {
+            "id": "A2",
+            "category": "A. Stoppen algemeen",
+            "description": "Elk geneesmiddel dat niet past bij het behandeldoel van de patiënt",
+            "argument": "",
+            "ATC_codes": [],
+            "ICPC_codes": []
+        },
+        {
+            "id": "A3",
+            "category": "A. Stoppen algemeen",
+            "description": "Elk geneesmiddel dat langer dan de aanbevolen duur voor de betreffende indicatie wordt voorgeschreven",
+            "argument": "",
+            "ATC_codes": [],
+            "ICPC_codes": []
+        },
+        {
+            "id": "A4",
+            "category": "A. Stoppen algemeen",
+            "description": "Dubbelmedicatie (verschillende geneesmiddelen uit dezelfde geneesmiddelgroep, zonder additioneel effect)",
+            "argument": "",
+            "ATC_codes": [],
+            "ICPC_codes": []
+        },
+        {
+            "id": "B1",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "[Kennisdocument benzodiazepinen](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20benzodiazepinen.pdf)",
+            "ATC_codes": ["N05CF","N05CD","N05BA","N03AE"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "B2",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "[Kennisdocument antipsychotica](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20antipsychotica.pdf)",
+            "ATC_codes": ["N05A"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "B3",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "[Kennisdocument opioïden](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20opioiden.pdf)",
+            "ATC_codes": ["N02A","N01AH"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "B4",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "[Kennisdocument antidepressiva](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20antidepressiva.pdf)",
+            "ATC_codes": ["N06A"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "B5",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "[Kennisdocument anti-epileptica](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20anti%20epileptica.pdf)",
+            "ATC_codes": ["N03"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "B6",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "Diuretica bij (orthostatische) hypotensie, duizeligheid, elektrolytstoornissen of urine-incontinentie. [Kennisdocument bloeddrukverlagende middelen](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Bloeddrukverlagende%20middelen_0.pdf)",
+            "ATC_codes": ["C03","C02L","C07B","C07C","C07D","C08G","C09BA","C09DA"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20","U04"]
+        },
+        {
+            "id": "B7",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "[Kennisdocument alfablokkers en 5-alfareductaseremmers](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Alfablokkers%20en%205-alfareductaseremmers_0.pdf)",
+            "ATC_codes": ["G04CA","G04CB"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "B8",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "Centraal werkende antihypertensiva bij (orthostatische) hypotensie of duizeligheid",
+            "ATC_codes": ["C02A"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "B9",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "Antihistaminica (eerste generatie en hoge dosering tweede generatie) bij verwardheid, slaperigheid, duizeligheid, wazig zien",
+            "ATC_codes": ["R06A"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "B10",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "Vasodilatoren voor cardiale aandoeningen bij (orthostatische) hypotensie of duizeligheid",
+            "ATC_codes": ["C01D"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "B11",
+            "category": "B. Vallen",
+            "description": "Deze geneesmiddelgroep(en) geven een verhoogd risico op vallen, bijvoorbeeld door (orthostatische) hypotensie, verslechtering van de balans of een sederende werking.",
+            "argument": "[Kennisdocument urologische spasmolytica](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Urologische%20spasmolytica_0.pdf)",
+            "ATC_codes": ["G04BD"],
+            "ICPC_codes": ["K88","A06","N17","H82","P20"]
+        },
+        {
+            "id": "C1",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "[Kennisdocument antidepressiva](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20antidepressiva.pdf), met name relevant voor tricyclische antidepressiva en paroxetine",
+            "ATC_codes": ["N06A"],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "C2",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "[Kennisdocument urologische spasmolytica](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Urologische%20spasmolytica_0.pdf)",
+            "ATC_codes": ["G04BD"],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "C3",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "Bij eerste generatie antihistaminica en hoge dosering tweede generatie",
+            "ATC_codes": ["R06A"],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "C4",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "[Kennisdocument antipsychotica](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20antipsychotica.pdf)",
+            "ATC_codes": ["N05A"],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "C5",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "Elk geneesmiddel of -combinatie met een anticholinerge belasting (ACB-score ≥ 2), zie ook ACB-calculator: https://www.acbcalc.com",
+            "ATC_codes": [],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "C6",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "[Kennisdocument benzodiazepinen](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20benzodiazepinen.pdf)",
+            "ATC_codes": ["N05CF","N05CD","N05BA","N03AE"],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "C7",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "Geneesmiddel(groep)en bij de ziekte van Parkinson en parkinsonisme (zoals Lewy body-dementie)",
+            "ATC_codes": ["N04"],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "C8",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "[Kennisdocument opioïden](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20opioiden.pdf)",
+            "ATC_codes": ["N02A","N01AH"],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "C9",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "[Kennisdocument anti-epileptica](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20anti%20epileptica.pdf)",
+            "ATC_codes": ["N03"],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "C10",
+            "category": "C. Verminderde cognitieve functies",
+            "description": "De hieronder genoemde medicatiegroepen geven een hogere kans op verstoring van cognitieve functies, verergering van symptomen van dementie of verhoging van het risico op delier. Dit is relevant bij achteruitgang in cognitieve functies, en bij reeds bestaande cognitieve problematiek. Overweeg in geval van cognitieve achteruitgang, sufheid/sedatie of delier te stoppen.",
+            "argument": "Spierrelaxantia, zoals baclofen, dantroleen, tizanidine",
+            "ATC_codes": ["M03"],
+            "ICPC_codes": ["P20","P71.04","P70"]
+        },
+        {
+            "id": "D1",
+            "category": "D. Mictie- en defecatieproblemen",
+            "description": "Deze geneesmiddel(groep)en kunnen mogelijk urineretentie, -incontinentie of obstipatie veroorzaken. Overweeg in geval van mictie- en/of defecatieproblemen een alternatief geneesmiddel of te stoppen",
+            "argument": "Lisdiuretica bij obstructieve mictieklachten of incontinentie (vooral urgency of nycturie)",
+            "ATC_codes": ["C03C"],
+            "ICPC_codes": ["U01","U02","U04","U05"]
+        },
+        {
+            "id": "D2",
+            "category": "D. Mictie- en defecatieproblemen",
+            "description": "Deze geneesmiddel(groep)en kunnen mogelijk urineretentie, -incontinentie of obstipatie veroorzaken. Overweeg in geval van mictie- en/of defecatieproblemen een alternatief geneesmiddel of te stoppen",
+            "argument": "Inhalatieparasympathicolytica bij obstructieve mictieklachten, urineretentie of obstipatie",
+            "ATC_codes": ["R03BB"],
+            "ICPC_codes": ["U01","U02","U04","U05","D12","D18"]
+        },
+        {
+            "id": "D3",
+            "category": "D. Mictie- en defecatieproblemen",
+            "description": "Deze geneesmiddel(groep)en kunnen mogelijk urineretentie, -incontinentie of obstipatie veroorzaken. Overweeg in geval van mictie- en/of defecatieproblemen een alternatief geneesmiddel of te stoppen",
+            "argument": "Anticholinergica bij urineretentie, prostatisme of obstipatie",
+            "ATC_codes": ["N06A","G04BD","R06A","N05A"],
+            "ICPC_codes": ["U05","D12","Y06","Y85"]
+        },
+        {
+            "id": "D4",
+            "category": "D. Mictie- en defecatieproblemen",
+            "description": "Deze geneesmiddel(groep)en kunnen mogelijk urineretentie, -incontinentie of obstipatie veroorzaken. Overweeg in geval van mictie- en/of defecatieproblemen een alternatief geneesmiddel of te stoppen",
+            "argument": "Cholineesteraseremmers bij incontinentie",
+            "ATC_codes": ["N06DA"],
+            "ICPC_codes": ["U02","U04"]
+        },
+        {
+            "id": "D5",
+            "category": "D. Mictie- en defecatieproblemen",
+            "description": "Deze geneesmiddel(groep)en kunnen mogelijk urineretentie, -incontinentie of obstipatie veroorzaken. Overweeg in geval van mictie- en/of defecatieproblemen een alternatief geneesmiddel of te stoppen",
+            "argument": "[Kennisdocument opioïden](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20opioiden.pdf)",
+            "ATC_codes": ["N02A","N01AH"],
+            "ICPC_codes": ["U02","U05","U01","U06","U04","U07","D18","D12"]
+        },
+        {
+            "id": "D6",
+            "category": "D. Mictie- en defecatieproblemen",
+            "description": "Deze geneesmiddel(groep)en kunnen mogelijk urineretentie, -incontinentie of obstipatie veroorzaken. Overweeg in geval van mictie- en/of defecatieproblemen een alternatief geneesmiddel of te stoppen",
+            "argument": "Verapamil bij obstipatie",
+            "ATC_codes": ["C09BB10","C08DA01","C08DA51"],
+            "ICPC_codes": ["D12","D18"]
+        },
+        {
+            "id": "D7",
+            "category": "D. Mictie- en defecatieproblemen",
+            "description": "Deze geneesmiddel(groep)en kunnen mogelijk urineretentie, -incontinentie of obstipatie veroorzaken. Overweeg in geval van mictie- en/of defecatieproblemen een alternatief geneesmiddel of te stoppen",
+            "argument": "Ijzerpreparaten bij obstipatie. Overweeg eventueel een lagere dosering of andere toedieningsvorm (iv)",
+            "ATC_codes": ["B03A"],
+            "ICPC_codes": ["D12","D18"]
+        },
+        {
+            "id": "E1",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "NSAID’s bij hartfalen, eGFR < 60 ml/min, ernstige hypertensie, combinatie met ACE-remmer/ARB, voorgeschiedenis van coronaire, cerebrale of perifere vasculaire aandoeningen",
+            "ATC_codes": ["M01A"],
+            "ICPC_codes": ["K01","K02","K03","K04","K05","K06","K07","K28","K29","K49","K71","K72","K73","K74","K75","K76","K77","K78","K79","K80","K81","K82","K83","K84","K85","K86","K87","K88","K89","K90","K91","K92","K93","K94","K95","K96","K99"]
+        },
+        {
+            "id": "E2",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "Digoxine bij hartfalen zonder atriumfibrilleren. Overweeg bij atriumfibrilleren eventueel een lagere dosering conform de geldende richtlijnen",
+            "ATC_codes": ["C01AA05"],
+            "ICPC_codes": ["K77"]
+        },
+        {
+            "id": "E3",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "Amiodaron geeft een hoger risico op bijwerkingen dan andere antiaritmica",
+            "ATC_codes": ["C01BD01"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "E4",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "Klasse I- en IV-antiaritmica bij hartfalen of in combinatie met bètablokker (klasse IV)",
+            "ATC_codes": ["C01BA","C01BB","C01BC","C08D"],
+            "ICPC_codes": ["K77"]
+        },
+        {
+            "id": "E5",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "Fosfodiësterase-5-remmers bij ernstig hartfalen met hypotensie, of gelijktijdig gebruik van nitraten",
+            "ATC_codes": ["G04BE"],
+            "ICPC_codes": ["K77","K88"]
+        },
+        {
+            "id": "E6",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "QT-verlengende medicatie [Tabel Geneesmiddelen en QT-verlenging](https://www.npfo.nl/assets/article/images/a1790_tabel_1.jpg)",
+            "ATC_codes": ["C01BD01","D10AF02","J01FA01","S01AA17","D10AF52","J01FA10","S01AA26","J01RA07","J01RA16","N06AB04","N06AB10","A03FA03","N05AD08","C01BC04","J02AC01","D01AC15","N05AD01","A02BD10","J01MA12","S01AE05","J01RA05","J04AM12","J01MA14","S01AE07","A04AA01","J01MA02","S01AE03","S02AA15","S03AA07","J01RA10","J01RA12","J01RA11","J01FA09","A02BD06","A02BD07","A02BD09","A02BD05","A02BD04","A02BD11","A02BD12","A02BD14","C01BA02","N01AX10","N01AB08","H01BA04"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "E7",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "Bètablokkers bij bradycardie (< 50/min) of AV-blok",
+            "ATC_codes": ["C07"],
+            "ICPC_codes": ["K84.02"]
+        },
+        {
+            "id": "E8",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "Lisdiuretica bij perifeer oedeem zonder hartfalen",
+            "ATC_codes": ["C03C"],
+            "ICPC_codes": ["K07"]
+        },
+        {
+            "id": "E9",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "Cholinesteraseremmers bij bradycardie (< 60/min) of AV-blok",
+            "ATC_codes": ["N06DA"],
+            "ICPC_codes": ["K84.02"]
+        },
+        {
+            "id": "E10",
+            "category": "E. Cardiovasculaire belasting",
+            "description": "Deze geneesmiddel(groep)en geven mogelijk verergering van cardiovasculaire aandoeningen of een verhoogd risico op cardiovasculaire bijwerkingen (bijv. ritmestoornissen of elektrolytstoornissen). Overweeg eventueel een alternatief geneesmiddel of het stoppen ervan.",
+            "argument": "Tricyclische antidepressiva bij hartfalen met prikkelgeleidingsstoornissen of ischemische hartziekten, [Kennisdocument antidepressiva](https://richtlijnen.nhg.org/files/2024-06/Kennisdocument%20antidepressiva.pdf)",
+            "ATC_codes": ["N06AA"],
+            "ICPC_codes": ["K77","K84","K78","K74","K75","K76","K79","K80","K84"]
+        },
+        {
+            "id": "F1",
+            "category": "F. Bloedingsrisico",
+            "description": "Deze medicatiegroepen geven een verhoogd risico op (maag)bloedingen. Overweeg te stoppen in geval van een verhoogd bloedingsrisico en gebruik van deze middelen.",
+            "argument": "NSAID’s of acetylsalicylzuur. Extra voorzichtigheid geboden bij combinatie met risicogeneesmiddelen, zoals SSRI’s, trombocytenaggregatieremmers, anticoagulantia, corticosteroïden en/of aldosteronantagonisten. Overweeg maagbescherming conform geldende richtlijnen. [Kennisdocument trombocytenaggregatieremmers](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Trombocytenaggregatieremmers_0.pdf)",
+            "ATC_codes": ["M01A","N02BA01","A01AD05","B01AC06","M01BA03","N02BA51","N02BA71","C10BX08","C10BX12","C10BX06","C07FX04","N02AJ07","N02AJ02","C07FX03","N02AJ18","C10BX02","B01AF51","C10BX05","C10BX01","C10BX04","C07FX02"],
+            "ICPC_codes": ["A10"]
+        },
+        {
+            "id": "F2",
+            "category": "F. Bloedingsrisico",
+            "description": "Deze medicatiegroepen geven een verhoogd risico op (maag)bloedingen. Overweeg te stoppen in geval van een verhoogd bloedingsrisico en gebruik van deze middelen.",
+            "argument": "(Dubbele) Antitrombotica zonder indicatie. [Kennisdocument trombocytenaggregatieremmers](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Trombocytenaggregatieremmers_0.pdf). [Kennisdocument anticoagulantia](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Anticoagulantia_0.pdf)",
+            "ATC_codes": ["M01A","N02BA01","A01AD05","B01AC06","M01BA03","N02BA51","N02BA71","C10BX08","C10BX12","C10BX06","C07FX04","N02AJ07","N02AJ02","C07FX03","N02AJ18","C10BX02","B01AF51","C10BX05","C10BX01","C10BX04","C07FX02"],
+            "ICPC_codes": ["A10"]
+        },
+        {
+            "id": "G1",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Lipidenverlagende middelen, zie ook [Kennisdocument statines](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Statines_0.pdf)",
+            "ATC_codes": ["C10"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G2",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Antihypertensiva, zie ook [Kennisdocument bloeddrukverlagende middelen](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Bloeddrukverlagende%20middelen_0.pdf)",
+            "ATC_codes": ["C08","C09","C03A"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G3",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Nitraten bij geen angineuze symptomen in afgelopen 12 maanden of geen geobjectiveerd coronair lijden.",
+            "ATC_codes": ["C01DA"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G4",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Anticoagulantia (VKA’s en DOAC’s), zie ook [Kennisdocument anticoagulantia](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Anticoagulantia_0.pdf)",
+            "ATC_codes": ["B01AA","B01AE","B01AF"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G5",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Trombocytenaggregatieremmers, zie ook [Kennisdocument trombocytenaggregatieremmers](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Trombocytenaggregatieremmers_0.pdf)",
+            "ATC_codes": ["B01AC"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G6",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Protonpompremmers en H2-antagonisten, zie ook [Kennisdocument protonpompremmers](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Protonpompremmers_0.pdf). Wees alert op reboundklachten bij afbouwen.",
+            "ATC_codes": ["A02BA","A02BC"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G7",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Vitamines en mineralen. Foliumzuur wel continueren in geval van MTX-gebruik",
+            "ATC_codes": ["A11","A12"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G8",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Medicatie bij osteoporose en fractuurpreventie, zie ook [Kennisdocument bisfosfonaten](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Bisfosfonaten_0.pdf) en [Kennisdocument calcium en vitamine D](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Calcium%20en%20vitamine%20D_01.pdf)",
+            "ATC_codes": ["M05B"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G9",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Systemische corticosteroïden bij chronisch gebruik (> 2mnd), tenzij voorgeschreven in het kader van palliatieve behandeling.",
+            "ATC_codes": ["H02"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G10",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "5-alfa-reductaseremmers en alfa-blokkers bij een verblijfskatheter, zie ook [Kennisdocument alfablokkers en 5-alfareductaseremmers](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Alfablokkers%20en%205-alfareductaseremmers_0.pdf)",
+            "ATC_codes": ["G04CA","G04CB"],
+            "ICPC_codes": [""]
+        },
+        {
+            "id": "G11",
+            "category": "G. Gering geschatte resterende levensverwachting (< 1 jaar)",
+            "description": "Bij een beperkte levensverwachting kan worden overwogen om preventieve medicatie zonder direct voordeel en medicatie die niet gericht is op symptoomverlichting te stoppen. In deze fase staat kwaliteit van leven voorop. Het stoppen van geneesmiddelen moet niet leiden tot discomfort. Overweeg stop in geval van een beperkte levensverwachting van deze geneesmiddelen.",
+            "argument": "Urologische spasmolytica bij volledige incontinentie, zie ook [Kennisdocument urologische spasmolytica](https://richtlijnen.nhg.org/files/2020-11/Eindversie%20Kennisdocument%20Urologische%20spasmolytica_0.pdf)",
+            "ATC_codes": ["G04BD"],
+            "ICPC_codes": [""]
+        }
+    ]
+}

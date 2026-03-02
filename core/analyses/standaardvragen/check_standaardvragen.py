@@ -265,13 +265,12 @@ def check_standaardvragen(
                 rule_meds |= _meds_for_any_token(code, idx)
 
             if operator == "AND":
-                # AND-regel:
-                # - Als er GEEN codes zijn -> altijd True (placeholder)
-                # - Als er wel codes zijn -> minstens één hit nodig (OR binnen lijst)
-                if codes and not rule_meds:
+                # Rule meds must contain at least one med *beyond* the primary triggers.
+                # This prevents a single medication from satisfying both primary and AND.
+                additional_meds = rule_meds - primary_meds
+                if codes and not additional_meds:
                     all_rules_ok = False
                     break
-                # Toevoegen aan matched_meds (dit zijn juist middelen die de vraag ondersteunen)
                 matched_meds |= rule_meds
 
             elif operator == "AND_NOT":

@@ -70,7 +70,7 @@ def _build_table(conn: sqlite3.Connection, rows: list[tuple[str, str]]):
             batch,
         )
 
-    cursor.execute(f"CREATE INDEX idx_{TABLE}_etiketnaam ON {TABLE} (LOWER(etiketnaam))")
+    cursor.execute(f"CREATE INDEX idx_{TABLE}_etiketnaam ON {TABLE} (etiketnaam)")
     cursor.execute(f"CREATE INDEX idx_{TABLE}_atc ON {TABLE} (atc)")
 
     conn.commit()

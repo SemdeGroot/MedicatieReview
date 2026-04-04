@@ -187,42 +187,93 @@ def resolve_routes_sql(nmnr: str, cursor) -> Tuple[Any, Any, Any]:
 
     return None, None, None
 
-def match_medicijn_sql(gm_clean: str, cursor) -> Tuple[Any, Any, Any]:
-    """Vervangt match_to_spkode. Gebruikt SQL LIKE voor prefix scans."""
-    full_clean = clean_name(gm_clean)
-    if not full_clean: return None, None, None
+def _healthbase_table_exists(cursor) -> bool:
+    cursor.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='healthbase_etiketnamen'"
+    )
+    return cursor.fetchone() is not None
 
-    # 1. Exacte match
+
+def _lookup_healthbase_exact(naam: str, cursor) -> Optional[str]:
+    """Exacte (case-insensitive) match op healthbase etiketnaam. Retourneert ATC code."""
+    if not _healthbase_table_exists(cursor):
+        return None
+    cursor.execute(
+        "SELECT atc FROM healthbase_etiketnamen WHERE LOWER(etiketnaam) = LOWER(?) LIMIT 1",
+        (naam,),
+    )
+    row = cursor.fetchone()
+    return row["atc"].strip().upper() if row and row["atc"] else None
+
+
+def _lookup_healthbase_fuzzy(naam: str, cursor) -> Optional[str]:
+    """Fuzzy match op healthbase etiketnaam. Retourneert ATC code."""
+    if not _healthbase_table_exists(cursor):
+        return None
+    from difflib import SequenceMatcher
+    prefix = naam.split()[0][:4] if naam.split() else ""
+    if not prefix:
+        return None
+    cursor.execute(
+        "SELECT etiketnaam, atc FROM healthbase_etiketnamen WHERE LOWER(etiketnaam) LIKE LOWER(?) LIMIT 200",
+        (prefix + "%",),
+    )
+    rows = cursor.fetchall()
+    if not rows:
+        return None
+
+    best_ratio = 0.0
+    best_atc = None
+    naam_lower = naam.lower()
+    for r in rows:
+        ratio = SequenceMatcher(None, naam_lower, r["etiketnaam"].lower()).ratio()
+        if ratio > best_ratio:
+            best_ratio = ratio
+            best_atc = r["atc"]
+    if best_ratio >= 0.85 and best_atc:
+        return best_atc.strip().upper()
+    return None
+
+
+def match_medicijn_sql(gm_clean: str, cursor) -> Tuple[Any, Any, Any, Optional[str]]:
+    """
+    Zoek medicijn in databases. Retourneert (nmnr, hpkode, spkode, atc_override).
+    atc_override is gezet wanneer Healthbase direct een ATC oplevert (geen NMNR/SPKode pad).
+    """
+    full_clean = clean_name(gm_clean)
+    if not full_clean: return None, None, None, None
+
+    # 1. Exacte G-Standaard match
     nmnr = find_nmnr_exact(full_clean, cursor)
     if nmnr:
         res = resolve_routes_sql(nmnr, cursor)
-        if res[2]: return res
+        if res[2]: return res[0], res[1], res[2], None
 
-    # 2. Prefix matching
+    # 2. Exacte Healthbase etiketnaammatch
+    hb_atc = _lookup_healthbase_exact(full_clean, cursor)
+    if hb_atc:
+        return None, None, None, hb_atc
+
+    # 3. Prefix G-Standaard matching
     tokens = full_clean.split()
     n = len(tokens)
 
     for k in range(n - 1, 0, -1):
         candidate = " ".join(tokens[:k])
-        
-        # A) Exact op ingekorte naam
+
         nmnr_k = find_nmnr_exact(candidate, cursor)
         if nmnr_k:
             res = resolve_routes_sql(nmnr_k, cursor)
-            if res[2]: return res
+            if res[2]: return res[0], res[1], res[2], None
 
-        # B) SQL Prefix Scan (vervangt regex boundary scan)
-        # Zoek namen die beginnen met 'candidate' (gevolgd door spatie of streepje)
-        # We pakken er max 20 om performance te bewaken
         query = """
-            SELECT nmnr, nmnaam FROM bst020_namen 
-            WHERE nmnaam LIKE ? 
+            SELECT nmnr, nmnaam FROM bst020_namen
+            WHERE nmnaam LIKE ?
             LIMIT 20
         """
         cursor.execute(query, (candidate + "%",))
         rows = cursor.fetchall()
-        
-        # Check de resultaten
+
         cand_norm = clean_name(candidate).lower()
         boundary_pat = re.compile(r'^' + re.escape(cand_norm) + r'(?:\b|[ \-/_]|$)')
 
@@ -230,9 +281,14 @@ def match_medicijn_sql(gm_clean: str, cursor) -> Tuple[Any, Any, Any]:
             nm_clean = clean_name(r['nmnaam']).lower()
             if boundary_pat.match(nm_clean):
                 res_pref = resolve_routes_sql(r['nmnr'], cursor)
-                if res_pref[2]: return res_pref
+                if res_pref[2]: return res_pref[0], res_pref[1], res_pref[2], None
 
-    return None, None, None
+    # 4. Fuzzy Healthbase
+    hb_atc_fuzzy = _lookup_healthbase_fuzzy(full_clean, cursor)
+    if hb_atc_fuzzy:
+        return None, None, None, hb_atc_fuzzy
+
+    return None, None, None, None
 
 def get_atc_details(atc_code: str, cursor) -> Dict:
     """Haalt omschrijvingen en Jansen groepen op."""
@@ -335,8 +391,8 @@ def process_medimo_text_stream(text: str) -> Iterator[Dict[str, Any]]:
         # Medicijnen verwerken
         clean_meds = []
         for gm in gm_list:
-            nmnr, hpkode, spkode = match_medicijn_sql(gm["clean"], cursor)
-            atc_code = get_atc_for_spkode(spkode, cursor)
+            nmnr, hpkode, spkode, atc_override = match_medicijn_sql(gm["clean"], cursor)
+            atc_code = atc_override or get_atc_for_spkode(spkode, cursor)
             details = get_atc_details(atc_code, cursor)
 
             med_entry = {**gm, **details}

@@ -5,6 +5,7 @@ from datetime import date, datetime
 # --- Parsers importeren ---
 from core.parsers.parse_medimo_afdeling import process_medimo_text_stream
 from core.parsers.parse_medimo_patient import process_medimo_patient_text_stream
+from core.parsers.parse_pharmacom_patient import process_pharmacom_patient_pdf_stream
 
 # --- Analyses importeren ---
 from core.analyses.start_stop.check_start_stop import check_stopp_criteria
@@ -15,16 +16,19 @@ from core.analyses.standaardvragen.check_standaardvragen import check_standaardv
 # ==============================================================================
 # PARSER REGISTRY
 # ==============================================================================
-PARSER_MAPPING: Dict[Tuple[str, str], Callable] = {
+# Text-based parsers (Medimo)
+TEXT_PARSER_MAPPING: Dict[Tuple[str, str], Callable] = {
     ("medimo", "afdeling"): process_medimo_text_stream,
-    ("medimo", "patient"): process_medimo_patient_text_stream,  # <-- fix
-    # later:
-    # ("pharmacom", "afdeling"): process_pharmacom_afdeling_text_stream,
-    # ("pharmacom", "patient"): process_pharmacom_patient_text_stream,
+    ("medimo", "patient"): process_medimo_patient_text_stream,
+}
+
+# PDF-based parsers (Pharmacom)
+PDF_PARSER_MAPPING: Dict[Tuple[str, str], Callable] = {
+    ("pharmacom", "patient"): process_pharmacom_patient_pdf_stream,
 }
 
 def get_parser(source: str, scope: str) -> Optional[Callable]:
-    return PARSER_MAPPING.get((source, scope))
+    return TEXT_PARSER_MAPPING.get((source, scope))
 
 def _age_from_dob_iso(dob_iso: str) -> Optional[int]:
     """
@@ -111,7 +115,68 @@ def run_review_service(text: str, source: str, scope: str, geboortedatum: Option
 
             # --- EINDRESULTAAT ---
             yield {
-                "type": "result", 
+                "type": "result",
+                "afdeling": afdeling,
+                "data": analyzed_patients
+            }
+
+
+def run_review_service_pdf(file_bytes: bytes, source: str, scope: str, geboortedatum: Optional[str] = None) -> Iterator[Dict[str, Any]]:
+    """Orchestreert het review-proces voor PDF-upload (Pharmacom)."""
+    parser_func = PDF_PARSER_MAPPING.get((source, scope))
+
+    if not parser_func:
+        yield {"type": "error", "msg": f"Combinatie bron='{source}' en scope='{scope}' wordt niet ondersteund voor PDF-upload."}
+        return
+
+    parser_stream = parser_func(file_bytes)
+
+    for item in parser_stream:
+        if item["type"] in ["status", "progress", "meta", "error"]:
+            yield item
+
+        elif item["type"] == "result":
+            raw_patients = item["data"]
+            afdeling = item.get("afdeling", "Onbekend")
+
+            analyzed_patients = []
+            yield {"type": "status", "msg": "Analyses uitvoeren..."}
+
+            for patient in raw_patients:
+                meds = patient.get("geneesmiddelen", [])
+
+                dob_iso = patient.get("geboortedatum")
+                if scope == "patient" and geboortedatum:
+                    dob_iso = geboortedatum
+
+                leeftijd = patient.get("leeftijd")
+                if leeftijd is None and dob_iso:
+                    leeftijd = _age_from_dob_iso(dob_iso)
+
+                stopp_res = check_stopp_criteria(meds, leeftijd) if leeftijd is not None else []
+                vragen_res = check_standaardvragen(meds, leeftijd) if leeftijd is not None else []
+                acb_score, acb_interp, acb_bijdrage = bereken_acb_score(meds)
+                dubbel_res = check_dubbelmedicatie(meds)
+
+                analyzed_patients.append({
+                    "naam": patient.get("naam", "Onbekend"),
+                    "leeftijd": leeftijd,
+                    "geboortedatum": dob_iso,
+                    "geneesmiddelen": meds,
+                    "analyses": {
+                        "stopp": stopp_res,
+                        "acb": {
+                            "score": acb_score,
+                            "interpretatie": acb_interp,
+                            "details": acb_bijdrage
+                        },
+                        "dubbelmedicatie": dubbel_res,
+                        "standaardvragen": vragen_res
+                    }
+                })
+
+            yield {
+                "type": "result",
                 "afdeling": afdeling,
                 "data": analyzed_patients
             }

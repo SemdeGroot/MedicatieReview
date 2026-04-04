@@ -265,11 +265,10 @@ def process_medimo_patient_text_stream(text: str) -> Iterator[Dict[str, Any]]:
             "total": total,
         }
 
-        nmnr, hpkode, spkode = match_medicijn_sql(gm["clean"], cursor)
-        atc_code = get_atc_for_spkode(spkode, cursor)
+        nmnr, hpkode, spkode, atc_override = match_medicijn_sql(gm["clean"], cursor)
+        atc_code = atc_override or get_atc_for_spkode(spkode, cursor)
         details = get_atc_details(atc_code, cursor)
 
-        # Zelfde verrijking als afdeling-parser
         med_entry = {**gm, **details}
         med_entry["NMNR"] = nmnr
         med_entry["HPKode"] = hpkode

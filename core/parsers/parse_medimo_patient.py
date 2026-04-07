@@ -7,9 +7,9 @@ from typing import Iterator, Dict, Any, List, Optional, Tuple
 from core.database import get_db_connection as get_db
 
 # Hergebruik exact dezelfde matching/ATC logica als je afdeling-parser
-from core.parsers.parse_medimo_afdeling import (
+from core.parsers.parse_medimo_afdeling import extract_patient_details
+from core.lookup import (
     clean_name,
-    extract_patient_details,
     match_medicijn_sql,
     get_atc_for_spkode,
     get_atc_details,

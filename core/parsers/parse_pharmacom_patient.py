@@ -8,7 +8,7 @@ from typing import Iterator, Dict, Any, Optional, List, Tuple
 import pdfplumber
 
 from core.database import get_db_connection as get_db
-from core.parsers.parse_medimo_afdeling import (
+from core.lookup import (
     clean_name,
     match_medicijn_sql,
     get_atc_for_spkode,

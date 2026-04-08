@@ -85,6 +85,20 @@ def _candidate_matches_prefix(nmnaam: str, prefix: str) -> bool:
     return any(w.startswith(prefix) for w in words)
 
 
+def _score_candidate(query_tokens: list[str], candidate_naam: str) -> int:
+    """Score a candidate by counting how many query tokens appear in the candidate name.
+
+    Uses substring matching to handle compound pharmaceutical names
+    (e.g. "din" matches "isosorbideDINitraat", "tabl" matches "TABLET").
+    """
+    candidate_lower = candidate_naam.lower()
+    score = 0
+    for token in query_tokens:
+        if token in candidate_lower:
+            score += 1
+    return score
+
+
 def _best_fuzzy_match(query_lower: str, candidates, text_fn, threshold: float = 0.45):
     """Return the candidate with the highest difflib ratio, or None if below threshold."""
     best_score = 0.0
@@ -267,13 +281,35 @@ def match_medicijn_sql(gm_clean: str, cursor) -> Tuple[Any, Any, Any, Optional[s
     )
     candidates = cursor.fetchall()
 
+    # Fallback: retry without hyphen if prefix yielded no candidates
+    if not candidates and "-" in first_token:
+        cursor.execute(
+            "SELECT nmnr, nmnaam FROM bst020_namen WHERE LOWER(nmnaam) LIKE LOWER(?) LIMIT 50",
+            (first_token.replace("-", "") + "%",),
+        )
+        candidates = cursor.fetchall()
+
     # Bij combinatiepreparaten (bijv. "Macro/zout"): filter op tweede stof-prefix
     if second_prefix:
         filtered = [r for r in candidates if _candidate_matches_prefix(r["nmnaam"], second_prefix)]
         if filtered:
             candidates = filtered
 
-    for row in candidates:
+    # Score candidates by token overlap with query (not just first-hit)
+    extra_tokens = [
+        t for t in re.split(r"[\s,\-/()]+", full_clean.lower())
+        if len(t) >= 3 and not _DOSAGE_RE.match(t) and t != first_token
+    ]
+    if extra_tokens:
+        scored = sorted(
+            candidates,
+            key=lambda r: _score_candidate(extra_tokens, r["nmnaam"]),
+            reverse=True,
+        )
+    else:
+        scored = candidates
+
+    for row in scored:
         res = resolve_routes_sql(row['nmnr'], cursor)
         if res[2]:
             return res[0], res[1], res[2], None
@@ -285,6 +321,15 @@ def match_medicijn_sql(gm_clean: str, cursor) -> Tuple[Any, Any, Any, Optional[s
         (prefix + "%",),
     )
     candidates = cursor.fetchall()
+
+    # Fallback: retry without hyphen if fuzzy prefix yielded no candidates
+    if not candidates and "-" in prefix:
+        cursor.execute(
+            "SELECT nmnr, nmnaam FROM bst020_namen WHERE LOWER(nmnaam) LIKE LOWER(?) LIMIT 200",
+            (prefix.replace("-", "") + "%",),
+        )
+        candidates = cursor.fetchall()
+
     match = _best_fuzzy_match(
         full_clean.lower(), candidates, lambda r: r["nmnaam"], threshold=0.85
     )

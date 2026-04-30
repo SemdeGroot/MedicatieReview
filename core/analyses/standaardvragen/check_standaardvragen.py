@@ -108,18 +108,11 @@ def _build_atc_indices(medicatielijst: List[Dict[str, Any]]) -> Dict[str, Any]:
         atc5 = gm.get("ATC5") or gm.get("atc5")
         atc4 = gm.get("ATC4") or gm.get("atc4")
         atc3 = gm.get("ATC3") or gm.get("atc3")
-        atc_full_norm = str(atc_full or "").strip().upper()
 
         _add(meds_by_atc7, atc_full, med_id)
         _add(meds_by_atc5, atc5, med_id)
         _add(meds_by_atc4, atc4, med_id)
         _add(meds_by_atc3, atc3, med_id)
-        if len(atc_full_norm) >= 3:
-            _add(meds_by_atc3, atc_full_norm[:3], med_id)
-        if len(atc_full_norm) >= 4:
-            _add(meds_by_atc4, atc_full_norm[:4], med_id)
-        if len(atc_full_norm) >= 5:
-            _add(meds_by_atc5, atc_full_norm[:5], med_id)
 
     return {
         "atc7": meds_by_atc7,

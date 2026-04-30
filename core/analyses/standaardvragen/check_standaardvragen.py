@@ -59,17 +59,27 @@ def _refresh_vragen_from_s3_if_needed() -> None:
 # 2. HULPFUNCTIES VOOR ATC-MAPPINGS
 # ==============================================================================
 
-def _add(dct: Dict[str, Set[str]], key: Optional[str], name: str) -> None:
-    """Voegt een middelnaam toe aan de juiste ATC-map."""
+def _add(dct: Dict[str, Set[int]], key: Optional[str], med_id: int) -> None:
+    """Voegt een medicatieregel toe aan de juiste ATC-map."""
     if not key:
         return
     k = str(key).strip().upper()
     if not k:
         return
-    dct.setdefault(k, set()).add(name)
+    dct.setdefault(k, set()).add(med_id)
 
 
-def _build_atc_indices(medicatielijst: List[Dict[str, Any]]) -> Dict[str, Dict[str, Set[str]]]:
+def _med_display_name(gm: Dict[str, Any]) -> str:
+    return (gm.get("clean") or gm.get("name") or "").strip() or "Onbekend middel"
+
+
+def _prefix_overlaps(p1: str, p2: str) -> bool:
+    p1 = str(p1).strip().upper()
+    p2 = str(p2).strip().upper()
+    return bool(p1) and bool(p2) and (p1.startswith(p2) or p2.startswith(p1))
+
+
+def _build_atc_indices(medicatielijst: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     Bouwt verschillende indices:
     - atc7: volledige ATC-code
@@ -81,42 +91,51 @@ def _build_atc_indices(medicatielijst: List[Dict[str, Any]]) -> Dict[str, Dict[s
         "atc5": {...},
         "atc4": {...},
         "atc3": {...},
+        "names": {med_id: display_name, ...},
     }
     """
-    meds_by_atc7: Dict[str, Set[str]] = {}
-    meds_by_atc5: Dict[str, Set[str]] = {}
-    meds_by_atc4: Dict[str, Set[str]] = {}
-    meds_by_atc3: Dict[str, Set[str]] = {}
+    meds_by_atc7: Dict[str, Set[int]] = {}
+    meds_by_atc5: Dict[str, Set[int]] = {}
+    meds_by_atc4: Dict[str, Set[int]] = {}
+    meds_by_atc3: Dict[str, Set[int]] = {}
+    names_by_id: Dict[int, str] = {}
 
-    for gm in medicatielijst:
-        # Naam van het middel
-        name = (gm.get("clean") or gm.get("name") or "").strip() or "Onbekend middel"
+    for med_id, gm in enumerate(medicatielijst):
+        names_by_id[med_id] = _med_display_name(gm)
 
         # ATC-codes verzamelen (gebruik wat er is)
         atc_full = gm.get("ATC") or gm.get("ATC7") or gm.get("atc") or gm.get("atc7")
         atc5 = gm.get("ATC5") or gm.get("atc5")
         atc4 = gm.get("ATC4") or gm.get("atc4")
         atc3 = gm.get("ATC3") or gm.get("atc3")
+        atc_full_norm = str(atc_full or "").strip().upper()
 
-        _add(meds_by_atc7, atc_full, name)
-        _add(meds_by_atc5, atc5, name)
-        _add(meds_by_atc4, atc4, name)
-        _add(meds_by_atc3, atc3, name)
+        _add(meds_by_atc7, atc_full, med_id)
+        _add(meds_by_atc5, atc5, med_id)
+        _add(meds_by_atc4, atc4, med_id)
+        _add(meds_by_atc3, atc3, med_id)
+        if len(atc_full_norm) >= 3:
+            _add(meds_by_atc3, atc_full_norm[:3], med_id)
+        if len(atc_full_norm) >= 4:
+            _add(meds_by_atc4, atc_full_norm[:4], med_id)
+        if len(atc_full_norm) >= 5:
+            _add(meds_by_atc5, atc_full_norm[:5], med_id)
 
     return {
         "atc7": meds_by_atc7,
         "atc5": meds_by_atc5,
         "atc4": meds_by_atc4,
         "atc3": meds_by_atc3,
+        "names": names_by_id,
     }
 
 
-def _meds_for_substance_token(token: str, idx: Dict[str, Dict[str, Set[str]]]) -> Set[str]:
+def _meds_for_substance_token(token: str, idx: Dict[str, Any]) -> Set[int]:
     """Exacte ATC7 match."""
     return idx["atc7"].get(str(token).strip().upper(), set())
 
 
-def _meds_for_group_token(token: str, idx: Dict[str, Dict[str, Set[str]]]) -> Set[str]:
+def _meds_for_group_token(token: str, idx: Dict[str, Any]) -> Set[int]:
     """
     Groepsmatches: probeer ATC5 -> ATC4 -> ATC3.
     Alleen exact op die code (we gaan ervan uit dat de juiste keys al opgebouwd zijn).
@@ -131,11 +150,27 @@ def _meds_for_group_token(token: str, idx: Dict[str, Dict[str, Set[str]]]) -> Se
     return set()
 
 
-def _meds_for_any_token(token: str, idx: Dict[str, Dict[str, Set[str]]]) -> Set[str]:
+def _meds_for_any_token(token: str, idx: Dict[str, Any]) -> Set[int]:
     """
     Combineert substance- en group-match.
     """
     return _meds_for_substance_token(token, idx) | _meds_for_group_token(token, idx)
+
+
+def _first_matching_med(codes: List[str], idx: Dict[str, Any]) -> Optional[int]:
+    for code in codes:
+        matches = _meds_for_any_token(code, idx)
+        if matches:
+            return min(matches)
+    return None
+
+
+def _rule_overlaps_primary(rule_codes: List[str], primary_triggers: List[str]) -> bool:
+    return any(
+        _prefix_overlaps(rule_code, primary_code)
+        for rule_code in rule_codes
+        for primary_code in primary_triggers
+    )
 
 
 # ==============================================================================
@@ -235,7 +270,7 @@ def check_standaardvragen(
             # Geen primary triggers = geen vraag (volgens jouw definitie)
             continue
 
-        primary_meds: Set[str] = set()
+        primary_meds: Set[int] = set()
         for code in primary_triggers:
             primary_meds |= _meds_for_any_token(code, idx)
 
@@ -244,7 +279,11 @@ def check_standaardvragen(
             continue
 
         # We gebruiken matched_meds om alle middelen te verzamelen die relevant zijn
-        matched_meds: Set[str] = set(primary_meds)
+        matched_meds: Set[int] = set(primary_meds)
+        consumed_meds: Set[int] = set()
+        primary_consumed = _first_matching_med(primary_triggers, idx)
+        if primary_consumed is not None:
+            consumed_meds.add(primary_consumed)
 
         # ------------------------------
         # 3. Logica regels (AND / AND_NOT)
@@ -260,17 +299,25 @@ def check_standaardvragen(
             codes = rule.get("trigger_codes", []) or []
 
             # Verzamel alle middelen die door deze regel geraakt worden
-            rule_meds: Set[str] = set()
+            rule_meds: Set[int] = set()
             for code in codes:
                 rule_meds |= _meds_for_any_token(code, idx)
 
             if operator == "AND":
-                # Rule meds must contain at least one med *beyond* the primary triggers.
-                # This prevents a single medication from satisfying both primary and AND.
-                additional_meds = rule_meds - primary_meds
-                if codes and not additional_meds:
+                if not codes:
+                    matched_meds |= rule_meds
+                    continue
+
+                if _rule_overlaps_primary(codes, primary_triggers):
+                    candidate_meds = rule_meds - consumed_meds
+                    if not candidate_meds:
+                        all_rules_ok = False
+                        break
+                    consumed_meds.add(min(candidate_meds))
+                elif not rule_meds:
                     all_rules_ok = False
                     break
+
                 matched_meds |= rule_meds
 
             elif operator == "AND_NOT":
@@ -298,7 +345,10 @@ def check_standaardvragen(
         # ------------------------------
         # 4. Resultaat samenstellen
         # ------------------------------
-        meds_list = sorted(matched_meds, key=str.lower)
+        meds_list = sorted(
+            {idx["names"].get(med_id, "Onbekend middel") for med_id in matched_meds},
+            key=str.lower,
+        )
         trigger_txt = ", ".join(meds_list)
 
         triggered_vragen.append({

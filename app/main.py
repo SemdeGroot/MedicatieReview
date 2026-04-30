@@ -93,7 +93,7 @@ async def review_upload_endpoint(
     return StreamingResponse(iter_json(), media_type="application/x-ndjson")
 
 
-# Handler voor AWS Lambda
+## Handler voor AWS Lambda
 handler = Mangum(app)
 
 # run met : uvicorn app.main:app --reload --port 8001
